@@ -2130,53 +2130,29 @@
     }    function addMessageToChat(sender, message) {
       const chatContainer = document.getElementById('chat-container');
       const messageDiv = document.createElement('div');
-      messageDiv.className = `chat-message ${sender === 'usuario' ? 'user' : 'ai'}`;
-      
-      if (sender === 'avatar') {
-        // Crear efecto de escritura para mensajes del avatar
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'typing-animation';
-        messageDiv.appendChild(typingDiv);
-        
-        let i = 0;
-        const typeWriter = () => {
-          if (i < message.length) {
-            typingDiv.textContent += message.charAt(i);
-            i++;
-            setTimeout(typeWriter, 50);
-          }
-        };
-        typeWriter();
-      } else {
-        messageDiv.textContent = message;
-      }
-      
+      messageDiv.className = `p-3 rounded-lg mb-2 ${
+        sender === 'usuario' 
+          ? 'bg-[#49e9c9] ml-auto' 
+          : 'bg-[#e8f3f0]'
+      }`;
+      messageDiv.style.maxWidth = '80%';
+      messageDiv.textContent = message;
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // Si el mensaje es del avatar      if (sender === 'avatar') {
+      // Si el mensaje es del avatar
+      if (sender === 'avatar') {
         const avatarImage = document.getElementById('avatar-image');
-        const avatarGif = document.getElementById('avatar-gif');
         const avatarVideo = document.getElementById('avatar-video');
         document.getElementById('avatar-dialog').textContent = message;
         
-        // Reproducir animación con transición suave.
+        // Reproducir animación con transición suave
         avatarImage.classList.add('avatar-hidden');
         setTimeout(() => {
           avatarImage.classList.add('hidden');
-          
-          // Intentar usar GIF primero, si falla usar video como respaldo
-          if (avatarGif.complete) {
-            avatarGif.classList.remove('hidden');
-          } else {
-            avatarVideo.classList.remove('hidden');
-            avatarVideo.currentTime = 0;
-            avatarVideo.play().catch(err => {
-              // Si el video falla, mostrar el GIF
-              avatarVideo.classList.add('hidden');
-              avatarGif.classList.remove('hidden');
-            });
-          }
+          avatarVideo.classList.remove('hidden');
+          avatarVideo.currentTime = 0;
+          avatarVideo.play();
         }, 200);
 
         // Calcular duración aproximada basada en el mensaje (50ms por carácter + 0.5 segundo base)
@@ -2184,11 +2160,8 @@
         
         // Detener la animación después de la duración calculada
         setTimeout(() => {
-          if (!avatarVideo.classList.contains('hidden')) {
-            avatarVideo.pause();
-            avatarVideo.classList.add('hidden');
-          }
-          avatarGif.classList.add('hidden');
+          avatarVideo.pause();
+          avatarVideo.classList.add('hidden');
           avatarImage.classList.remove('hidden');
           avatarImage.classList.remove('avatar-hidden');
           updateAvatarPosition();
