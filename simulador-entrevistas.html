@@ -2130,13 +2130,27 @@
     }    function addMessageToChat(sender, message) {
       const chatContainer = document.getElementById('chat-container');
       const messageDiv = document.createElement('div');
-      messageDiv.className = `p-3 rounded-lg mb-2 ${
-        sender === 'usuario' 
-          ? 'bg-[#49e9c9] ml-auto' 
-          : 'bg-[#e8f3f0]'
-      }`;
-      messageDiv.style.maxWidth = '80%';
-      messageDiv.textContent = message;
+      messageDiv.className = `chat-message ${sender === 'usuario' ? 'user' : 'ai'}`;
+      
+      if (sender === 'avatar') {
+        // Crear efecto de escritura para mensajes del avatar
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-animation';
+        messageDiv.appendChild(typingDiv);
+        
+        let i = 0;
+        const typeWriter = () => {
+          if (i < message.length) {
+            typingDiv.textContent += message.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+          }
+        };
+        typeWriter();
+      } else {
+        messageDiv.textContent = message;
+      }
+      
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
