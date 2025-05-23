@@ -1862,9 +1862,10 @@
               <div class="w-full md:w-1/2 flex flex-col items-center">                <!-- Avatar container -->
                 <div class="relative w-full flex justify-center mb-8">
                   <!-- Imagen estática -->
-                  <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" id="avatar-image" class="w-48 h-48 object-contain">                  <!-- Video de animación -->
+                  <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" id="avatar-image" class="w-48 h-48 object-contain">                  <!-- Animación (GIF/Video) -->
+                  <img id="avatar-gif" src="animations/mochi-speaking.gif" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" alt="Mochi hablando">
                   <video id="avatar-video" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" muted>
-                    <source src="animations/mochi-speaking-original.mp4" type="video/mp4">
+                    <source src="https://raw.githubusercontent.com/TU_USUARIO/FORMIGO/main/animations/mochi-speaking-original.mp4" type="video/mp4">
                   </video>
                   <div class="globo-dialogo absolute -top-20 right-0 bg-[#49e9c9] p-4 rounded-lg max-w-xs">
                     <p class="text-[#0e1b18]" id="avatar-dialog">¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas. ¿Comenzamos?</p>
@@ -2139,26 +2140,43 @@
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // Si el mensaje es del avatar
-      if (sender === 'avatar') {
+      // Si el mensaje es del avatar      if (sender === 'avatar') {
         const avatarImage = document.getElementById('avatar-image');
+        const avatarGif = document.getElementById('avatar-gif');
         const avatarVideo = document.getElementById('avatar-video');
         document.getElementById('avatar-dialog').textContent = message;
         
-        // Reproducir animación
-        avatarImage.classList.add('hidden');
-        avatarVideo.classList.remove('hidden');
-        avatarVideo.currentTime = 0;
-        avatarVideo.play();
+        // Reproducir animación con transición suave
+        avatarImage.classList.add('avatar-hidden');
+        setTimeout(() => {
+          avatarImage.classList.add('hidden');
+          
+          // Intentar usar GIF primero, si falla usar video como respaldo
+          if (avatarGif.complete) {
+            avatarGif.classList.remove('hidden');
+          } else {
+            avatarVideo.classList.remove('hidden');
+            avatarVideo.currentTime = 0;
+            avatarVideo.play().catch(err => {
+              // Si el video falla, mostrar el GIF
+              avatarVideo.classList.add('hidden');
+              avatarGif.classList.remove('hidden');
+            });
+          }
+        }, 200);
 
-        // Calcular duración aproximada basada en el mensaje (100ms por carácter + 1 segundo base)
-        const duration = Math.max(2000, message.length * 100 + 1000);
+        // Calcular duración aproximada basada en el mensaje (50ms por carácter + 0.5 segundo base)
+        const duration = Math.max(1000, message.length * 50 + 500);
         
         // Detener la animación después de la duración calculada
         setTimeout(() => {
-          avatarVideo.pause();
-          avatarVideo.classList.add('hidden');
+          if (!avatarVideo.classList.contains('hidden')) {
+            avatarVideo.pause();
+            avatarVideo.classList.add('hidden');
+          }
+          avatarGif.classList.add('hidden');
           avatarImage.classList.remove('hidden');
+          avatarImage.classList.remove('avatar-hidden');
           updateAvatarPosition();
         }, duration);
       }
