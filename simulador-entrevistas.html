@@ -8,247 +8,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
   <link rel="icon" href="img/LOGO-MOCHI.ico">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/styles-simulator.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f8fbfb;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .boton {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.6rem 1.2rem;
-      border-radius: 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-      font-size: 1rem;
-      margin-bottom: 2em;
-    }
-
-    .boton:hover {
-      background-color: #3fc0a4;
-    }
-
-    .boton-secundario {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    .boton-secundario:hover {
-      background-color: #cfdad6;
-    }
-
-    .footer {
-      background-color: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-
-    .card {
-      border: 1px solid #e8f3f0;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-    }
-
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-
-    .card-description {
-      color: #4f9688;
-    }
-
-    .barra-progreso-completado {
-      background-color: #49e9c9;
-      height: 10px;
-      width: 10%;
-    }
-
-    .sutil-contorno {
-      border: 1px solid #e2e8f0;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .texto-progreso {
-      flex: 1;
-    }
-
-    .imagen-espacio {
-      width: 150px;
-      height: auto;
-      margin-left: 1rem;
-    }
-
-    .borde-suave {
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-      transition: box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-
-    .borde-suave:hover {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-/* NUEVO  */
-
-    /* Menú de notificaciones */
-    #notificationMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Menú de perfil */
-    #profileMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Botón Premium */
-    .boton-premium {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 1rem;
-      height: 40px; /* Asegura una altura consistente */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-
-    .boton-premium:hover {
-      background-color: #3fc0a4;
-    }
-
-    /* Ajuste general del header */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px; /* Asegura que todos los elementos estén centrados */
-    }
-
-    header .flex.items-center {
-      align-items: center; /* Alinea verticalmente todos los elementos */
-    }
-
-    /* Alineación uniforme del header */
-    header .gap-6 > * {
-      display: flex;
-      align-items: center; /* Asegura alineación vertical */
-    }
-
-
-
-/*  ----    */   
-
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .slide-down {
-      animation: slideDown 0.3s ease-out;
-    }
-
-    .card-container {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform: scale(1);
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
-    }
-
-    .card-container:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-container img {
-      border-radius: 8px;
-      width: 100%;
-      height: auto;
-      display: block;
-      background-color: transparent;
-    }
-
-    .card {
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .card p {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-top: 0.5em;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .card-container img {
-      border-radius: 12px;
-    }
-
-    .boton {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.8rem 1.6rem;
-      border-radius: 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-      font-size: 1rem;
-    }
-
-    .boton:hover {
-      background-color: #3fc0a4;
-    }
-
+    /* Estilos específicos del simulador */
     .simulador-container {
       display: flex;
       justify-content: center;
@@ -268,189 +33,55 @@
       position: relative;
     }
 
-    .simulador-avatar {
-      position: absolute;
-      top: -30px;
-      right: -125px;
-      width: 150px;
-      height: auto;
-    }
-
-    .globo-dialogo {
-      position: absolute;
-      top: -140px;
-      right: -200px;
-      background-color: #49e9c9;
-      color: #ffffff;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      width: 200px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .globo-dialogo::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 30px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #49e9c9;
-    }
-
-    .pregunta {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: #0e1b18;
-    }
-
-    .opciones {
+    .media-controls {
       display: flex;
-      flex-direction: column;
       gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
     }
 
-    .opcion {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      text-align: center;
-    }
-
-    .opcion:hover {
-      background-color: #cfdad6;
-    }
-
-    .opacity-50 {
-      opacity: 0.5;
-    }
-
-    .cursor-not-allowed {
-      cursor: not-allowed;
-    }
-
-    .w-full.flex.justify-start {
-      margin-bottom: 1rem;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .slide-down {
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @media (max-width: 768px) {
-      #profileMenu {
-        position: relative;
-        width: 100%;
-      }
-      .simulador-avatar {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin: 0 auto;
-        display: block;
-      }
-
-      .simulador-pantalla {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .simulador-pantalla {
-        padding: 1rem;
-        max-width: 100%;
-      }
-
-      .avatar-container {
-        align-items: center;
-      }
-
-      .simulador-avatar {
-        width: 120px;
-      }
-
-      .globo-dialogo {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin: 0 auto;
-        display: block;
-      }
-    }
-
-    /* Estilos para el botón de micrófono */
-    .mic-button {
+    .media-button {
       background-color: #e8f3f0;
       color: #0e1b18;
       padding: 1rem;
       border-radius: 50%;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      width: 60px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      margin: 1rem auto;
-      width: 70px;
-      height: 70px;
     }
 
-    .mic-button:hover {
+    .media-button:hover {
       background-color: #cfdad6;
+      transform: scale(1.1);
     }
 
-    .mic-button.recording {
-      background-color: #ff4d4d;
+    .media-button.active {
+      background-color: #49e9c9;
       color: #ffffff;
-      animation: pulse 1s infinite;
     }
 
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(255, 77, 77, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
-      }
-    }
-
-    /* Estilos para el mensaje de "Presiona para hablar" */
-    .press-to-speak {
-      text-align: center;
-      color: #0e1b18;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    /* Estilos para la respuesta simulada */
-    .simulated-response {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 1rem;
+    .permission-prompt {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
       border-radius: 8px;
-      margin-top: 1rem;
-      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .permission-prompt.show {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
     }
   </style>
 </head>
@@ -538,6 +169,26 @@
 
   <!-- Contenido principal -->
   <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+    <!-- Instrucciones del simulador -->
+    <div class="text-center my-8 p-6 bg-white rounded-lg shadow-md border border-[#e8f3f0]">
+      <h2 class="text-2xl font-bold mb-4 text-[#0e1b18]">¡Prepárate para brillar! 🌟</h2>
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-4">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-microphone text-[#49e9c9] text-xl"></i>
+          <p>Practica tus respuestas</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-video text-[#49e9c9] text-xl"></i>
+          <p>Mejora tu lenguaje corporal</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-star text-[#49e9c9] text-xl"></i>
+          <p>Recibe feedback instantáneo</p>
+        </div>
+      </div>
+      <p class="text-[#4f9688]">Mochi te ayudará a prepararte para tu próxima entrevista de trabajo</p>
+    </div>
+
     <!-- Menú Principal -->
     <section id="menu" class="container mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold text-center mb-6">¡Bienvenido al Simulador de Entrevistas!</h1>
@@ -2050,7 +1701,7 @@
         },
         {
           levelNumber: 13,
-          title: "Simulación Inicial con STT",
+          title: "Simulación Inicial with STT",
           questions: [
             {
               questionText: "Cuéntame cómo organizarías un proyecto desde cero en un plazo de una semana.",
@@ -2208,10 +1859,13 @@
             <!-- Contenedor principal del simulador -->
             <div class="flex flex-col md:flex-row gap-6">
               <!-- Lado izquierdo: Avatar y cámara -->
-              <div class="w-full md:w-1/2 flex flex-col items-center">
-                <!-- Avatar container -->
+              <div class="w-full md:w-1/2 flex flex-col items-center">                <!-- Avatar container -->
                 <div class="relative w-full flex justify-center mb-8">
-                  <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" id="avatar-image" class="w-48 h-48 object-contain">
+                  <!-- Imagen estática -->
+                  <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" id="avatar-image" class="w-48 h-48 object-contain">                  <!-- Video de animación -->
+                  <video id="avatar-video" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" muted>
+                    <source src="animations/mochi-speaking-original.mp4" type="video/mp4">
+                  </video>
                   <div class="globo-dialogo absolute -top-20 right-0 bg-[#49e9c9] p-4 rounded-lg max-w-xs">
                     <p class="text-[#0e1b18]" id="avatar-dialog">¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas. ¿Comenzamos?</p>
                   </div>
@@ -2274,60 +1928,141 @@
 
       // Inicializar la funcionalidad de video y audio
       initializeMediaDevices();
+      initializeAvatarVideo();
       
       // Eventos para los botones
       setupEventListeners();
-    }
-
-    function initializeMediaDevices() {
+    }    function initializeMediaDevices() {
       const video = document.getElementById('userVideo');
       const toggleCamera = document.getElementById('toggleCamera');
       const toggleMic = document.getElementById('toggleMic');
-      let stream = null;
+      let videoStream = null;
+      let audioStream = null;
 
-      async function setupDevices() {
+      // Configuración inicial de botones
+      toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+      toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+
+      // Crear y mostrar el placeholder de la cámara
+      video.style.display = 'none';
+      const placeholder = document.createElement('div');
+      placeholder.className = 'camera-placeholder flex items-center justify-center bg-gray-100 w-full h-full rounded-lg';
+      placeholder.innerHTML = '<i class="fas fa-video-slash text-4xl text-gray-400"></i>';
+      video.parentElement.appendChild(placeholder);
+
+      async function setupDevices(type) {
         try {
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true
-          });
+          const constraints = {
+            video: type === 'video' ? true : false,
+            audio: type === 'audio' ? true : false
+          };
+
+          const newStream = await navigator.mediaDevices.getUserMedia(constraints);
           
-          // Configurar video
-          video.srcObject = stream;
-          
-          // Actualizar estados de los botones
-          toggleCamera.innerHTML = '<i class="fas fa-video"></i>';
-          toggleMic.innerHTML = '<i class="fas fa-microphone"></i>';
+          if (type === 'video') {
+            if (videoStream) {
+              videoStream.getTracks().forEach(track => track.stop());
+            }
+            videoStream = newStream;
+            video.srcObject = videoStream;
+            video.style.display = 'block';
+            placeholder.style.display = 'none';
+            toggleCamera.innerHTML = '<i class="fas fa-video"></i>';
+            toggleCamera.classList.add('active');
+          } else if (type === 'audio') {
+            if (audioStream) {
+              audioStream.getTracks().forEach(track => track.stop());
+            }
+            audioStream = newStream;
+            toggleMic.innerHTML = '<i class="fas fa-microphone"></i>';
+            toggleMic.classList.add('active');
+          }
           
         } catch (err) {
           console.error('Error accessing media devices:', err);
-          alert('Por favor, permite el acceso a la cámara y micrófono para una mejor experiencia.');
+          if (type === 'video') {
+            toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+            toggleCamera.classList.remove('active');
+            video.style.display = 'none';
+            placeholder.style.display = 'flex';
+          } else {
+            toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            toggleMic.classList.remove('active');
+          }
+        }
+      }      // Función para detener todos los tracks de media
+      function stopAllMediaTracks() {
+        if (videoStream) {
+          videoStream.getTracks().forEach(track => track.stop());
+          videoStream = null;
+          video.srcObject = null;
+          video.style.display = 'none';
+          placeholder.style.display = 'flex';
+          toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+          toggleCamera.classList.remove('active');
+        }
+        if (audioStream) {
+          audioStream.getTracks().forEach(track => track.stop());
+          audioStream = null;
+          toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+          toggleMic.classList.remove('active');
         }
       }
 
       // Eventos para toggles
       toggleCamera.addEventListener('click', () => {
-        if (stream) {
-          const videoTrack = stream.getVideoTracks()[0];
-          videoTrack.enabled = !videoTrack.enabled;
-          toggleCamera.innerHTML = videoTrack.enabled ? 
-            '<i class="fas fa-video"></i>' : 
-            '<i class="fas fa-video-slash"></i>';
+        if (toggleCamera.classList.contains('active')) {
+          if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+          }
+          video.srcObject = null;
+          video.style.display = 'none';
+          placeholder.style.display = 'flex';
+          toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+          toggleCamera.classList.remove('active');
+        } else {
+          setupDevices('video');
         }
       });
 
       toggleMic.addEventListener('click', () => {
-        if (stream) {
-          const audioTrack = stream.getAudioTracks()[0];
-          audioTrack.enabled = !audioTrack.enabled;
-          toggleMic.innerHTML = audioTrack.enabled ? 
-            '<i class="fas fa-microphone"></i>' : 
-            '<i class="fas fa-microphone-slash"></i>';
+        if (toggleMic.classList.contains('active')) {
+          if (audioStream) {
+            audioStream.getTracks().forEach(track => track.stop());
+            audioStream = null;
+          }
+          toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+          toggleMic.classList.remove('active');
+        } else {
+          setupDevices('audio');
         }
       });
 
-      // Iniciar dispositivos
-      setupDevices();
+      // Limpiar al cerrar o cambiar de página
+      window.addEventListener('beforeunload', stopAllMediaTracks);
+      window.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopAllMediaTracks();
+        }
+      });
+    }    // Función para inicializar los eventos del video del avatar
+    function initializeAvatarVideo() {
+      const avatarVideo = document.getElementById('avatar-video');
+      
+      // Cuando el video llegue al final, reiniciarlo mientras siga visible
+      avatarVideo.addEventListener('ended', () => {
+        if (!avatarVideo.classList.contains('hidden')) {
+          avatarVideo.currentTime = 0;
+          avatarVideo.play();
+        }
+      });
+
+      // Si hay un error en la reproducción, mostrar la imagen estática
+      avatarVideo.addEventListener('error', () => {
+        avatarVideo.classList.add('hidden');
+        document.getElementById('avatar-image').classList.remove('hidden');
+      });
     }
 
     function setupEventListeners() {
@@ -2335,6 +2070,20 @@
       const sendButton = document.getElementById('sendButton');
       const userInput = document.getElementById('userInput');
       const chatContainer = document.getElementById('chat-container');
+      const volverMenuBtn = document.querySelector('.volver-menu');
+
+      // Evento para el botón "Volver al Menú"
+      volverMenuBtn.addEventListener('click', () => {
+        // Detener todos los streams de media
+        if (typeof stopAllMediaTracks === 'function') {
+          stopAllMediaTracks();
+        }
+        
+        // Mostrar el menú principal y ocultar el simulador
+        document.getElementById('menu').classList.remove('hidden');
+        document.getElementById('simulator').classList.add('hidden');
+        document.getElementById('progress-page').classList.add('hidden');
+      });
 
       // Evento para el botón de micrófono principal
       let isRecording = false;
@@ -2350,6 +2099,7 @@
         } else {
           mainMicButton.classList.remove('recording');
           mainMicButton.style.backgroundColor = '#e8f3f0';
+          playConfirmSound(); // Reproducir sonido al terminar la grabación
           // Procesar la respuesta
           addMessageToChat('usuario', '¡Gracias por tu respuesta! Estoy procesando...');
           setTimeout(() => {
@@ -2376,9 +2126,7 @@
           sendButton.click();
         }
       });
-    }
-
-    function addMessageToChat(sender, message) {
+    }    function addMessageToChat(sender, message) {
       const chatContainer = document.getElementById('chat-container');
       const messageDiv = document.createElement('div');
       messageDiv.className = `p-3 rounded-lg mb-2 ${
@@ -2391,10 +2139,28 @@
       chatContainer.appendChild(messageDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // Si el mensaje es del avatar, actualizar también el globo de diálogo
+      // Si el mensaje es del avatar
       if (sender === 'avatar') {
+        const avatarImage = document.getElementById('avatar-image');
+        const avatarVideo = document.getElementById('avatar-video');
         document.getElementById('avatar-dialog').textContent = message;
-        updateAvatarPosition();
+        
+        // Reproducir animación
+        avatarImage.classList.add('hidden');
+        avatarVideo.classList.remove('hidden');
+        avatarVideo.currentTime = 0;
+        avatarVideo.play();
+
+        // Calcular duración aproximada basada en el mensaje (100ms por carácter + 1 segundo base)
+        const duration = Math.max(2000, message.length * 100 + 1000);
+        
+        // Detener la animación después de la duración calculada
+        setTimeout(() => {
+          avatarVideo.pause();
+          avatarVideo.classList.add('hidden');
+          avatarImage.classList.remove('hidden');
+          updateAvatarPosition();
+        }, duration);
       }
     }
 
@@ -2416,6 +2182,70 @@
       const nextPosition = currentPosition % 4 + 1;
       avatarImage.src = `img/AVATAR-POSISION${nextPosition}-MOCHI.png`;
     }
+
+    // Función para reproducir el sonido de confirmación
+    function playConfirmSound() {
+      const audio = new Audio('sound/sound-buttom-confirm.mp3');
+      audio.play().catch(error => {
+        console.log('Error reproduciendo el sonido:', error);
+      });
+    }
+
+    // Función para detener todos los tracks de media
+    function stopAllMediaTracks() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => {
+          track.stop();
+        });
+        mediaStream = null;
+      }
+    }
+
+    // Función para mostrar el prompt de permisos
+    function showPermissionPrompt(type) {
+      const prompt = document.getElementById('permissionPrompt');
+      const text = document.getElementById('permissionText');
+      text.textContent = type === 'microphone' ? 
+        'Tu micrófono para grabar tu respuesta' : 
+        'Tu cámara para una experiencia más realista';
+      prompt.classList.add('show');
+    }
+
+    // Función para cerrar el prompt de permisos
+    function closePermissionPrompt() {
+      const prompt = document.getElementById('permissionPrompt');
+      prompt.classList.remove('show');
+      stopAllMediaTracks();
+    }
+
+    // Función para procesar la entrada de voz
+    function processVoiceInput(text) {
+      addMessageToChat('usuario', text);
+      playConfirmSound(); // Reproducir sonido inmediatamente después de procesar la voz
+      setTimeout(() => {
+        processUserInput();
+      }, 1000);
+    }
+
+    // Función para manejar el final de la grabación
+    function handleRecordingEnd() {
+      const mainMicButton = document.getElementById('mainMicButton');
+      mainMicButton.classList.remove('recording');
+      mainMicButton.style.backgroundColor = '#e8f3f0';
+      stopAllMediaTracks();
+      playConfirmSound();
+    }
+
+    // Evento para detener grabación y streams al cerrar/cambiar de página
+    window.addEventListener('beforeunload', () => {
+      stopAllMediaTracks();
+    });
+
+    window.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAllMediaTracks();
+      }
+    });
   </script>
 </body>
 </html>
