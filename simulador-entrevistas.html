@@ -1,15 +1,83 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formigo|Simulador de Entrevistas</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
-  <link rel="icon" href="img/LOGO-MOCHI.ico">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles-simulator.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<html lang="es">  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formigo|Simulador de Entrevistas</title>
+    
+    <!-- Precargar recursos críticos -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preload" href="img/AVATAR-POSISION1-MOCHI.png" as="image" />
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+    <link rel="icon" href="img/LOGO-MOCHI.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles-simulator.css">
+      <!-- Scripts no bloqueantes -->
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    
+    <!-- Scripts de IA y configuración -->
+    <script type="module">
+      // Función para cargar scripts de forma asíncrona
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      // Cargar scripts solo cuando se necesiten
+      window.loadAIScripts = async function() {
+        try {
+          // Primero cargamos las dependencias externas
+          console.log('Loading external dependencies...');
+          await Promise.all([
+            loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs'),
+            loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet'),
+            loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh'),
+            loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/pose'),
+            loadScript('https://aka.ms/csspeech/jsbrowserpackageraw')
+          ]);
+          
+          // Esperamos un momento para asegurar que todo esté inicializado
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          console.log('External dependencies loaded, loading local modules...');
+          
+          // Cargamos los módulos locales en orden específico
+          await loadScript('js/ai-config.js');
+          await loadScript('js/pose-analyzer.js');
+          await loadScript('js/speech-handler.js');
+          await loadScript('js/simulator.js');
+          
+          console.log('All AI scripts loaded successfully');
+          
+          // Inicializar componentes
+          const speechHandler = new SpeechHandler(AI_CONFIG);
+          const success = await speechHandler.initialize().catch(e => {
+            console.error('Error initializing speech handler:', e);
+            return false;
+          });
+          
+          if (!success) {
+            console.warn('Some AI features may not be available');
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Error loading AI scripts:', error);
+          return false;
+        }
+      };
+
+      // Exportar para uso global
+      window.AI_CONFIG = AI_CONFIG;
+    </script>
 
   <style>
     body {
@@ -247,212 +315,355 @@
 
     .boton:hover {
       background-color: #3fc0a4;
-    }
-
-    .simulador-container {
+    }    .simulador-container {
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      margin-top: 2rem;
+      margin: 2rem auto;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 1rem;
     }
 
     .simulador-pantalla {
-      display: flex;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
       background-color: #ffffff;
-      width: 60%;
+      width: 100%;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 2rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       position: relative;
+      min-height: 600px;
+      gap: 2rem;
+    }
+
+    .avatar-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-container:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar-container img {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .avatar-container.speaking img {
+      animation: subtle-bounce 2s infinite;
+    }
+
+    @keyframes subtle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
     }
 
     .simulador-avatar {
-      position: absolute;
-      top: -30px;
-      right: -125px;
-      width: 150px;
+      display: block;
+      margin: 0 auto;
+      width: 180px;
       height: auto;
+      z-index: 1;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+
+    .simulador-avatar.speaking {
+      transform: scale(1.05);
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
     }
 
     .globo-dialogo {
       position: absolute;
-      top: -140px;
-      right: -200px;
+      top: -20px;
+      right: -20px;
       background-color: #49e9c9;
-      color: #ffffff;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      width: 200px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .globo-dialogo::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 30px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #49e9c9;
-    }
-
-    .pregunta {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
       color: #0e1b18;
+      padding: 1rem 1.5rem;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      max-width: 300px;
+      box-shadow: 0 4px 15px rgba(73, 233, 201, 0.3);
+      transform-origin: bottom left;
+      animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
     }
 
-    .opciones {
+    @keyframes popIn {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .look-indicator {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      animation: pulse 2s infinite;
+    }
+
+    .look-indicator.bottom {
+      top: auto;
+      bottom: -30px;
+    }
+
+    .look-indicator {
+      position: absolute;
+      background: rgba(73, 233, 201, 0.9);
+      color: #0e1b18;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: float 2s infinite;
+    }
+
+    .look-indicator.top {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .look-indicator.bottom {
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    .interaction-area {
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }    .interaction-area {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      padding: 1.5rem;
+      background: linear-gradient(to top, #f8fbfb, transparent);
+      border-radius: 0 0 16px 16px;
+    }
+
+    .video-container {
+      width: 320px;
+      height: 240px;
+      background-color: #f8fbfb;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      transition: all 0.3s ease;
+    }
+
+    .video-container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    #userVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+      transform: scaleX(-1); /* Efecto espejo */
+    }
+
+    .mic-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 1rem;
     }
 
-    .opcion {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      text-align: center;
-    }
-
-    .opcion:hover {
-      background-color: #cfdad6;
-    }
-
-    .opacity-50 {
-      opacity: 0.5;
-    }
-
-    .cursor-not-allowed {
-      cursor: not-allowed;
-    }
-
-    .w-full.flex.justify-start {
-      margin-bottom: 1rem;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .slide-down {
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @media (max-width: 768px) {
-      #profileMenu {
-        position: relative;
-        width: 100%;
-      }
-      .simulador-avatar {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin: 0 auto;
-        display: block;
-      }
-
-      .simulador-pantalla {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .simulador-pantalla {
-        padding: 1rem;
-        max-width: 100%;
-      }
-
-      .avatar-container {
-        align-items: center;
-      }
-
-      .simulador-avatar {
-        width: 120px;
-      }
-
-      .globo-dialogo {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin: 0 auto;
-        display: block;
-      }
-    }
-
-    /* Estilos para el botón de micrófono */
     .mic-button {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 1rem;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
+      background: #49e9c9;
+      color: #0e1b18;
+      border: none;
       cursor: pointer;
-      transition: background-color 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
-      margin: 1rem auto;
-      width: 70px;
-      height: 70px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(73, 233, 201, 0.3);
     }
 
     .mic-button:hover {
-      background-color: #cfdad6;
+      transform: scale(1.1);
+      background: #3fc0a4;
     }
 
     .mic-button.recording {
-      background-color: #ff4d4d;
-      color: #ffffff;
-      animation: pulse 1s infinite;
+      background: #ff4d4d;
+      animation: pulseRecording 2s infinite;
     }
 
-    @keyframes pulse {
+    .speech-status {
+      text-align: center;
+      color: #0e1b18;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .speech-status.listening {
+      color: #ff4d4d;
+      font-weight: 600;
+    }
+
+    @keyframes pulseRecording {
       0% {
-        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
+        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4);
       }
       70% {
-        box-shadow: 0 0 0 10px rgba(255, 77, 77, 0);
+        box-shadow: 0 0 0 20px rgba(255, 77, 77, 0);
       }
       100% {
         box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
       }
     }
 
-    /* Estilos para el mensaje de "Presiona para hablar" */
-    .press-to-speak {
-      text-align: center;
-      color: #0e1b18;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
+    .speech-status.listening {
+      color: #ff4d4d;
     }
 
-    /* Estilos para la respuesta simulada */
-    .simulated-response {
-      background-color: #e8f3f0;
-      color: #0e1b18;
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Ajustes responsive */
+    @media (max-width: 768px) {
+      .video-container {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .simulador-avatar {
+        width: 140px;
+      }
+
+      .permissions-content {
+        width: 95%;
+        padding: 1rem;
+      }
+    }
+
+    /* Estilos para la pantalla de carga */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #49e9c9;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Estilos para mensajes de error */
+    .error-message {
+      background-color: #ffe5e5;
+      color: #ff4d4d;
       padding: 1rem;
       border-radius: 8px;
-      margin-top: 1rem;
-      text-align: left;
+      margin: 1rem;
+      border: 1px solid #ffcccc;
+      max-width: 500px;
+      margin: 1rem auto;
+    }
+
+    .error-message ul {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+      list-style-type: disc;
+    }
+
+    .error-message li {
+      margin: 0.25rem 0;
+    }
+
+    /* Optimizaciones de rendimiento */
+    .simulador-avatar {
+      will-change: transform;
+    }
+
+    .conversation-area {
+      will-change: scroll-position;
+    }
+
+    .message {
+      will-change: transform, opacity;
     }
   </style>
+  <!-- Librerías externas -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+  
+  <!-- Scripts locales - Cargar en orden específico -->
+  <script src="js/ai-config.js" defer></script>
+  <script src="js/pose-analyzer.js" defer></script>
+  <script src="js/speech-handler.js" defer></script>
+  <script src="js/simulator.js" defer></script>
 </head>
 
 <body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
@@ -571,9 +782,60 @@
       </div>
     </section>
 
-    <!-- Contenedor del Simulador -->
-    <section id="simulator" class="hidden">
-      <!-- Aquí se generarán dinámicamente las preguntas y opciones -->
+    <!-- Contenedor del Simulador -->    <section id="simulator" class="hidden">
+      <!-- Modal de permisos -->
+      <div id="permissionsModal" class="permissions-modal" style="display: flex;">
+        <div class="permissions-content">
+          <h2>Permisos necesarios</h2>
+          <p>Para una mejor experiencia, necesitamos acceso a:</p>
+          <div class="permission-item">
+            <i class="fas fa-microphone"></i>
+            <span>Micrófono - Para escuchar tus respuestas</span>
+            <button id="micPermissionBtn" class="permission-btn">Permitir</button>
+          </div>
+          <div class="permission-item">
+            <i class="fas fa-camera"></i>
+            <span>Cámara - Para una experiencia más personal</span>
+            <button id="cameraPermissionBtn" class="permission-btn">Permitir</button>
+          </div>
+          <div id="permissionError" class="error-message" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="simulador-container">
+        <div class="simulador-pantalla">
+          <!-- Indicador de mirada -->
+          <div class="look-indicator">Mira aquí ↑</div>
+
+          <!-- Avatar y globo de diálogo -->
+          <div class="avatar-section">
+            <div class="avatar-container">
+              <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" class="simulador-avatar" id="avatarImage">
+              <div class="globo-dialogo" id="avatarDialog">¡Hola! Soy Mochi, tu entrevistador virtual. ¿Estás listo para comenzar?</div>
+            </div>
+          </div>
+          <div class="conversation-area" id="conversationArea"></div>
+
+          <!-- Área de entrada y video -->
+          <div class="interaction-area">
+            <div class="video-container">
+              <video id="userVideo" autoplay muted playsinline></video>
+              <div class="look-indicator bottom">Mira aquí para responder ↓</div>
+            </div>
+            
+            <div class="mic-container">
+              <button id="micButton" class="mic-button">
+                <i class="fas fa-microphone"></i>
+              </button>
+              <p id="speechStatus" class="speech-status">Presiona para hablar</p>
+            </div>
+
+            <div id="userResponse" class="simulated-response hidden">
+              <!-- Aquí se mostrará la transcripción en tiempo real -->
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Página de Progreso -->
@@ -673,6 +935,7 @@
     let currentLevel = 1;
     let currentQuestion = 1;
     let currentCategory = 'basic';
+    let chatHistory = [];
 
     const levelsData = {
       basic: [
@@ -2016,215 +2279,150 @@
     };
     
     // Este objeto incluye preguntas, opciones y texto de diálogo para cada modalidad y nivel.
-    
-
-    function startSimulator(level = 1, category = 'basic') {
+        function startSimulator(level = 1, category = 'basic') {
       currentLevel = level;
       currentCategory = category;
       currentQuestion = 1;
+      chatHistory = [];
+
+      // Reproducir sonido de inicio
+      const startSound = document.getElementById('startSound');
+      if (startSound) startSound.play();
 
       document.getElementById('menu').classList.add('hidden');
       document.getElementById('progress-page').classList.add('hidden');
       document.getElementById('simulator').classList.remove('hidden');
 
-      renderQuestion();
+      // Mostrar modal de permisos con animación
+      const permissionsModal = document.getElementById('permissionsModal');
+      permissionsModal.style.opacity = '0';
+      permissionsModal.style.display = 'flex';
+      setTimeout(() => {
+        permissionsModal.style.opacity = '1';
+        permissionsModal.style.transition = 'opacity 0.3s ease-in-out';
+      }, 100);
+
+      // Inicializar con mensaje de bienvenida personalizado
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+      const welcomeMessage = `¡Bienvenido al nivel ${currentLevel}: ${levelData.title}! Soy Mochi, tu entrevistador virtual. 
+        Estoy aquí para ayudarte a practicar y mejorar tus habilidades de entrevista. 
+        Cuando estés listo, presiona el botón del micrófono y comienza a hablar. 
+        ¿Estás preparado para comenzar?`;
+      
+      // Limpiar el área de conversación
+      document.getElementById('conversationArea').innerHTML = '';
+      
+      // Agregar mensaje con un pequeño retraso para la animación
+      setTimeout(() => {
+        addMessage('avatar', welcomeMessage);
+        speakText(welcomeMessage);
+      }, 500);
+
+      // Inicializar sistemas de IA
+      initializeAI().catch(console.error);
     }
 
     function renderQuestion() {
       const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
       const questionData = levelData.questions[currentQuestion - 1];
+      
+      // Actualizar el globo de diálogo del avatar
+      const avatarDialog = document.getElementById('avatarDialog');
+      if (avatarDialog) {
+        avatarDialog.textContent = questionData.dialogText;
+      }
 
-      const simulator = document.getElementById('simulator');
+      // Agregar la pregunta al historial de chat
+      addMessage('avatar', questionData.questionText);
 
-      // Ajuste para el Nivel 11 (Intermedio)
-      if (currentCategory === 'intermediate' && currentLevel >= 11 && currentLevel <= 30) {
-        simulator.innerHTML = `
-          <section class="simulador-container relative w-full flex flex-col justify-center items-center md:items-stretch">
-            <h1 class="text-xl md:text-2xl font-bold text-center mb-4 text-[#0e1b18]">Nivel ${currentLevel}: ${levelData.title}</h1>
-            <h3 class="text-center text-[#4f9688] font-medium mb-6">¡Prepárate para destacar en tus entrevistas!</h3>
-    
-            <div class="w-full flex justify-center mb-4">
-              <div class="w-full max-w-2xl px-4 md:px-0">
-                <div class="bg-[#e8f3f0] h-2 rounded-full mx-auto">
-                  <div class="barra-progreso-completado h-2 rounded-full" style="width: ${(currentQuestion / levelData.questions.length) * 100}%"></div>
-                </div>
-                <p class="text-sm text-center text-[#0e1b18] mt-2">Pregunta ${currentQuestion} de ${levelData.questions.length}</p>
-              </div>
-            </div>
-            <div class="simulador-pantalla w-full max-w-md md:max-w-2xl relative mx-auto flex flex-col items-center">
-              <!-- Contenedor del Avatar y Globo -->
-              <div class="simulador-avatar-container">
-                <div class="globo-dialogo">
-                  <p>${questionData.dialogText}</p>
-                </div>            
-                <img src="img/AVATAR-POSISION3-MOCHI.png" alt="Mochi Avatar" class="simulador-avatar">
-              </div>
-              <!-- Contenedor de la Pregunta -->
-              <div class="w-full text-center">
-                <h2 class="pregunta px-4">${questionData.questionText}</h2>
-                <!-- Botón de micrófono -->
-                <div>
-                  <div id="micButton" class="mic-button">
-                    <i class="fas fa-microphone"></i>
-                  </div>
-                  <p class="press-to-speak">Presiona para hablar...</p>
-                </div>
-                <!-- Contenedor para la respuesta simulada -->
-                <div id="simulatedResponse" class="simulated-response hidden"></div>
-              </div>
-            </div>
-            <div class="w-full mt-6 flex justify-start md:justify-center px-4">
-              <button class="boton-secundario volver-menu">Volver al Menú</button>
-            </div>
-            <div class="w-full mt-4 text-center px-4">
-              <p class="text-sm text-[#0e1b18]">
-                <i class="fas fa-info-circle text-[#49e9c9]"></i>
-                Practica tu respuesta en voz alta y presiona el micrófono para simular.
-              </p>
-            </div>
-          </section>
-          <audio id="confirmSound" src="sound/sound-buttom-confirm.mp3" preload="auto"></audio>
-          <audio id="congratulationsSound" src="sound/tada-fanfare-a-6313.mp3" preload="auto"></audio>
-        `;
-
-        // Evento para el botón de micrófono
-        const micButton = document.getElementById('micButton');
-        micButton.addEventListener('click', () => {
-          simulateSpeechToText();
-        });
-
-      } else {
-        // Renderizado para otros niveles
-        // Renderizado para otros niveles
-        simulator.innerHTML = `
-          <section class="simulador-container relative w-full flex flex-col justify-center items-center md:items-stretch">
-            <h1 class="text-xl md:text-2xl font-bold text-center mb-4 text-[#0e1b18]">Nivel ${currentLevel}: ${levelData.title}</h1>
-            <h3 class="text-center text-[#4f9688] font-medium mb-6">¡Prepárate para destacar en tus entrevistas!</h3>
-    
-            <div class="w-full flex justify-center mb-4">
-              <div class="w-full max-w-2xl px-4 md:px-0">
-                <div class="bg-[#e8f3f0] h-2 rounded-full mx-auto">
-                  <div class="barra-progreso-completado h-2 rounded-full" style="width: ${(currentQuestion / levelData.questions.length) * 100}%"></div>
-                </div>
-                <p class="text-sm text-center text-[#0e1b18] mt-2">Pregunta ${currentQuestion} de ${levelData.questions.length}</p>
-              </div>
-            </div>
-            <div class="simulador-pantalla w-full max-w-md md:max-w-2xl relative mx-auto flex flex-col items-center">
-              <!-- Contenedor del Avatar y Globo -->
-              <div class="simulador-avatar-container">
-                <div class="globo-dialogo">
-                  <p>${questionData.dialogText}</p>
-                </div>            
-                <img src="img/AVATAR-POSISION3-MOCHI.png" alt="Mochi Avatar" class="simulador-avatar">
-              </div>
-              <!-- Contenedor de la Pregunta -->
-              <div class="w-full">
-                <h2 class="pregunta text-center md:text-left px-4">${questionData.questionText}</h2>
-                <div class="opciones px-4">
-                  ${questionData.options.map(option => `<button class="opcion">${option}</button>`).join('')}
-                </div>
-              </div>
-            </div>
-            <div class="w-full mt-6 flex justify-start md:justify-center px-4">
-              <button class="boton-secundario volver-menu">Volver al Menú</button>
-            </div>
-            <div class="w-full mt-4 text-center px-4">
-              <p class="text-sm text-[#0e1b18]">
-                <i class="fas fa-info-circle text-[#49e9c9]"></i>
-                Si necesitas ayuda, selecciona "No estoy seguro" para obtener orientación.
-              </p>
-            </div>
-          </section>
-          <audio id="confirmSound" src="sound/sound-buttom-confirm.mp3" preload="auto"></audio>
-          <audio id="congratulationsSound" src="sound/tada-fanfare-a-6313.mp3" preload="auto"></audio>
-        `;
+      // Mostrar opciones si existen
+      const userOptions = document.getElementById('userOptions');
+      if (userOptions && questionData.options && questionData.options.length > 0) {
+        userOptions.innerHTML = questionData.options
+          .map(option => `<button class="opcion">${option}</button>`)
+          .join('');
 
         // Agregar eventos a las opciones
         document.querySelectorAll('.opcion').forEach((opcion) => {
           opcion.addEventListener('click', () => {
-            nextQuestion();
-            playConfirmSound();
+            handleUserResponse(opcion.textContent);
           });
         });
       }
+    }
 
-      // Evento para volver al menú
-      document.querySelector('.volver-menu').addEventListener('click', returnToMenu);
+    function addMessage(type, content) {
+      const conversationArea = document.getElementById('conversationArea');
+      const message = document.createElement('div');
+      message.className = `message ${type}`;
+      message.textContent = content;
+      conversationArea.appendChild(message);
+      conversationArea.scrollTop = conversationArea.scrollHeight;
+    }
+
+    function handleUserResponse(response) {
+      addMessage('user', response);
+      
+      // Cambiar la expresión del avatar según el contenido
+      if (response.toLowerCase().includes('no') || response.toLowerCase().includes('difícil')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION3-MOCHI.png';
+      } else if (response.toLowerCase().includes('sí') || response.toLowerCase().includes('bien')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+      }
+
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+      const questionData = levelData.questions[currentQuestion - 1];
+      
+      // Simular procesamiento de IA con feedback personalizado
+      setTimeout(() => {
+        let feedback = questionData.dialogText;
+        
+        // Personalizar el feedback según palabras clave en la respuesta
+        if (response.length < 20) {
+          feedback = "¡Adelante! Puedes expandir un poco más tu respuesta. " + feedback;
+        } else if (response.length > 100) {
+          feedback = "¡Excelente detalle! " + feedback;
+        }
+
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION1-MOCHI.png';
+        addMessage('avatar', feedback);
+        speakText(feedback);
+
+        setTimeout(() => {
+          if (currentQuestion < levelData.questions.length) {
+            currentQuestion++;
+            renderQuestion();
+          } else {
+            document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+            showCompletionModal();
+          }
+        }, 2000);
+      }, 1000);
     }
 
     function simulateSpeechToText() {
       const micButton = document.getElementById('micButton');
-      const simulatedResponse = document.getElementById('simulatedResponse');
-  
+      const userResponse = document.getElementById('userResponse');
+
       micButton.classList.add('recording');
       micButton.querySelector('i').classList.remove('fa-microphone');
       micButton.querySelector('i').classList.add('fa-microphone-alt');
-  
-      // Simular captura de voz con tiempo reducido
-      setTimeout(() => {
-          micButton.classList.remove('recording');
-          micButton.querySelector('i').classList.remove('fa-microphone-alt');
-          micButton.querySelector('i').classList.add('fa-microphone');
-  
-  
-          // Respuestas simuladas específicas por nivel
-          const levelResponses = {
-              11: [
-                  "En una ocasión lideré un equipo de 5 personas para desarrollar un proyecto crítico...",
-                  "Superé el desafío mediante una planificación cuidadosa y colaboración con mi equipo...",
-                  "Me considero el mejor candidato porque tengo la experiencia y habilidades necesarias...",
-                  "Mis metas a largo plazo incluyen crecer dentro de la empresa y contribuir al éxito...",
-                  "Manejo el estrés priorizando tareas y manteniendo una comunicación abierta..."
-              ],
-              12: [
-                  "Trabajé con mi equipo para priorizar tareas y cumplir con el plazo asignado.",
-                  "En esta situación, escuché activamente y propuse un compromiso que benefició a todos.",
-                  "Mantuve la calma y busqué entender las preocupaciones del cliente antes de proponer una solución."
-              ],
-              13: [
-                  "Primero definí los objetivos del proyecto, asigné tareas clave y establecí un cronograma detallado.",
-                  "Para resolver el conflicto, dialogué con mi compañero, identificamos el problema y acordamos una solución.",
-                  "Comencé evaluando la urgencia de las tareas y enfoqué mis esfuerzos en las de mayor prioridad."
-              ],
-              14: [
-                  "La situación inicial era crítica: un proyecto atrasado. Mi tarea fue liderar la reorganización.",
-                  "Resolví el desafío analizando el problema, tomando acción inmediata y logrando los resultados esperados.",
-                  "Mis habilidades técnicas permitieron identificar el problema rápidamente y solucionarlo con eficiencia."
-              ],
-              15: [
-                  "Para un problema técnico complejo, primero analizo los requisitos y luego desarrollo una solución iterativa.",
-                  "Superé el obstáculo implementando un enfoque innovador que redujo tiempos de ejecución.",
-                  "Expliqué el concepto técnico utilizando analogías simples, logrando que todos lo comprendieran."
-              ],
-              16: [
-                  "Mi logro profesional más destacado fue liderar un proyecto que mejoró la eficiencia en un 25%.",
-                  "Cuando enfrenté una decisión difícil, evalué todas las opciones, consulté con colegas y decidí el mejor curso de acción.",
-                  "Manejé el desacuerdo con mi jefe presentando datos claros que respaldaban mi punto de vista."
-              ],
-              17: [
-                  "Para motivar al equipo, organicé reuniones regulares para discutir objetivos y celebrar pequeños logros.",
-                  "Cuando el proyecto se retrasó, comuniqué el problema al proveedor y trabajé en un plan alternativo.",
-                  "Implementé un cambio en el flujo de trabajo que redujo tiempos de espera en un 30%."
-              ]
-          };
-  
-          // Obtener las respuestas del nivel actual
-          const responses = levelResponses[currentLevel] || ["Respuesta simulada."];
-  
-          // Seleccionar la respuesta basada en la pregunta actual
-          const responseText = responses[currentQuestion - 1] || "Respuesta simulada.";
-  
-          simulatedResponse.textContent = responseText;
-          simulatedResponse.classList.remove('hidden');
-          playConfirmSound();
 
-          // Avanzar a la siguiente pregunta con menor retraso
-          setTimeout(() => {
-              nextQuestion();
-          }, 1150); // Reducido de 3000ms a 2000ms
-      }, 1600); // Simular 1.5 segundos de "grabación"
-  }
-  
+      // Simular grabación por 1.5 segundos
+      setTimeout(() => {
+        micButton.classList.remove('recording');
+        micButton.querySelector('i').classList.remove('fa-microphone-alt');
+        micButton.querySelector('i').classList.add('fa-microphone');
+
+        // Obtener una respuesta simulada
+        const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+        const responses = levelResponses[currentLevel] || ["Respuesta simulada."];
+        const responseText = responses[currentQuestion - 1] || "Respuesta simulada.";
+
+        // Procesar la respuesta
+        handleUserResponse(responseText);
+      }, 1500);
+    }
 
     function nextQuestion() {
       const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
@@ -2398,16 +2596,16 @@
         "Ajustes en el Lenguaje Profesional Oral",
         "Simulación de Entrevista Moderada",
         // Fase 3: Escenarios Avanzados
-        "Simulación Compleja con Preguntas Situacionales",
-        "Preguntas sobre Liderazgo Avanzado",
-        "Resolviendo Escenarios Éticos Iniciales",
-        "STAR Completa: Fluidez en Tiempo Real",
-        "Ajustes para Paneles Virtuales",
-        "Casos Técnicos con Feedback Oral",
-        "Preguntas de Alta Complejidad Ética",
-        "Simulación Final Nivel Intermedio",
-        "Retroalimentación Detallada por Sesión",
-        "Certificación de Nivel Intermedio",
+        "Simulación Completa de Entrevista Ejecutiva",
+        "STAR en Roles Estratégicos",
+        "Retroalimentación en Respuestas Críticas",
+        "Resolviendo Dilemas Éticos Reales",
+        "Feedback Oral en Paneles Técnicos",
+        "Escenarios de Resolución de Conflictos Laborales",
+        "Simulación Avanzada de Negociación Salarial",
+        "Ajustes para Entrevistas Multiculturales",
+        "Preparación Final para Roles Globales",
+        "Certificación Avanzada: Dominio Profesional",
       ],
       advanced: [
       // Modalidad Avanzado: 20 niveles
@@ -2492,6 +2690,1278 @@
         });
       }
     });
-  </script>
-</body>
-</html>
+
+    // Variables para manejo de voz y video
+    let recognition;
+    let synthesizer;
+    let isListening = false;
+    let stream;
+
+    // Inicializar reconocimiento de voz con mejor manejo de errores
+    async function initializeSpeechRecognition() {
+      if (!('webkitSpeechRecognition' in window)) {
+        showError('Tu navegador no soporta reconocimiento de voz. Por favor, usa Chrome.');
+        return false;
+      }
+    
+      try {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'es-ES';
+    
+        recognition.onstart = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.add('recording');
+          speechStatus.textContent = 'Escuchando...';
+          speechStatus.classList.add('listening');
+          changeAvatarExpression('listening');
+          
+          // Efecto de onda en el botón
+          micButton.style.animation = 'pulse 1.5s infinite';
+        };
+    
+        recognition.onresult = (event) => {
+          let interimTranscript = '';
+          let finalTranscript = '';
+    
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
+            }
+          }
+    
+          // Mostrar texto intermedio en tiempo real
+          if (interimTranscript !== '') {
+            showUserSpeaking(interimTranscript);
+          }
+    
+          // Procesar texto final
+          if (finalTranscript !== '') {
+            handleUserResponse(finalTranscript);
+          }
+        };
+    
+        recognition.onerror = (event) => {
+          console.error('Error en reconocimiento de voz:', event.error);
+          handleAudioError();
+        };
+    
+        recognition.onend = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.remove('recording');
+          speechStatus.textContent = 'Presiona para hablar';
+          speechStatus.classList.remove('listening');
+          changeAvatarExpression('normal');
+          
+          // Detener animación
+          micButton.style.animation = '';
+        };
+    
+        return true;
+      } catch (error) {
+        console.error('Error initializing speech recognition:', error);
+        showError('No se pudo inicializar el reconocimiento de voz.');
+        return false;
+      }
+    }
+    
+    // Mostrar texto mientras el usuario habla
+    function showUserSpeaking(text) {
+      const userResponse = document.getElementById('userResponse');
+      if (!userResponse) return;
+      
+      userResponse.textContent = text;
+      userResponse.classList.remove('hidden');
+      
+      // Añadir efecto de typing
+      userResponse.classList.add('typing');
+    }
+    
+
+    // Inicializar síntesis de voz
+    function initSpeechSynthesis() {
+      synthesizer = window.speechSynthesis;
+    }
+
+    // Solicitar permisos
+    async function requestPermissions() {
+      try {
+        // Solicitar permiso de micrófono
+        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        document.getElementById('micPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('micPermissionBtn').disabled = true;
+        
+        // Solicitar permiso de cámara
+        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('userVideo').srcObject = videoStream;
+        document.getElementById('cameraPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('cameraPermissionBtn').disabled = true;
+
+        // Inicializar reconocimiento y síntesis de voz
+        initSpeechRecognition();
+        initSpeechSynthesis();
+
+        // Ocultar modal de permisos
+        document.getElementById('permissionsModal').style.display = 'none';
+      } catch (error) {
+        showPermissionError('No se pudo acceder a los dispositivos. Por favor, permite el acceso a micrófono y cámara.');
+      }
+    }
+
+    // Función para que el avatar hable
+    function speakText(text) {
+      if (synthesizer) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.pitch = 1.1;  // Ajustar el tono
+        utterance.rate = 1.0;   // Velocidad normal
+        utterance.volume = 0.9;  // Volumen alto pero no máximo
+
+        utterance.onstart = () => {
+          document.getElementById('avatarImage').classList.add('speaking');
+        };
+
+        utterance.onend = () => {
+          document.getElementById('avatarImage').classList.remove('speaking');
+        };
+
+        synthesizer.speak(utterance);
+      }
+    }
+
+    // Actualizar manejo de respuestas
+    function handleUserResponse(response) {
+      addMessage('user', response);
+      
+      // Cambiar la expresión del avatar según el contenido
+      if (response.toLowerCase().includes('no') || response.toLowerCase().includes('difícil')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION3-MOCHI.png';
+      } else if (response.toLowerCase().includes('sí') || response.toLowerCase().includes('bien')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+      }
+
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+      const questionData = levelData.questions[currentQuestion - 1];
+      
+      // Simular procesamiento de IA con feedback personalizado
+      setTimeout(() => {
+        let feedback = questionData.dialogText;
+        
+        // Personalizar el feedback según palabras clave en la respuesta
+        if (response.length < 20) {
+          feedback = "¡Adelante! Puedes expandir un poco más tu respuesta. " + feedback;
+        } else if (response.length > 100) {
+          feedback = "¡Excelente detalle! " + feedback;
+        }
+
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION1-MOCHI.png';
+        addMessage('avatar', feedback);
+        speakText(feedback);
+
+        setTimeout(() => {
+          if (currentQuestion < levelData.questions.length) {
+            currentQuestion++;
+            renderQuestion();
+          } else {
+            document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+            showCompletionModal();
+          }
+        }, 2000);
+      }, 1000);
+    }
+
+    function simulateSpeechToText() {
+      const micButton = document.getElementById('micButton');
+      const userResponse = document.getElementById('userResponse');
+
+      micButton.classList.add('recording');
+      micButton.querySelector('i').classList.remove('fa-microphone');
+      micButton.querySelector('i').classList.add('fa-microphone-alt');
+
+      // Simular grabación por 1.5 segundos
+      setTimeout(() => {
+        micButton.classList.remove('recording');
+        micButton.querySelector('i').classList.remove('fa-microphone-alt');
+        micButton.querySelector('i').classList.add('fa-microphone');
+
+        // Obtener una respuesta simulada
+        const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+        const responses = levelResponses[currentLevel] || ["Respuesta simulada."];
+        const responseText = responses[currentQuestion - 1] || "Respuesta simulada.";
+
+        // Procesar la respuesta
+        handleUserResponse(responseText);
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+
+      if (currentQuestion < levelData.questions.length) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        setTimeout(() => {
+          showCompletionModal();
+        }, 1000);
+      }
+    }
+
+    function showCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.remove('hidden');
+        const congratulationsSound = document.getElementById('congratulationsSound');
+        if (congratulationsSound) {
+          congratulationsSound.currentTime = 0;
+          congratulationsSound.play();
+        }
+      }
+    }
+
+    function goToProgressPage() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+
+      // Actualizar el estado de progreso
+      progressState[currentCategory] = Math.max(progressState[currentCategory], currentLevel + 1);
+
+      document.getElementById('simulator').classList.add('hidden');
+      showProgressPage();
+    }
+
+    function closeCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+      returnToMenu();
+    }
+
+    function returnToMenu() {
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.add('hidden');
+      document.getElementById('menu').classList.remove('hidden');
+    }
+
+    function playConfirmSound() {
+      const confirmSound = document.getElementById('confirmSound');
+      if (confirmSound) {
+        confirmSound.currentTime = 0;
+        confirmSound.play();
+      }
+    }
+
+    function showLevels(category) {
+      const levelsContainer = document.getElementById("levels-container");
+      const levelCategoryTitle = document.getElementById("level-category");
+    
+      levelCategoryTitle.textContent =
+        category === "basic" ? "Básico" : category === "intermediate" ? "Intermedio" : "Avanzado";
+    
+      levelsContainer.innerHTML = "";
+    
+      levels[category].forEach((level, index) => {
+        const isUnlocked = progressState[category] > index;
+        const levelDiv = document.createElement("div");
+        levelDiv.className = `borde-suave text-center p-4 relative ${isUnlocked ? "" : "opacity-50 cursor-not-allowed"}`;
+    
+        levelDiv.innerHTML = `
+          <div class="text-lg font-bold">${level}</div>
+          <p class="text-sm text-[#4f9688] mt-2">Nivel ${index + 1}</p>
+          ${isUnlocked ? "" : '<span class="absolute top-2 right-2 bg-gray-400 text-white text-xs px-2 py-0.5 rounded-full">🔒</span>'}
+        `;
+    
+        if (isUnlocked) {
+          levelDiv.addEventListener("click", () => {
+            startSimulator(index + 1, category);
+          });
+        }
+    
+        levelsContainer.appendChild(levelDiv);
+      });
+    }
+    
+
+    const progressState = {
+      basic: 10, // Los 10 primeros niveles están desbloqueados
+      intermediate: 17, // Hasta el nivel 17 desbloqueado
+      advanced: 0, // Ningún nivel avanzado desbloqueado aún
+    };
+    
+
+    const levels = {
+      basic: [
+      // Fase 1: Conocimiento del Usuario
+      "Conociéndote mejor",
+      "Preferencias de comunicación",
+      "Gestión de Situaciones Desafiantes",
+      "Identificando Tus Intereses",
+      "Habilidades Generales y Adaptabilidad",
+      // Subfase 1.1 de vocacionalización (autopersonalización)
+      "Descubriendo tu Identidad Profesional",
+      "Explorando Tus Metas Personales",
+      "Conexión con Tus Habilidades Interpersonales",
+      "Reconociendo tus Fortalezas y Debilidades",
+      "Adaptabilidad y Resiliencia en el Trabajo",
+      "Reflexión sobre Logros Personales",
+      "Preferencias en el Entorno Laboral",
+      "Identificando Tu Estilo de Trabajo",
+      "Toma de Decisiones bajo Presión",
+      "Conexión entre Pasión y Carrera",
+      // Fase 2: Introducción al Rubro
+      "Expectativas del Rubro Profesional",
+      "Tendencias en tu Sector",
+      "Habilidades Esenciales por Industria",
+      "Retos Comunes de tu Sector",
+      "Adaptación a las Demandas del Rubro",
+      "Planificación de Metas Profesionales",
+      "Rol Ideal y Funciones Clave",
+      "Exploración de Liderazgo Inicial",
+      "Networking y Relaciones Profesionales",
+      "Herramientas Básicas del Sector",
+      // Fase 3: Transición a Entrevistas
+      "Primera Impresión Profesional",
+      "Dominando los Saludos y Aperturas",
+      "Lenguaje Corporal Positivo",
+      "Estrategias de Conexión Inicial",
+      "Mostrando Interés Genuino en el Puesto",
+      "Abordando Preguntas Comunes",
+      "Resaltando tu Preparación Académica",
+      "Relatando tus Experiencias de Manera Clara",
+      "Ajuste de Respuestas al Puesto",
+      "Manejando Preguntas sobre Expectativas",
+      // Fase 4: Auto Personalización
+      "Preguntas Personalizadas Basadas en tu Perfil",
+      "Ajuste de Respuestas por Sector Específico",
+      "Refinamiento del Lenguaje Profesional",
+      "Introducción a Escenarios Específicos",
+      "Resaltando tu Propuesta de Valor",
+      "Enfrentando Preguntas Retadoras",
+      "Simulaciones de Entrevista Inicial",
+      "Feedback Personalizado y Ajustes",
+      "Práctica Avanzada con Escenarios Simples",
+      "Certificación Inicial de Preparación",
+    ],
+      intermediate: [
+        // Niveles intermedios del 11 al 30
+        "Estrategias para Preguntas Situacionales",
+        "Trabajo en Equipo: Respuestas Enfocadas",
+        "Uso de Ejemplos en Respuestas",
+        "Introducción a la Técnica STAR",
+        "STAR: Desglosando Situación y Tarea",
+        "Resolviendo Conflictos Laborales Simples",
+        "Habilidades Técnicas y Blandas en Respuestas",
+        "Ajustes de Respuesta según Contexto",
+        "Preguntas Hipotéticas y su Manejo",
+        "Preparación para Preguntas de Panel",
+        // Fase 2: Introducción al Speech-to-Text (STT)
+        "Fluidez en Respuestas Orales",
+        "Feedback Básico sobre Tono y Ritmo",
+        "Simulación Inicial con STT",
+        "Uso de STAR en Respuestas Orales",
+        "Retroalimentación en Preguntas Técnicas",
+        "Lenguaje Corporal y Voz en Entrevistas",
+        "Escenarios Simples con STT",
+        "Feedback Avanzado en Respuestas Habladas",
+        "Ajustes en el Lenguaje Profesional Oral",
+        "Simulación de Entrevista Moderada",
+        // Fase 3: Escenarios Avanzados
+        "Simulación Completa de Entrevista Ejecutiva",
+        "STAR en Roles Estratégicos",
+        "Retroalimentación en Respuestas Críticas",
+        "Resolviendo Dilemas Éticos Reales",
+        "Feedback Oral en Paneles Técnicos",
+        "Escenarios de Resolución de Conflictos Laborales",
+        "Simulación Avanzada de Negociación Salarial",
+        "Ajustes para Entrevistas Multiculturales",
+        "Preparación Final para Roles Globales",
+        "Certificación Avanzada: Dominio Profesional",
+      ],
+      advanced: [
+      // Modalidad Avanzado: 20 niveles
+      // Fase 1: Preparación Completa
+      "Respuestas Técnicas por Industria",
+      "STAR en Escenarios Multidimensionales",
+      "Preguntas Éticas Complejas",
+      "Introducción a Paneles de Alta Exigencia",
+      "Lenguaje Corporal y Ritmo Avanzados",
+      "Feedback en Roles Ejecutivos",
+      "Simulación de Entrevista Ejecutiva",
+      "Manejo de Casos Críticos en Tiempo Real",
+      "Ajustes de Respuesta para Altos Cargos",
+      "Preparación para Negociación Salarial",
+      // Fase 2: Simulaciones Intensivas
+      "Simulación Completa de Entrevista Ejecutiva",
+      "STAR en Roles Estratégicos",
+      "Retroalimentación en Respuestas Críticas",
+      "Resolviendo Dilemas Éticos Reales",
+      "Feedback Oral en Paneles Técnicos",
+      "Escenarios de Resolución de Conflictos Laborales",
+      "Simulación Avanzada de Negociación Salarial",
+      "Ajustes para Entrevistas Multiculturales",
+      "Preparación Final para Roles Globales",
+      "Certificación Avanzada: Dominio Profesional",
+    ],
+  
+    };
+
+    function showProgressPage() {
+      document.getElementById('menu').classList.add('hidden');
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.remove('hidden');
+      showLevels(currentCategory);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('button.volver-menu').forEach(boton => {
+        boton.addEventListener('click', returnToMenu);
+      });
+
+      if (profileButton && profileMenu) {
+        profileButton.addEventListener('click', () => {
+          profileMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', (e) => {
+          if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+            profileMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('slide-down');
+          } else {
+            mobileMenu.classList.remove('slide-down');
+          }
+        });
+      }
+
+      const notificationButton = document.getElementById('notificationButton');
+      const notificationMenu = document.getElementById('notificationMenu');
+      if (notificationButton && notificationMenu) {
+        notificationButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', (e) => {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      const progressCard = document.getElementById('progress-card');
+      if (progressCard) {
+        progressCard.addEventListener('click', () => {
+          showProgressPage();
+        });
+      }
+    });
+
+    // Variables para manejo de voz y video
+    let recognition;
+    let synthesizer;
+    let isListening = false;
+    let stream;
+
+    // Inicializar reconocimiento de voz con mejor manejo de errores
+    async function initializeSpeechRecognition() {
+      if (!('webkitSpeechRecognition' in window)) {
+        showError('Tu navegador no soporta reconocimiento de voz. Por favor, usa Chrome.');
+        return false;
+      }
+    
+      try {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'es-ES';
+    
+        recognition.onstart = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.add('recording');
+          speechStatus.textContent = 'Escuchando...';
+          speechStatus.classList.add('listening');
+          changeAvatarExpression('listening');
+          
+          // Efecto de onda en el botón
+          micButton.style.animation = 'pulse 1.5s infinite';
+        };
+    
+        recognition.onresult = (event) => {
+          let interimTranscript = '';
+          let finalTranscript = '';
+    
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
+            }
+          }
+    
+          // Mostrar texto intermedio en tiempo real
+          if (interimTranscript !== '') {
+            showUserSpeaking(interimTranscript);
+          }
+    
+          // Procesar texto final
+          if (finalTranscript !== '') {
+            handleUserResponse(finalTranscript);
+          }
+        };
+    
+        recognition.onerror = (event) => {
+          console.error('Error en reconocimiento de voz:', event.error);
+          handleAudioError();
+        };
+    
+        recognition.onend = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.remove('recording');
+          speechStatus.textContent = 'Presiona para hablar';
+          speechStatus.classList.remove('listening');
+          changeAvatarExpression('normal');
+          
+          // Detener animación
+          micButton.style.animation = '';
+        };
+    
+        return true;
+      } catch (error) {
+        console.error('Error initializing speech recognition:', error);
+        showError('No se pudo inicializar el reconocimiento de voz.');
+        return false;
+      }
+    }
+    
+    // Mostrar texto mientras el usuario habla
+    function showUserSpeaking(text) {
+      const userResponse = document.getElementById('userResponse');
+      if (!userResponse) return;
+      
+      userResponse.textContent = text;
+      userResponse.classList.remove('hidden');
+      
+      // Añadir efecto de typing
+      userResponse.classList.add('typing');
+    }
+    
+
+    // Inicializar síntesis de voz
+    function initSpeechSynthesis() {
+      synthesizer = window.speechSynthesis;
+    }
+
+    // Solicitar permisos
+    async function requestPermissions() {
+      try {
+        // Solicitar permiso de micrófono
+        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        document.getElementById('micPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('micPermissionBtn').disabled = true;
+        
+        // Solicitar permiso de cámara
+        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('userVideo').srcObject = videoStream;
+        document.getElementById('cameraPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('cameraPermissionBtn').disabled = true;
+
+        // Inicializar reconocimiento y síntesis de voz
+        initSpeechRecognition();
+        initSpeechSynthesis();
+
+        // Ocultar modal de permisos
+        document.getElementById('permissionsModal').style.display = 'none';
+      } catch (error) {
+        showPermissionError('No se pudo acceder a los dispositivos. Por favor, permite el acceso a micrófono y cámara.');
+      }
+    }
+
+    // Función para que el avatar hable
+    function speakText(text) {
+      if (synthesizer) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.pitch = 1.1;  // Ajustar el tono
+        utterance.rate = 1.0;   // Velocidad normal
+        utterance.volume = 0.9;  // Volumen alto pero no máximo
+
+        utterance.onstart = () => {
+          document.getElementById('avatarImage').classList.add('speaking');
+        };
+
+        utterance.onend = () => {
+          document.getElementById('avatarImage').classList.remove('speaking');
+        };
+
+        synthesizer.speak(utterance);
+      }
+    }
+
+    // Actualizar manejo de respuestas
+    function handleUserResponse(response) {
+      addMessage('user', response);
+      
+      // Cambiar la expresión del avatar según el contenido
+      if (response.toLowerCase().includes('no') || response.toLowerCase().includes('difícil')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION3-MOCHI.png';
+      } else if (response.toLowerCase().includes('sí') || response.toLowerCase().includes('bien')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+      }
+
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+      const questionData = levelData.questions[currentQuestion - 1];
+      
+      // Simular procesamiento de IA con feedback personalizado
+      setTimeout(() => {
+        let feedback = questionData.dialogText;
+        
+        // Personalizar el feedback según palabras clave en la respuesta
+        if (response.length < 20) {
+          feedback = "¡Adelante! Puedes expandir un poco más tu respuesta. " + feedback;
+        } else if (response.length > 100) {
+          feedback = "¡Excelente detalle! " + feedback;
+        }
+
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION1-MOCHI.png';
+        addMessage('avatar', feedback);
+        speakText(feedback);
+
+        setTimeout(() => {
+          if (currentQuestion < levelData.questions.length) {
+            currentQuestion++;
+            renderQuestion();
+          } else {
+            document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+            showCompletionModal();
+          }
+        }, 2000);
+      }, 1000);
+    }
+
+    function simulateSpeechToText() {
+      const micButton = document.getElementById('micButton');
+      const userResponse = document.getElementById('userResponse');
+
+      micButton.classList.add('recording');
+      micButton.querySelector('i').classList.remove('fa-microphone');
+      micButton.querySelector('i').classList.add('fa-microphone-alt');
+
+      // Simular grabación por 1.5 segundos
+      setTimeout(() => {
+        micButton.classList.remove('recording');
+        micButton.querySelector('i').classList.remove('fa-microphone-alt');
+        micButton.querySelector('i').classList.add('fa-microphone');
+
+        // Obtener una respuesta simulada
+        const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+        const responses = levelResponses[currentLevel] || ["Respuesta simulada."];
+        const responseText = responses[currentQuestion - 1] || "Respuesta simulada.";
+
+        // Procesar la respuesta
+        handleUserResponse(responseText);
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+
+      if (currentQuestion < levelData.questions.length) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        setTimeout(() => {
+          showCompletionModal();
+        }, 1000);
+      }
+    }
+
+    function showCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.remove('hidden');
+        const congratulationsSound = document.getElementById('congratulationsSound');
+        if (congratulationsSound) {
+          congratulationsSound.currentTime = 0;
+          congratulationsSound.play();
+        }
+      }
+    }
+
+    function goToProgressPage() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+
+      // Actualizar el estado de progreso
+      progressState[currentCategory] = Math.max(progressState[currentCategory], currentLevel + 1);
+
+      document.getElementById('simulator').classList.add('hidden');
+      showProgressPage();
+    }
+
+    function closeCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+      returnToMenu();
+    }
+
+    function returnToMenu() {
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.add('hidden');
+      document.getElementById('menu').classList.remove('hidden');
+    }
+
+    function playConfirmSound() {
+      const confirmSound = document.getElementById('confirmSound');
+      if (confirmSound) {
+        confirmSound.currentTime = 0;
+        confirmSound.play();
+      }
+    }
+
+    function showLevels(category) {
+      const levelsContainer = document.getElementById("levels-container");
+      const levelCategoryTitle = document.getElementById("level-category");
+    
+      levelCategoryTitle.textContent =
+        category === "basic" ? "Básico" : category === "intermediate" ? "Intermedio" : "Avanzado";
+    
+      levelsContainer.innerHTML = "";
+    
+      levels[category].forEach((level, index) => {
+        const isUnlocked = progressState[category] > index;
+        const levelDiv = document.createElement("div");
+        levelDiv.className = `borde-suave text-center p-4 relative ${isUnlocked ? "" : "opacity-50 cursor-not-allowed"}`;
+    
+        levelDiv.innerHTML = `
+          <div class="text-lg font-bold">${level}</div>
+          <p class="text-sm text-[#4f9688] mt-2">Nivel ${index + 1}</p>
+          ${isUnlocked ? "" : '<span class="absolute top-2 right-2 bg-gray-400 text-white text-xs px-2 py-0.5 rounded-full">🔒</span>'}
+        `;
+    
+        if (isUnlocked) {
+          levelDiv.addEventListener("click", () => {
+            startSimulator(index + 1, category);
+          });
+        }
+    
+        levelsContainer.appendChild(levelDiv);
+      });
+    }
+    
+
+    const progressState = {
+      basic: 10, // Los 10 primeros niveles están desbloqueados
+      intermediate: 17, // Hasta el nivel 17 desbloqueado
+      advanced: 0, // Ningún nivel avanzado desbloqueado aún
+    };
+    
+
+    const levels = {
+      basic: [
+      // Fase 1: Conocimiento del Usuario
+      "Conociéndote mejor",
+      "Preferencias de comunicación",
+      "Gestión de Situaciones Desafiantes",
+      "Identificando Tus Intereses",
+      "Habilidades Generales y Adaptabilidad",
+      // Subfase 1.1 de vocacionalización (autopersonalización)
+      "Descubriendo tu Identidad Profesional",
+      "Explorando Tus Metas Personales",
+      "Conexión con Tus Habilidades Interpersonales",
+      "Reconociendo tus Fortalezas y Debilidades",
+      "Adaptabilidad y Resiliencia en el Trabajo",
+      "Reflexión sobre Logros Personales",
+      "Preferencias en el Entorno Laboral",
+      "Identificando Tu Estilo de Trabajo",
+      "Toma de Decisiones bajo Presión",
+      "Conexión entre Pasión y Carrera",
+      // Fase 2: Introducción al Rubro
+      "Expectativas del Rubro Profesional",
+      "Tendencias en tu Sector",
+      "Habilidades Esenciales por Industria",
+      "Retos Comunes de tu Sector",
+      "Adaptación a las Demandas del Rubro",
+      "Planificación de Metas Profesionales",
+      "Rol Ideal y Funciones Clave",
+      "Exploración de Liderazgo Inicial",
+      "Networking y Relaciones Profesionales",
+      "Herramientas Básicas del Sector",
+      // Fase 3: Transición a Entrevistas
+      "Primera Impresión Profesional",
+      "Dominando los Saludos y Aperturas",
+      "Lenguaje Corporal Positivo",
+      "Estrategias de Conexión Inicial",
+      "Mostrando Interés Genuino en el Puesto",
+      "Abordando Preguntas Comunes",
+      "Resaltando tu Preparación Académica",
+      "Relatando tus Experiencias de Manera Clara",
+      "Ajuste de Respuestas al Puesto",
+      "Manejando Preguntas sobre Expectativas",
+      // Fase 4: Auto Personalización
+      "Preguntas Personalizadas Basadas en tu Perfil",
+      "Ajuste de Respuestas por Sector Específico",
+      "Refinamiento del Lenguaje Profesional",
+      "Introducción a Escenarios Específicos",
+      "Resaltando tu Propuesta de Valor",
+      "Enfrentando Preguntas Retadoras",
+      "Simulaciones de Entrevista Inicial",
+      "Feedback Personalizado y Ajustes",
+      "Práctica Avanzada con Escenarios Simples",
+      "Certificación Inicial de Preparación",
+    ],
+      intermediate: [
+        // Niveles intermedios del 11 al 30
+        "Estrategias para Preguntas Situacionales",
+        "Trabajo en Equipo: Respuestas Enfocadas",
+        "Uso de Ejemplos en Respuestas",
+        "Introducción a la Técnica STAR",
+        "STAR: Desglosando Situación y Tarea",
+        "Resolviendo Conflictos Laborales Simples",
+        "Habilidades Técnicas y Blandas en Respuestas",
+        "Ajustes de Respuesta según Contexto",
+        "Preguntas Hipotéticas y su Manejo",
+        "Preparación para Preguntas de Panel",
+        // Fase 2: Introducción al Speech-to-Text (STT)
+        "Fluidez en Respuestas Orales",
+        "Feedback Básico sobre Tono y Ritmo",
+        "Simulación Inicial con STT",
+        "Uso de STAR en Respuestas Orales",
+        "Retroalimentación en Preguntas Técnicas",
+        "Lenguaje Corporal y Voz en Entrevistas",
+        "Escenarios Simples con STT",
+        "Feedback Avanzado en Respuestas Habladas",
+        "Ajustes en el Lenguaje Profesional Oral",
+        "Simulación de Entrevista Moderada",
+        // Fase 3: Escenarios Avanzados
+        "Simulación Completa de Entrevista Ejecutiva",
+        "STAR en Roles Estratégicos",
+        "Retroalimentación en Respuestas Críticas",
+        "Resolviendo Dilemas Éticos Reales",
+        "Feedback Oral en Paneles Técnicos",
+        "Escenarios de Resolución de Conflictos Laborales",
+        "Simulación Avanzada de Negociación Salarial",
+        "Ajustes para Entrevistas Multiculturales",
+        "Preparación Final para Roles Globales",
+        "Certificación Avanzada: Dominio Profesional",
+      ],
+      advanced: [
+      // Modalidad Avanzado: 20 niveles
+      // Fase 1: Preparación Completa
+      "Respuestas Técnicas por Industria",
+      "STAR en Escenarios Multidimensionales",
+      "Preguntas Éticas Complejas",
+      "Introducción a Paneles de Alta Exigencia",
+      "Lenguaje Corporal y Ritmo Avanzados",
+      "Feedback en Roles Ejecutivos",
+      "Simulación de Entrevista Ejecutiva",
+      "Manejo de Casos Críticos en Tiempo Real",
+      "Ajustes de Respuesta para Altos Cargos",
+      "Preparación para Negociación Salarial",
+      // Fase 2: Simulaciones Intensivas
+      "Simulación Completa de Entrevista Ejecutiva",
+      "STAR en Roles Estratégicos",
+      "Retroalimentación en Respuestas Críticas",
+      "Resolviendo Dilemas Éticos Reales",
+      "Feedback Oral en Paneles Técnicos",
+      "Escenarios de Resolución de Conflictos Laborales",
+      "Simulación Avanzada de Negociación Salarial",
+      "Ajustes para Entrevistas Multiculturales",
+      "Preparación Final para Roles Globales",
+      "Certificación Avanzada: Dominio Profesional",
+    ],
+  
+    };
+
+    function showProgressPage() {
+      document.getElementById('menu').classList.add('hidden');
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.remove('hidden');
+      showLevels(currentCategory);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('button.volver-menu').forEach(boton => {
+        boton.addEventListener('click', returnToMenu);
+      });
+
+      if (profileButton && profileMenu) {
+        profileButton.addEventListener('click', () => {
+          profileMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', (e) => {
+          if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+            profileMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('slide-down');
+          } else {
+            mobileMenu.classList.remove('slide-down');
+          }
+        });
+      }
+
+      const notificationButton = document.getElementById('notificationButton');
+      const notificationMenu = document.getElementById('notificationMenu');
+      if (notificationButton && notificationMenu) {
+        notificationButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', (e) => {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+      }
+
+      const progressCard = document.getElementById('progress-card');
+      if (progressCard) {
+        progressCard.addEventListener('click', () => {
+          showProgressPage();
+        });
+      }
+    });
+
+    // Variables para manejo de voz y video
+    let recognition;
+    let synthesizer;
+    let isListening = false;
+    let stream;
+
+    // Inicializar reconocimiento de voz con mejor manejo de errores
+    async function initializeSpeechRecognition() {
+      if (!('webkitSpeechRecognition' in window)) {
+        showError('Tu navegador no soporta reconocimiento de voz. Por favor, usa Chrome.');
+        return false;
+      }
+    
+      try {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'es-ES';
+    
+        recognition.onstart = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.add('recording');
+          speechStatus.textContent = 'Escuchando...';
+          speechStatus.classList.add('listening');
+          changeAvatarExpression('listening');
+          
+          // Efecto de onda en el botón
+          micButton.style.animation = 'pulse 1.5s infinite';
+        };
+    
+        recognition.onresult = (event) => {
+          let interimTranscript = '';
+          let finalTranscript = '';
+    
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
+            }
+          }
+    
+          // Mostrar texto intermedio en tiempo real
+          if (interimTranscript !== '') {
+            showUserSpeaking(interimTranscript);
+          }
+    
+          // Procesar texto final
+          if (finalTranscript !== '') {
+            handleUserResponse(finalTranscript);
+          }
+        };
+    
+        recognition.onerror = (event) => {
+          console.error('Error en reconocimiento de voz:', event.error);
+          handleAudioError();
+        };
+    
+        recognition.onend = () => {
+          const micButton = document.getElementById('micButton');
+          const speechStatus = document.getElementById('speechStatus');
+          
+          micButton.classList.remove('recording');
+          speechStatus.textContent = 'Presiona para hablar';
+          speechStatus.classList.remove('listening');
+          changeAvatarExpression('normal');
+          
+          // Detener animación
+          micButton.style.animation = '';
+        };
+    
+        return true;
+      } catch (error) {
+        console.error('Error initializing speech recognition:', error);
+        showError('No se pudo inicializar el reconocimiento de voz.');
+        return false;
+      }
+    }
+    
+    // Mostrar texto mientras el usuario habla
+    function showUserSpeaking(text) {
+      const userResponse = document.getElementById('userResponse');
+      if (!userResponse) return;
+      
+      userResponse.textContent = text;
+      userResponse.classList.remove('hidden');
+      
+      // Añadir efecto de typing
+      userResponse.classList.add('typing');
+    }
+    
+
+    // Inicializar síntesis de voz
+    function initSpeechSynthesis() {
+      synthesizer = window.speechSynthesis;
+    }
+
+    // Solicitar permisos
+    async function requestPermissions() {
+      try {
+        // Solicitar permiso de micrófono
+        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        document.getElementById('micPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('micPermissionBtn').disabled = true;
+        
+        // Solicitar permiso de cámara
+        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('userVideo').srcObject = videoStream;
+        document.getElementById('cameraPermissionBtn').textContent = '✓ Permitido';
+        document.getElementById('cameraPermissionBtn').disabled = true;
+
+        // Inicializar reconocimiento y síntesis de voz
+        initSpeechRecognition();
+        initSpeechSynthesis();
+
+        // Ocultar modal de permisos
+        document.getElementById('permissionsModal').style.display = 'none';
+      } catch (error) {
+        showPermissionError('No se pudo acceder a los dispositivos. Por favor, permite el acceso a micrófono y cámara.');
+      }
+    }
+
+    // Función para que el avatar hable
+    function speakText(text) {
+      if (synthesizer) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.pitch = 1.1;  // Ajustar el tono
+        utterance.rate = 1.0;   // Velocidad normal
+        utterance.volume = 0.9;  // Volumen alto pero no máximo
+
+        utterance.onstart = () => {
+          document.getElementById('avatarImage').classList.add('speaking');
+        };
+
+        utterance.onend = () => {
+          document.getElementById('avatarImage').classList.remove('speaking');
+        };
+
+        synthesizer.speak(utterance);
+      }
+    }
+
+    // Actualizar manejo de respuestas
+    function handleUserResponse(response) {
+      addMessage('user', response);
+      
+      // Cambiar la expresión del avatar según el contenido
+      if (response.toLowerCase().includes('no') || response.toLowerCase().includes('difícil')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION3-MOCHI.png';
+      } else if (response.toLowerCase().includes('sí') || response.toLowerCase().includes('bien')) {
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+      }
+
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+      const questionData = levelData.questions[currentQuestion - 1];
+      
+      // Simular procesamiento de IA con feedback personalizado
+      setTimeout(() => {
+        let feedback = questionData.dialogText;
+        
+        // Personalizar el feedback según palabras clave en la respuesta
+        if (response.length < 20) {
+          feedback = "¡Adelante! Puedes expandir un poco más tu respuesta. " + feedback;
+        } else if (response.length > 100) {
+          feedback = "¡Excelente detalle! " + feedback;
+        }
+
+        document.getElementById('avatarImage').src = 'img/AVATAR-POSISION1-MOCHI.png';
+        addMessage('avatar', feedback);
+        speakText(feedback);
+
+        setTimeout(() => {
+          if (currentQuestion < levelData.questions.length) {
+            currentQuestion++;
+            renderQuestion();
+          } else {
+            document.getElementById('avatarImage').src = 'img/AVATAR-POSISION4-MOCHI.png';
+            showCompletionModal();
+          }
+        }, 2000);
+      }, 1000);
+    }
+
+    function simulateSpeechToText() {
+      const micButton = document.getElementById('micButton');
+      const userResponse = document.getElementById('userResponse');
+
+      micButton.classList.add('recording');
+      micButton.querySelector('i').classList.remove('fa-microphone');
+      micButton.querySelector('i').classList.add('fa-microphone-alt');
+
+      // Simular grabación por 1.5 segundos
+      setTimeout(() => {
+        micButton.classList.remove('recording');
+        micButton.querySelector('i').classList.remove('fa-microphone-alt');
+        micButton.querySelector('i').classList.add('fa-microphone');
+
+        // Obtener una respuesta simulada
+        const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+        const responses = levelResponses[currentLevel] || ["Respuesta simulada."];
+        const responseText = responses[currentQuestion - 1] || "Respuesta simulada.";
+
+        // Procesar la respuesta
+        handleUserResponse(responseText);
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      const levelData = levelsData[currentCategory].find(l => l.levelNumber === currentLevel);
+
+      if (currentQuestion < levelData.questions.length) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        setTimeout(() => {
+          showCompletionModal();
+        }, 1000);
+      }
+    }
+
+    function showCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.remove('hidden');
+        const congratulationsSound = document.getElementById('congratulationsSound');
+        if (congratulationsSound) {
+          congratulationsSound.currentTime = 0;
+          congratulationsSound.play();
+        }
+      }
+    }
+
+    function goToProgressPage() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+
+      // Actualizar el estado de progreso
+      progressState[currentCategory] = Math.max(progressState[currentCategory], currentLevel + 1);
+
+      document.getElementById('simulator').classList.add('hidden');
+      showProgressPage();
+    }
+
+    function closeCompletionModal() {
+      if (completionModal) {
+        completionModal.classList.add('hidden');
+      }
+      returnToMenu();
+    }
+
+    function returnToMenu() {
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.add('hidden');
+      document.getElementById('menu').classList.remove('hidden');
+    }
+
+    function playConfirmSound() {
+      const confirmSound = document.getElementById('confirmSound');
+      if (confirmSound) {
+        confirmSound.currentTime = 0;
+        confirmSound.play();
+      }
+    }
+
+    function showLevels(category) {
+      const levelsContainer = document.getElementById("levels-container");
+      const levelCategoryTitle = document.getElementById("level-category");
+    
+      levelCategoryTitle.textContent =
+        category === "basic" ? "Básico" : category === "intermediate" ? "Intermedio" : "Avanzado";
+    
+      levelsContainer.innerHTML = "";
+    
+      levels[category].forEach((level, index) => {
+        const isUnlocked = progressState[category] > index;
+        const levelDiv = document.createElement("div");
+        levelDiv.className = `borde-suave text-center p-4 relative ${isUnlocked ? "" : "opacity-50 cursor-not-allowed"}`;
+    
+        levelDiv.innerHTML = `
+          <div class="text-lg font-bold">${level}</div>
+          <p class="text-sm text-[#4f9688] mt-2">Nivel ${index + 1}</p>
+          ${isUnlocked ? "" : '<span class="absolute top-2 right-2 bg-gray-400 text-white text-xs px-2 py-0.5 rounded-full">🔒</span>'}
+        `;
+    
+        if (isUnlocked) {
+          levelDiv.addEventListener("click", () => {
+            startSimulator(index + 1, category);
+          });
+        }
+    
+        levelsContainer.appendChild(levelDiv);
+      });
+    }
+    
+
+    const progressState = {
+      basic: 10, // Los 10 primeros niveles están desbloqueados
+      intermediate: 17, // Hasta el nivel 17 desbloqueado
+      advanced: 0, // Ningún nivel avanzado desbloqueado aún
+    };
+    
+
+    const levels = {
+      basic: [
+      // Fase 1: Conocimiento del Usuario
+      "Conociéndote mejor",
+      "Preferencias de comunicación",
+      "Gestión de Situaciones Desafiantes",
+      "Identificando Tus Intereses",
+      "Habilidades Generales y Adaptabilidad",
+      // Subfase 1.1 de vocacionalización (autopersonalización)
+      "Descubriendo tu Identidad Profesional",
+      "Explorando Tus Metas Personales",
+      "Conexión con
