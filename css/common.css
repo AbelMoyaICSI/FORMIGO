@@ -1,0 +1,166 @@
+/* Estilos comunes para todos los archivos HTML de Formigo */
+
+/* Configuración base */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8fbfb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Botones */
+.boton {
+  background-color: #49e9c9;
+  color: #0e1b18;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+.boton:hover {
+  background-color: #3fc0a4;
+}
+
+.boton-secundario {
+  background-color: #e8f3f0;
+  color: #0e1b18;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.boton-secundario:hover {
+  background-color: #cfdad6;
+}
+
+.boton-premium {
+  background-color: #49e9c9;
+  color: #0e1b18;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.boton-premium:hover {
+  background-color: #3fc0a4;
+}
+
+/* Header y Navegación */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  border-bottom: 1px solid #e8f3f0;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding: 0 2.5rem;
+  }
+}
+
+header .flex.items-center {
+  align-items: center;
+}
+
+header .gap-6 > * {
+  display: flex;
+  align-items: center;
+}
+
+/* Menús desplegables */
+#notificationMenu,
+#profileMenu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #e8f3f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Bordes y Tarjetas */
+.borde-suave {
+  border: 1px solid #e8f3f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.borde-suave:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+  background-color: #f8fbfb;
+  padding: 1.5rem 0;
+  text-align: center;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+  margin-top: 2.5rem;
+}
+
+footer .social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+footer .social-icons a {
+  color: #3fc0a4;
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+}
+
+footer .social-icons a:hover {
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #mobileMenu {
+    width: 100%;
+    border-top: 1px solid #e8f3f0;
+  }
+
+  #profileMenu {
+    position: relative;
+    width: 100%;
+    top: unset;
+    right: unset;
+  }
+}

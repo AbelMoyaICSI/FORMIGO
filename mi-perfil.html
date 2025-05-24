@@ -6,208 +6,23 @@
   <title>Formigo|Mi perfil</title>
   <link rel="icon" href="img/LOGO-MOCHI.ico">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #f8fbfb;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-
-      }
-
-      
-
-      .hidden {
-        display: none;
-      }
-
-      .slide-down {
-        animation: slideDown 0.3s ease-out;
-      }
-
-
-/* NUEVO  */
-
-    /* Menú de notificaciones */
-    #notificationMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Menú de perfil */
-    #profileMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Botón Premium */
-    .boton-premium {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 1rem;
-      height: 40px; /* Asegura una altura consistente */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-
-    .boton-premium:hover {
-      background-color: #3fc0a4;
-    }
-
-    /* Ajuste general del header */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px; /* Asegura que todos los elementos estén centrados */
-    }
-
-    header .flex.items-center {
-      align-items: center; /* Alinea verticalmente todos los elementos */
-    }
-
-    /* Alineación uniforme del header */
-    header .gap-6 > * {
-      display: flex;
-      align-items: center; /* Asegura alineación vertical */
-    }
-
-
-
-/*  ----    */   
-
-      @keyframes slideDown {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Header y footer */
-      header {
-        background-color: #f8fbfb;
-        border-bottom: 1px solid #e2e8f0;
-      }
-
-      .header-logo {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        cursor: pointer;
-      }
-
-      .header-logo img {
-        width: 2.5rem;
-        height: 2.5rem;
-      }
-
-      .header-menu a {
-        font-size: 1rem;
-        font-weight: 500;
-        color: #0e1b18;
-        transition: color 0.3s;
-      }
-
-      .header-menu a:hover {
-        color: #49e9c9;
-      }
-
-    /* Header y Footer */
-    header {
-        background-color: #f8fbfb;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .header-logo {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        cursor: pointer;
-    }
-
-    .header-logo img {
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-
-    .header-menu a {
-        font-size: 1rem;
-        font-weight: 500;
-        color: #0e1b18;
-        transition: color 0.3s;
-    }
-
-    .header-menu a:hover {
-        color: #49e9c9;
-    }
-    main {
-        flex: 1; /* Toma el espacio restante entre header y footer */
-        padding: 1rem;
-      }
-  
-      footer {
-        background-color: #f8fbfb;
-        border-top: 1px solid #e2e8f0;
-        text-align: center;
-        padding: 1.5rem;
-        font-size: 0.875rem;
-        
-      }
-  
-      footer a {
-        color: #3fc0a4;
-        transition: color 0.3s, transform 0.3s;
-      }
-  
-      footer a:hover {
-        color: #49e9c9;
-        transform: translateY(-3px);
-      }
-
-    footer a {
-        color: #3fc0a4;
-        transition: color 0.3s, transform 0.3s;
-    }
-
-    footer a:hover {
-        color: #49e9c9;
-        transform: translateY(-3px);
-    }
-
-    /* Perfil */
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">  <style>
+    /* Estilos específicos de mi-perfil.html */
     .profile-header {
-        background-color: #ffffff;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
-        padding: 2rem;
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
         gap: 2rem;
         margin-bottom: 2rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .profile-picture {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
         background-size: cover;
         background-position: center;
@@ -215,15 +30,14 @@
     }
 
     .edit-button {
-        margin: 0 auto;
-        display: block;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 1.5rem;
         background-color: #49e9c9;
-        color: white;
-        border-radius: 8px;
-        text-align: center;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
+        border: none;
+        border-radius: 20px;
+        color: #0e1b18;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
 
     .edit-button:hover {
@@ -240,7 +54,6 @@
     .friend-item, .activity-item {
         display: flex;
         align-items: center;
-
         gap: 1rem;
         margin-bottom: 1rem;
     }
@@ -251,30 +64,12 @@
         border-radius: 50%;
     }
 
-    .friend-item:last-child, .activity-item:last-child {
-        margin-bottom: 0;
-    }
-
     .friend-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .friend-actions i {
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }
-
-    .friend-actions i:hover {
-        color: #49e9c9;
+        margin-left: auto;
     }
 
     .add-friend {
         margin-top: 1rem;
-        padding: 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        background-color: #ffffff;
         display: flex;
         gap: 0.5rem;
     }
@@ -289,8 +84,10 @@
     .add-friend button {
         padding: 0.5rem 1rem;
         background-color: #49e9c9;
-        color: white;
+        color: #0e1b18;
+        border: none;
         border-radius: 8px;
+        cursor: pointer;
         transition: background-color 0.3s ease;
     }
 
@@ -298,7 +95,6 @@
         background-color: #3fc0a4;
     }
 
-    /* Responsivo */
     @media (max-width: 768px) {
         .profile-header {
             flex-direction: column;
@@ -308,6 +104,7 @@
         .edit-button {
             width: 100%;
             max-width: 300px;
+            margin: 1rem auto 0;
         }
     }
   </style>

@@ -9,272 +9,75 @@
   <link rel="icon" href="img/LOGO-MOCHI.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* Estilos específicos de suscripcion.html */
+    .suscripcion-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        padding: 1rem;
+    }
 
-  <style> 
-    html, body {
-        height: 100%; /* Asegura que el body y html usen todo el espacio */
-        margin: 0;
+    .suscripcion-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         display: flex;
         flex-direction: column;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #f8fbfb;
-
-          
-      }
-      
-      main {
-        flex: 1; /* Este espacio empuja el footer hacia abajo */
-      }
-      
-
-    .boton {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.6rem 1.2rem;
-      border-radius: 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-      font-size: 1rem;
-      margin-bottom: 2em;
+        gap: 1rem;
     }
 
-    .boton:hover {
-      background-color: #3fc0a4;
-    }
-
-    .boton-secundario {
-      background-color: #e8f3f0;
-      color: #0e1b18;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    .boton-secundario:hover {
-      background-color: #cfdad6;
-    }
-
-    .barra-progreso-completado {
-      background-color: #49e9c9;
-      height: 10px;
-      width: 60%;
-    }
-
-    .sutil-contorno {
-      border: 1px solid #e2e8f0;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .texto-progreso {
-      flex: 1;
-    }
-
-    .imagen-espacio {
-      width: 150px;
-      height: auto;
-      margin-left: 1rem;
-    }
-    .borde-suave {
-      border: 1px solid #e2e8f0; /* Color tenue */
-      border-radius: 8px; /* Esquinas redondeadas */
-      padding: 1.5rem; /* Espaciado interno */
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); /* Sombra ligera */
-      transition: box-shadow 0.3s ease;
-    }
-    
-    .borde-suave:hover {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Efecto hover */
-    }
-
-    .suscripcion-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        justify-content: center;
-        margin-top: 3rem;
-      }
-  
-      .suscripcion-card {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        flex: 1 1 45%;
-        max-width: 500px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-  
-      .suscripcion-card:hover {
+    .suscripcion-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-  
-      .suscripcion-card h3 {
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .suscripcion-card h3 {
         font-size: 1.5rem;
         font-weight: bold;
         color: #0e1b18;
         margin-bottom: 1rem;
-      }
-  
-      .suscripcion-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centra los elementos dentro del card */
-        justify-content: space-between;
     }
-    
+
+    .suscripcion-card p {
+        color: #4f9688;
+        line-height: 1.6;
+    }
+
+    .suscripcion-card ul {
+        margin: 1rem 0;
+    }
+
+    .suscripcion-card ul li {
+        margin-bottom: 0.75rem;
+        color: #4f9688;
+    }
+
     .boton-suscripcion {
         background-color: #49e9c9;
         color: #0e1b18;
-        padding: 0.8rem 2rem;
-        border-radius: 50px; /* Cambia la forma a semicircular */
-        font-weight: bold;
-        display: inline-block;
-        margin-top: auto; /* Empuja el botón hacia el final */
-        transition: background-color 0.3s ease;
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
         text-align: center;
+        font-weight: bold;
+        margin-top: auto;
+        transition: background-color 0.3s ease;
     }
-    
+
     .boton-suscripcion:hover {
         background-color: #3fc0a4;
     }
-     
 
-/* NUEVO  */
-
-    /* Menú de notificaciones */
-    #notificationMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Menú de perfil */
-    #profileMenu {
-      position: absolute; /* Ajusta la posición del menú */
-      top: 40px; /* Separación desde el botón */
-      right: 0;
-      z-index: 1000; /* Superposición */
-      margin-top: 0; /* Elimina el uso de margen */
-    }
-
-    /* Botón Premium */
-    .boton-premium {
-      background-color: #49e9c9;
-      color: #0e1b18;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 1rem;
-      height: 40px; /* Asegura una altura consistente */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-
-    .boton-premium:hover {
-      background-color: #3fc0a4;
-    }
-
-    /* Ajuste general del header */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px; /* Asegura que todos los elementos estén centrados */
-    }
-
-    header .flex.items-center {
-      align-items: center; /* Alinea verticalmente todos los elementos */
-    }
-
-    /* Alineación uniforme del header */
-    header .gap-6 > * {
-      display: flex;
-      align-items: center; /* Asegura alineación vertical */
-    }
-
-
-
-/*  ----    */   
-
-    /* Animación de deslizamiento */
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .slide-down {
-      animation: slideDown 0.3s ease-out;
-    }
-
-    /* Estilo para los cards */
-    .card-container {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform: scale(1);
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
-    }
-
-    .card-container:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-container img {
-      border-radius: 8px;
-      width: 100%;
-      height: auto;
-      display: block;
-      background-color: transparent;
-    }
-
-    .card {
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .card p {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-top: 0.5em;
-    }
-
-    .card-container img {
-      border-radius: 12px;
-    }
-
-    .borde-suave {
-      cursor: pointer;
-    }
-
-    /* Estilos específicos para el menú de perfil en modo responsive */
     @media (max-width: 768px) {
-      #profileMenu {
-        position: relative;
-        width: 100%;
-        top: unset;
-        right: unset;
-      }
+        .suscripcion-container {
+            grid-template-columns: 1fr;
+        }
     }
-</style>
-
+  </style>
 </head>
 
 <body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
