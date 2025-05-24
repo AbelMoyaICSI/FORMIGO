@@ -153,6 +153,64 @@
     #mobileMenu hr {
       margin: 0.5rem 0;
       border-color: #e8f3f0;
+    }    /* Estilos del globo de diálogo */
+    .globo-dialogo {
+      width: calc(100% - 2rem);
+      margin: 0 1rem;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      word-wrap: break-word;
+    }
+
+    @media (min-width: 768px) {
+      .globo-dialogo {
+        width: auto;
+      }
+    }    /* Animación suave para el globo */    .globo-dialogo {
+      opacity: 0;
+      transform-origin: bottom center;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .globo-dialogo.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .globo-dialogo:not(.show) {
+      transform: translateY(10px) scale(0.95);
+    }
+
+    /* Triángulo del globo */
+    .globo-dialogo .relative {
+      padding-bottom: 8px;
+    }
+
+    .globo-dialogo::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #49e9c9;
+    }
+
+    /* Ajuste del triángulo en móvil */
+    @media (max-width: 767px) {
+      .globo-dialogo::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #49e9c9;
+      }
     }
 
   </style>
@@ -276,12 +334,10 @@
     <!-- Contenedor del Simulador -->
     <section id="simulator" class="hidden">
       <!-- Aquí se generarán dinámicamente las preguntas y opciones -->
-    </section>
-
-    <!-- Página de Progreso -->
+    </section>      <!-- Página de Progreso -->
     <section id="progress-page" class="hidden">
       <div class="w-full flex justify-start px-4 mb-6">
-        <button class="boton-secundario volver-menu" style="margin-top: 1em;">Volver al Menú</button>
+        <button class="boton-secundario volver-menu" onclick="window.location.href='simulador-entrevistas.html';" style="margin-top: 1em;">Volver al Menú</button>
       </div>
 
       <div class="flex flex-col md:flex-row">
@@ -546,6 +602,10 @@
       let currentLevel = 1;
       let currentQuestion = 1;
       let currentCategory = 'basic';
+
+      // Variables para el control de la conversación
+      let conversationState = 0;
+      let userName = '';
 
       const levelsData = {
         basic: [
@@ -1904,7 +1964,8 @@
       }
 
       function renderQuestion() {
-        const simulator = document.getElementById('simulator');        simulator.innerHTML = `
+        const simulator = document.getElementById('simulator');        
+        simulator.innerHTML = `
             <!-- Instrucciones del simulador -->
             <div class="text-center my-8 p-6 bg-white rounded-lg shadow-md border border-[#e8f3f0]">
               <h2 class="text-2xl font-bold mb-4 text-[#0e1b18]">¡Prepárate para brillar! 🌟</h2>
@@ -1918,7 +1979,7 @@
                   <p>Mejora tu lenguaje corporal</p>
                 </div>
                 <div class="flex items-center gap-2">
-                  <i class="fas fa-star text-[#49e9c9] text-xl"></i>
+                  <i class="fas fa-star text-[#49e9c9] text-4xl"></i>
                   <p>Recibe feedback instantáneo</p>
                 </div>
               </div>
@@ -1929,68 +1990,84 @@
               <div class="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 my-8">
                 <!-- Contenedor principal del simulador -->
                 <div class="flex flex-col md:flex-row gap-6">
-                <!-- Lado izquierdo: Avatar y cámara -->
-                <div class="w-full md:w-1/2 flex flex-col items-center">                <!-- Avatar container -->
-                  <div class="relative w-full flex justify-center mb-8">
-                    <!-- Imagen estática -->
-                    <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi Avatar" id="avatar-image" class="w-48 h-48 object-contain">                  <!-- Video de animación -->
-                    <video id="avatar-video" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" muted>
-                      <source src="animations/mochi-speaking-original.mp4" type="video/mp4">
-                    </video>
-                    <div class="globo-dialogo absolute -top-20 right-0 bg-[#49e9c9] p-4 rounded-lg max-w-xs">
-                      <p class="text-[#0e1b18]" id="avatar-dialog">¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas. ¿Comenzamos?</p>
+                  <!-- Lado izquierdo: Avatar y cámara -->
+                  <div class="w-full md:w-1/2 flex flex-col items-center">                    <!-- Globo de diálogo sobre el contenedor del avatar -->
+                    <div class="w-full flex flex-col items-center mb-8">
+                      <div class="globo-dialogo mb-4 p-4 bg-[#49e9c9] rounded-lg shadow-md max-w-[300px] md:max-w-[340px]">
+                        <div class="relative">
+                          <!-- Contenido del globo -->
+                          <p class="text-[#0e1b18] text-sm md:text-base" id="avatar-dialog">¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas.</p>
+                          
+                          <!-- Triángulo del globo -->
+                          <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                            <div class="w-4 h-4 bg-[#49e9c9] transform rotate-45"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Avatar container -->
+                      <div class="relative flex justify-center">                        <!-- GIF de espera -->
+                        <img src="animations/mochi-reading-original.gif" alt="Mochi Avatar Idle" id="avatar-idle" class="w-48 h-48 object-contain relative z-10">
+                        
+                        <!-- Video de animación hablando -->
+                        <video id="avatar-video" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" muted loop>
+                          <source src="animations/mochi-speaking-original.mp4" type="video/mp4">
+                        </video>
+                      </div>
+                    </div>
+                    
+                    <!-- Video container -->
+                    <div class="w-full aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4">
+                      <video id="userVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+                    </div>
+                    
+                    <!-- Controles de cámara y micrófono -->
+                    <div class="flex gap-4 justify-center w-full">
+                      <button id="toggleCamera" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                        <i class="fas fa-video text-[#0e1b18]"></i>
+                      </button>
+                      <button id="toggleMic" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                        <i class="fas fa-microphone text-[#0e1b18]"></i>
+                      </button>
                     </div>
                   </div>
-                  
-                  <!-- Video container -->
-                  <div class="w-full aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4">
-                    <video id="userVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
-                  </div>
-                  
-                  <!-- Controles de cámara y micrófono -->
-                  <div class="flex gap-4 justify-center w-full">
-                    <button id="toggleCamera" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
-                      <i class="fas fa-video text-[#0e1b18]"></i>
-                    </button>
-                    <button id="toggleMic" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
-                      <i class="fas fa-microphone text-[#0e1b18]"></i>
-                    </button>
-                  </div>
-                </div>
 
-                <!-- Lado derecho: Chat y controles -->
-                <div class="w-full md:w-1/2">
-                  <!-- Área de chat -->
-                  <div id="chat-container" class="bg-[#f8fbfb] rounded-lg p-4 h-96 overflow-y-auto mb-4">
-                    <!-- Los mensajes se agregarán dinámicamente aquí -->
-                  </div>
+                  <!-- Lado derecho: Chat y controles -->
+                  <div class="w-full md:w-1/2">
+                    <!-- Área de chat -->
+                    <div id="chat-container" class="bg-[#f8fbfb] rounded-lg p-4 h-96 overflow-y-auto mb-4">
+                      <!-- Los mensajes se agregarán dinámicamente aquí -->
+                    </div>                    <!-- Controles de entrada -->
+                    <div class="flex items-center gap-4">
+                      <!-- Contenedor del botón de micrófono y texto de estado -->
+                      <div class="flex flex-col items-center">
+                        <!-- Botón de micrófono principal -->
+                        <button id="mainMicButton" class="mic-button p-4 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                          <i class="fas fa-microphone text-[#0e1b18] text-xl"></i>
+                        </button>
+                        <!-- Texto de estado (inicialmente oculto) -->
+                        <div id="recording-status" class="hidden text-sm text-[#ff4d4d] mt-2">Escuchando...</div>
+                      </div>
 
-                  <!-- Controles de entrada -->
-                  <div class="flex items-center gap-4">
-                    <!-- Botón de micrófono principal -->
-                    <button id="mainMicButton" class="mic-button p-4 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
-                      <i class="fas fa-microphone text-[#0e1b18] text-xl"></i>
-                    </button>
-                    
-                    <!-- Campo de texto -->
-                    <input type="text" id="userInput" 
-                          class="flex-grow p-3 rounded-lg border border-[#e8f3f0] focus:outline-none focus:ring-2 focus:ring-[#49e9c9]" 
-                          placeholder="Escribe tu respuesta aquí...">
-                    
-                    <!-- Botón de enviar -->
-                    <button id="sendButton" class="p-4 rounded-lg bg-[#49e9c9] hover:bg-[#3fc0a4] transition-colors">
-                      <i class="fas fa-paper-plane text-[#0e1b18]"></i>
-                    </button>
-                  </div>
+                      <!-- Campo de texto -->
+                      <input type="text" id="userInput" 
+                            class="flex-grow p-3 rounded-lg border border-[#e8f3f0] focus:outline-none focus:ring-2 focus:ring-[#49e9c9]" 
+                            placeholder="Escribe tu respuesta aquí...">
+                      
+                      <!-- Botón de enviar -->
+                      <button id="sendButton" class="p-4 rounded-lg bg-[#49e9c9] hover:bg-[#3fc0a4] transition-colors">
+                        <i class="fas fa-paper-plane text-[#0e1b18]"></i>
+                      </button>
+                    </div>
+                  </div>                </div>
+          <!-- Controles inferiores -->
+                <div class="mt-6 flex justify-between items-center">
+                  <button class="boton-secundario volver-menu" onclick="window.location.href='simulador-entrevistas.html';">Volver al Menú</button>
+                  <p class="text-sm text-[#4f9688]">
+                    <i class="fas fa-info-circle"></i>
+                    Habla naturalmente o escribe tu respuesta
+                  </p>
                 </div>
-              </div>              <!-- Controles inferiores -->
-              <div class="mt-6 flex justify-between items-center">
-                <button class="boton-secundario volver-menu" onclick="window.location.reload()">Volver al Menú</button>
-                <p class="text-sm text-[#4f9688]">
-                  <i class="fas fa-info-circle"></i>
-                  Habla naturalmente o escribe tu respuesta
-                </p>
-              </div>
             </div>
           </section>
         `;
@@ -2001,6 +2078,11 @@
         
         // Eventos para los botones
         setupEventListeners();
+
+        // Iniciar la conversación automáticamente
+        setTimeout(() => {
+          processUserInput();
+        }, 1000);
       }    function initializeMediaDevices() {
         const video = document.getElementById('userVideo');
         const toggleCamera = document.getElementById('toggleCamera');
@@ -2137,30 +2219,32 @@
         const sendButton = document.getElementById('sendButton');
         const userInput = document.getElementById('userInput');
         const chatContainer = document.getElementById('chat-container');
-        const volverMenuBtns = document.querySelectorAll('.volver-menu');
-
-        // Evento para todos los botones de "Volver al Menú"
+        const volverMenuBtns = document.querySelectorAll('.volver-menu');        // Evento para todos los botones de "Volver al Menú"
         volverMenuBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            resetSimulator();
-            stopAllMediaTracks(); // Asegurarnos de detener todos los streams
-          });
+          if (!btn.hasAttribute('onclick')) { // Solo si no tiene ya un onclick definido
+            btn.addEventListener('click', () => {
+              stopAllMediaTracks(); // Asegurarnos de detener todos los streams
+              window.location.href = 'index.html';
+            });
+          }
         });
 
         // Evento para el botón de micrófono principal
         let isRecording = false;
         mainMicButton.addEventListener('click', () => {
-          isRecording = !isRecording;
-          if (isRecording) {
+          isRecording = !isRecording;          if (isRecording) {
             mainMicButton.classList.add('recording');
             mainMicButton.style.backgroundColor = '#ff4d4d';
+            // Mostrar el texto "Escuchando..."
+            document.getElementById('recording-status').classList.remove('hidden');
             // Simular grabación después de 2 segundos
             setTimeout(() => {
               mainMicButton.click(); // Detener la grabación automáticamente
             }, 2000);
           } else {
-            mainMicButton.classList.remove('recording');
-            mainMicButton.style.backgroundColor = '#e8f3f0';
+            mainMicButton.classList.remove('recording');            mainMicButton.style.backgroundColor = '#e8f3f0';
+            // Ocultar el texto "Escuchando..."
+            document.getElementById('recording-status').classList.add('hidden');
             playConfirmSound(); // Reproducir sonido al terminar la grabación
             // Procesar la respuesta
             addMessageToChat('usuario', '¡Gracias por tu respuesta! Estoy procesando...');
@@ -2188,7 +2272,7 @@
             sendButton.click();
           }
         });
-      }    function addMessageToChat(sender, message) {
+      }      function addMessageToChat(sender, message) {
         const chatContainer = document.getElementById('chat-container');
         const messageDiv = document.createElement('div');
         messageDiv.className = `p-3 rounded-lg mb-2 ${
@@ -2197,7 +2281,32 @@
             : 'bg-[#e8f3f0]'
         }`;
         messageDiv.style.maxWidth = '80%';
-          chatContainer.appendChild(messageDiv);      if (sender === 'avatar') {
+        chatContainer.appendChild(messageDiv);
+        
+        if (sender === 'avatar') {
+          const avatarIdle = document.getElementById('avatar-idle');
+          const avatarVideo = document.getElementById('avatar-video');
+          const dialogBubble = document.querySelector('.globo-dialogo');
+          
+          // Ocultar el globo inicialmente
+          dialogBubble.style.opacity = '0';
+          
+          // Actualizar el texto del diálogo
+          document.getElementById('avatar-dialog').textContent = message;
+          
+          // Transición suave al video de hablar
+          avatarIdle.classList.add('avatar-hidden');
+          setTimeout(() => {
+            avatarIdle.classList.add('hidden');
+            avatarVideo.classList.remove('hidden');
+            avatarVideo.currentTime = 0;
+            avatarVideo.play();
+            
+            // Mostrar el globo con una animación suave cuando empiece a hablar
+            dialogBubble.style.transition = 'opacity 0.3s ease-in-out';
+            dialogBubble.style.opacity = '1';
+          }, 200);
+
           let i = 0;
           const speed = 15; // Velocidad más natural (15ms por carácter)
           
@@ -2207,61 +2316,85 @@
               chatContainer.scrollTop = chatContainer.scrollHeight;
               i++;
               setTimeout(typeWriter, speed);
+            } else {
+              // Cuando termine de escribir, ocultar el globo suavemente
+              setTimeout(() => {
+                dialogBubble.style.opacity = '0';
+              }, 500);
             }
           }
           typeWriter();
+          
+          // Calcular duración basada en el mensaje (40ms por carácter)
+          const duration = Math.max(500, message.length * 40);
+          
+          // Volver al GIF de espera después de la duración calculada
+          setTimeout(() => {
+            avatarVideo.pause();
+            avatarVideo.classList.add('hidden');
+            avatarIdle.classList.remove('hidden');
+            avatarIdle.classList.remove('avatar-hidden');
+          }, duration);
         } else {
           messageDiv.textContent = message;
         }
         
         chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-        // Si el mensaje es del avatar
-        if (sender === 'avatar') {
-          const avatarImage = document.getElementById('avatar-image');
-          const avatarVideo = document.getElementById('avatar-video');
-          document.getElementById('avatar-dialog').textContent = message;
+      function processUserInput(userMessage = '') {
+        switch(conversationState) {
+          case 0:
+            // Mensaje inicial de bienvenida
+            addMessageToChat('avatar', '¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas. Me emociona conocerte y ayudarte a prepararte para tus futuras entrevistas. ¿Podrías decirme tu nombre?');
+            conversationState++;
+            break;
           
-          // Reproducir animación con transición suave
-          avatarImage.classList.add('avatar-hidden');
-          setTimeout(() => {
-            avatarImage.classList.add('hidden');
-            avatarVideo.classList.remove('hidden');
-            avatarVideo.currentTime = 0;
-            avatarVideo.play();
-          }, 200);
-
-          // Calcular duración aproximada basada en el mensaje (50ms por carácter + 0.5 segundo base)
-          const duration = Math.max(1000, message.length * 50 + 500);
+          case 1:
+            // Guardar el nombre del usuario y pedir presentación
+            userName = userMessage || 'amigo';
+            addMessageToChat('avatar', `¡Es un placer conocerte, ${userName}! Este es el primer nivel donde interactuaremos para conocerte mejor. ¿Podrías contarme un poco sobre ti y qué te trae por aquí?`);
+            conversationState++;
+            break;
           
-          // Detener la animación después de la duración calculada
-          setTimeout(() => {
-            avatarVideo.pause();
-            avatarVideo.classList.add('hidden');
-            avatarImage.classList.remove('hidden');
-            avatarImage.classList.remove('avatar-hidden');
-            updateAvatarPosition();
-          }, duration);
+          case 2:
+            // Respuesta a la presentación del usuario
+            addMessageToChat('avatar', 'Gracias por compartir eso conmigo. Veo que tienes motivación por mejorar tus habilidades en entrevistas. Empecemos con algunas preguntas básicas para conocer tu perfil profesional. ¿Te parece bien?');
+            conversationState++;
+            break;
+          
+          case 3:
+            // Comenzar con las preguntas del nivel 1
+            addMessageToChat('avatar', 'Perfecto. Primera pregunta: ¿Cómo te describirías profesionalmente en tres palabras?');
+            conversationState++;
+            break;
+          
+          case 4:
+            // Feedback positivo y siguiente pregunta
+            addMessageToChat('avatar', '¡Excelente elección de palabras! Me ayuda a entender mejor tu perfil. Ahora, cuéntame sobre tu experiencia o formación más relevante.');
+            conversationState++;
+            break;
+          
+          case 5:
+            // Retroalimentación constructiva
+            addMessageToChat('avatar', 'Muy interesante. Me gusta cómo estructuraste tu respuesta. Recuerda siempre dar ejemplos específicos cuando sea posible. ¿Qué objetivos profesionales te has planteado para el corto plazo?');
+            conversationState++;
+            break;
+          
+          default:
+            // Respuestas generales para mantener la conversación fluida
+            const responses = [
+              "Excelente perspectiva. Tus respuestas muestran buena preparación y claridad de pensamiento.",
+              `${userName}, me impresiona tu enfoque. ¿Podrías elaborar un poco más sobre eso?`,
+              "Muy bien estructurado. Considera también incluir ejemplos específicos de tus logros.",
+              "Interesante punto de vista. ¿Cómo llegaste a desarrollar esa perspectiva?",
+              "Tu respuesta refleja buena preparación. Sigamos practicando para mejorar aún más."
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addMessageToChat('avatar', randomResponse);
+            break;
         }
-      }
-
-      function processUserInput() {
-        const responses = [
-          "¡Excelente respuesta! Me gusta cómo estructuraste tu explicación.",
-          "Interesante punto de vista. ¿Podrías elaborar un poco más?",
-          "Buen trabajo. Considera también mencionar ejemplos específicos.",
-          "Tu respuesta muestra buena preparación. Sigamos practicando.",
-        ];
-        
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-        addMessageToChat('avatar', randomResponse);
-      }
-
-      function updateAvatarPosition() {
-        const avatarImage = document.getElementById('avatar-image');
-        const currentPosition = parseInt(avatarImage.src.match(/POSISION(\d)/)[1]);
-        const nextPosition = currentPosition % 4 + 1;
-        avatarImage.src = `img/AVATAR-POSISION${nextPosition}-MOCHI.png`;
       }
 
       // Función para reproducir el sonido de confirmación
@@ -2391,16 +2524,16 @@
         const chatContainer = document.getElementById('chat-container');
         if (chatContainer) {
           chatContainer.innerHTML = '';
-        }
-          // Limpiar y reiniciar el estado del avatar
+        }        // Limpiar y reiniciar el estado del avatar
         const avatarVideo = document.getElementById('avatar-video');
-        const avatarImage = document.getElementById('avatar-image');
+        const avatarIdle = document.getElementById('avatar-idle');
         if (avatarVideo) {
           avatarVideo.pause();
           avatarVideo.classList.add('hidden');
         }
-        if (avatarImage) {
-          avatarImage.classList.remove('hidden');
+        if (avatarIdle) {
+          avatarIdle.classList.remove('hidden');
+          avatarIdle.classList.remove('avatar-hidden');
         }
         
         // Recargar la página actual
