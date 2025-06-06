@@ -14,7 +14,24 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #f8fbfb;
-    }    .boton {
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .boton {
       background-color: #49e9c9;
       color: #0e1b18;
       padding: 0.6rem 1.2rem;
@@ -81,7 +98,7 @@
     }
 
     .cta-section {
-      background-color: #0e1b18;
+      background-color: #44d3b5;
       color: white;
       padding: 4rem 0;
       margin-top: 4rem;
@@ -109,7 +126,7 @@
         </svg>
       </button>
     </div>
-  </header>  <div id="mobileMenu" class="md:hidden hidden bg-white p-4 border-b border-[#e8f3f0]">    <nav class="flex flex-col space-y-4">
+  </header>  <div id="mobileMenu" class="md:hidden hidden bg-white p-4 border-b border-[#e8f3f0] slide-down">    <nav class="flex flex-col space-y-4">
       <a href="login.html" class="text-base font-medium text-center">Iniciar Sesión</a>
       <a href="registro.html" class="boton w-full text-center justify-center inline-flex items-center">
         <i class="fas fa-user-plus mr-2"></i>
@@ -280,8 +297,8 @@
           </div>
         </div>
       </div>
-    </section>    <!-- Precios -->    <section id="precios" class="py-16 container mx-auto px-4 max-w-5xl">      <h2 class="text-3xl font-bold text-center mb-4">Planes Mensuales que se adaptan a ti</h2>
-      <p class="text-center text-gray-600 mb-12">Elige el plan mensual perfecto para tu preparación profesional</p>
+    </section>    <!-- Precios -->    <section id="precios" class="py-16 container mx-auto px-4 max-w-5xl">      <h2 class="text-3xl font-bold text-center mb-4">¡Planes que se adaptan a ti!</h2>
+      <p class="text-center text-gray-600 mb-12">Elige el plan perfecto para tu preparación profesional</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         <!-- Plan Gratuito -->
         <div class="feature-card text-center">          <h3 class="text-2xl font-bold mb-4">Plan Básico</h3>          <p class="text-xl mb-4">Comienza tu viaje de preparación profesional con nuestras funciones esenciales:</p>
@@ -389,61 +406,12 @@
           </a>
         </div>
       </div>
-<<<<<<< HEAD
-    </li>
-    <li class="borde-suave flex items-center gap-4">
-      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
-      <div>
-        <p class="text-sm text-[#4f9688]">"Prepara tus respuestas con ejemplos específicos que demuestren tus habilidades."</p>
-        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=2';">Ir a "Preferencias de comunicación"</button>
-      </div>
-    </li>
-    <li class="borde-suave flex items-center gap-4">
-      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
-      <div>
-        <p class="text-sm text-[#4f9688]">"Investiga sobre la empresa antes de la entrevista para destacar tu interés."</p>
-        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=3';">Ir a "Habilidades Generales y Adaptabilidad"</button>
-      </div>
-    </li>
-  </ul>
+ 
 </section>
 
-<section class="mt-10 text-center">
-  <h2 class="text-lg font-bold">¡Envíanos tu Opinión!</h2>
-  <p class="mt-2 text-gray-600">Escribe tus comentarios o sugerencias, nos encantaría saber qué piensas.</p>
-  
-  <!-- Campo de entrada para comentarios -->
-  <div class="mt-6 flex flex-col items-center">
-    <textarea 
-      id="commentInput"
-      class="w-full max-w-lg h-32 border border-[#e2e8f0] rounded-lg p-4 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#49e9c9] hover:shadow-lg placeholder-gray-400 resize-none" 
-      placeholder="Escribe tu comentario aquí...">
-    </textarea>
-    
-    <!-- Botón de enviar -->
-    <button 
-      onclick="handleFeedbackSubmit()"
-      class="mt-4 boton">
-      Enviar
-    </button>
-  </div>
-</section>
 
-<!-- Modal de confirmación de envío -->
-<div id="feedbackModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0">
-    <div class="text-center">
-      <img src="img/AVATAR-POSISION4-MOCHI.png" alt="Mochi feliz" class="w-24 h-24 mx-auto mb-4">
-      <h3 class="text-xl font-bold text-[#0e1b18] mb-2">¡Gracias por tu opinión!</h3>
-      <p class="text-[#4f9688] mb-4">Tu feedback nos ayuda a mejorar Formigo</p>
-      <button onclick="closeFeedbackModal()" class="boton-secundario">Cerrar</button>
-    </div>
-  </div>
-</div>
-    
-=======
+
     </section>
->>>>>>> 087d545 (New commit update)
   </main>
 
   <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm">
@@ -466,15 +434,18 @@
       <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
       <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
     </div>
-    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+    <p class="text-sm text-[#3fc0a4] mt-4">2025 Formigo</p>
   </footer>
 
   <script>
     const menuButton = document.getElementById('menuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    menuButton.addEventListener('click', () => {
+    const mobileMenu = document.getElementById('mobileMenu');    menuButton.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('slide-down');
+      } else {
+        mobileMenu.classList.remove('slide-down');
+      }
     });
 
     // Cerrar menú móvil al hacer clic en un enlace
@@ -483,7 +454,6 @@
         mobileMenu.classList.add('hidden');
       });
     });
-<<<<<<< HEAD
 
     // Cerrar el menú de perfil al hacer clic fuera
     window.addEventListener('click', function (e) {
@@ -625,8 +595,6 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.classList.add('hidden');
       }, 300);
     }
-=======
->>>>>>> 087d545 (New commit update)
   </script>
 </body>
 </html>
