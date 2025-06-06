@@ -95,6 +95,232 @@
         background-color: #3fc0a4;
     }
 
+    /* Estilos para el chat flotante */
+    .chat-floating-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      background-color: #49e9c9;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .chat-floating-button:hover {
+      transform: scale(1.1);
+    }
+
+    .chat-container {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      overflow: hidden;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      width: 320px;
+      height: 400px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #f8fbfb;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #49e9c9;
+      border-radius: 3px;
+    }
+
+    /* Estilos para las ventanas de chat */
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      width: 320px;
+      height: 400px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .chat-messages {
+      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #f8fbfb;
+      scrollbar-width: thin;
+      scrollbar-color: #49e9c9 #f8fbfb;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: #f8fbfb;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background-color: #49e9c9;
+      border-radius: 3px;
+    }
+
+    .chat-messages .message {
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: messageSlide 0.3s forwards;
+    }
+
+    @keyframes messageSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-input {
+      padding: 12px;
+      border-top: 1px solid #e8f3f0;
+      display: flex;
+      gap: 8px;
+      background: white;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 8px 16px;
+      border: 1px solid #e8f3f0;
+      border-radius: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input input:focus {
+      outline: none;
+      border-color: #49e9c9;
+    }
+
+    .chat-input button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #49e9c9;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chat-input button:hover {
+      background: #3fc0a4;
+      transform: scale(1.05);
+    }
+
+    /* Estilos para el modal de solicitud aceptada */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .modal img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 16px;
+    }
+
     @media (max-width: 768px) {
         .profile-header {
             flex-direction: column;
@@ -106,10 +332,85 @@
             max-width: 300px;
             margin: 1rem auto 0;
         }
+
+        .chat-window {
+          right: 24px;
+          width: calc(100% - 48px);
+        }
+    }
+
+    /* Estilos para el chat flotante */
+    .chat-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .chat-item {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 1px solid #e8f3f0;
+    }
+
+    .chat-item:last-child {
+      border-bottom: none;
+    }
+
+    .chat-item:hover {
+      background-color: #f8fbfb;
+    }
+
+    .chat-item img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e8f3f0;
+    }
+
+    .chat-item .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-item .chat-info .name {
+      font-weight: 500;
+      margin-bottom: 2px;
+      color: #0e1b18;
+    }
+
+    .chat-item .chat-info .preview {
+      font-size: 0.875rem;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-item .status {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-left: auto;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px #e8f3f0;
+    }
+
+    .status.online {
+      background-color: #22c55e;
+      box-shadow: 0 0 0 2px #dcfce7;
+    }
+
+    .status.offline {
+      background-color: #94a3b8;
+      box-shadow: 0 0 0 2px #f1f5f9;
     }
   </style>
 </head>
-<body>
+<body class="bg-gray-100">
   <!-- Encabezado -->
   <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
     <!-- Logo y Título -->
@@ -191,6 +492,7 @@
 
   <!-- Contenido Principal -->
   <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+    <!-- Header del perfil -->
     <section class="profile-header">
       <div class="profile-picture" style="background-image: url('img/userprofile.png');"></div>
       <div>
@@ -200,33 +502,199 @@
       </div>
       <button class="edit-button">Editar Perfil</button>
     </section>
+
+    <!-- Nueva sección de estadísticas -->
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Mis Estadísticas</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-[#e8f3f0]">
+          <div class="text-[#49e9c9] text-3xl mb-2">
+            <i class="fas fa-video"></i>
+          </div>
+          <p class="text-2xl font-bold">24</p>
+          <p class="text-gray-600">Entrevistas Completadas</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-[#e8f3f0]">
+          <div class="text-[#49e9c9] text-3xl mb-2">
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="text-2xl font-bold">4.8</p>
+          <p class="text-gray-600">Puntuación Promedio</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-[#e8f3f0]">
+          <div class="text-[#49e9c9] text-3xl mb-2">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <p class="text-2xl font-bold">12</p>
+          <p class="text-gray-600">Logros Desbloqueados</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-[#e8f3f0]">
+          <div class="text-[#49e9c9] text-3xl mb-2">
+            <i class="fas fa-clock"></i>
+          </div>
+          <p class="text-2xl font-bold">18h</p>
+          <p class="text-gray-600">Tiempo de Práctica</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nueva sección de habilidades -->
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Mis Habilidades</h2>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-[#e8f3f0]">
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium">Comunicación</span>
+              <span class="text-sm font-medium">85%</span>
+            </div>
+            <div class="w-full bg-[#e8f3f0] rounded-full h-2">
+              <div class="bg-[#49e9c9] h-2 rounded-full" style="width: 85%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium">Resolución de Problemas</span>
+              <span class="text-sm font-medium">75%</span>
+            </div>
+            <div class="w-full bg-[#e8f3f0] rounded-full h-2">
+              <div class="bg-[#49e9c9] h-2 rounded-full" style="width: 75%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium">Trabajo en Equipo</span>
+              <span class="text-sm font-medium">90%</span>
+            </div>
+            <div class="w-full bg-[#e8f3f0] rounded-full h-2">
+              <div class="bg-[#49e9c9] h-2 rounded-full" style="width: 90%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Próximas Entrevistas -->
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Próximas Entrevistas</h2>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-[#e8f3f0]">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 border border-[#e8f3f0] rounded-lg hover:border-[#49e9c9] transition-colors">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-[#49e9c9] bg-opacity-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-building text-[#49e9c9]"></i>
+              </div>
+              <div>
+                <h3 class="font-medium">Entrevista Técnica</h3>
+                <p class="text-sm text-gray-600">Empresa ABC Tech</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-medium text-[#49e9c9]">Mañana</p>
+              <p class="text-sm text-gray-600">10:00 AM</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-4 border border-[#e8f3f0] rounded-lg hover:border-[#49e9c9] transition-colors">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-[#49e9c9] bg-opacity-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-[#49e9c9]"></i>
+              </div>
+              <div>
+                <h3 class="font-medium">Entrevista Grupal</h3>
+                <p class="text-sm text-gray-600">StartUp XYZ</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-medium text-[#49e9c9]">Próxima Semana</p>
+              <p class="text-sm text-gray-600">Martes 15:30</p>
+            </div>
+          </div>
+        </div>
+        <button class="mt-4 w-full text-center text-[#49e9c9] hover:underline">
+          <i class="fas fa-plus mr-2"></i>Programar Nueva Entrevista
+        </button>
+      </div>
+    </section>
+
+    <!-- Grid de amigos y actividad reciente -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="friend-list">
-        <h2 class="text-xl font-bold mb-4">Amigos</h2>
-        <div class="friend-item">
-          <img src="img/userprofile.png" alt="Amigo 1">
-          <p>María López</p>
-          <div class="friend-actions">
-            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Amigos</h2>
+          <div class="relative">
+            <input type="text" 
+              placeholder="Buscar amigos..." 
+              class="px-4 py-2 border border-[#e8f3f0] rounded-lg text-sm focus:outline-none focus:border-[#49e9c9]">
+            <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
         </div>
         <div class="friend-item">
-          <img src="img/userprofile.png" alt="Amigo 2">
-          <p>Pedro Gómez</p>
-          <div class="friend-actions">
-            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+          <div class="relative">
+            <img src="img/userprofile.png" alt="Amigo 1">
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+          </div>
+          <div>
+            <p class="font-medium">María López</p>
+            <p class="text-sm text-gray-500">Nivel 5 • Online</p>
+          </div>
+          <div class="friend-actions flex gap-2">
+            <button class="text-[#3fc0a4] hover:text-[#49e9c9]" title="Enviar mensaje" onclick="openChatFromFriend('María López', true)">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <button class="text-[#3fc0a4] hover:text-[#49e9c9]" title="Invitar a práctica">
+              <i class="fas fa-video"></i>
+            </button>
           </div>
         </div>
         <div class="friend-item">
-          <img src="img/userprofile.png" alt="Amigo 3">
-          <p>Lucía Fernández</p>
-          <div class="friend-actions">
-            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+          <div class="relative">
+            <img src="img/userprofile.png" alt="Amigo 2">
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-gray-300 border-2 border-white rounded-full"></span>
+          </div>
+          <div>
+            <p class="font-medium">Pedro Gómez</p>
+            <p class="text-sm text-gray-500">Nivel 3 • Offline</p>
+          </div>
+          <div class="friend-actions flex gap-2">
+            <button class="text-[#3fc0a4] hover:text-[#49e9c9]" title="Enviar mensaje" onclick="openChatFromFriend('Pedro Gómez', false)">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <button class="text-[#3fc0a4] hover:text-[#49e9c9]" title="Invitar a práctica">
+              <i class="fas fa-video"></i>
+            </button>
           </div>
         </div>
-        <div class="add-friend">
-          <input type="text" placeholder="Nombre del amigo" />
-          <button>Agregar</button>
+
+        <!-- Solicitudes de Amistad Pendientes -->
+        <div class="mt-6 border-t border-[#e8f3f0] pt-4">
+          <h3 class="font-medium text-gray-600 mb-3">Solicitudes Pendientes (2)</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between bg-[#f8fbfb] p-3 rounded-lg">
+              <div class="flex items-center gap-3">
+                <img src="img/userprofile.png" alt="Solicitud" class="w-10 h-10 rounded-full">
+                <div>
+                  <p class="font-medium">Ana García</p>
+                  <p class="text-sm text-gray-500">2 amigos en común</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="text-white bg-[#49e9c9] px-3 py-1 rounded-full text-sm hover:bg-[#3fc0a4]">
+                  Aceptar
+                </button>
+                <button class="text-gray-600 bg-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-300">
+                  Ignorar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-friend mt-6">
+          <input type="text" placeholder="Buscar nuevos amigos por nombre o email" class="w-full px-4 py-2 border border-[#e8f3f0] rounded-lg text-sm focus:outline-none focus:border-[#49e9c9]"/>
+          <button class="mt-2 bg-[#49e9c9] text-white px-4 py-2 rounded-lg hover:bg-[#3fc0a4] transition-colors w-full flex items-center justify-center">
+            <i class="fas fa-user-plus mr-2"></i>
+            Agregar Amigo
+          </button>
         </div>
       </div>
       <div class="recent-activity">
@@ -243,32 +711,79 @@
     </section>
   </main>
 
+  <!-- Chat Flotante -->
+  <div class="chat-floating-button" onclick="toggleChat()">
+    <i class="fas fa-comments"></i>
+  </div>
 
-  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
-    <div class="flex justify-center gap-6 mb-4">
-      <!-- Íconos de redes sociales -->
-      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
-        <i class="fab fa-youtube"></i>
-      </a>
+  <div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+      <div class="flex items-center justify-between">
+        <span class="text-lg">Chats</span>
+        <span class="text-sm">2 en línea</span>
+      </div>
     </div>
-    <!-- Enlaces del footer -->
-    <div class="flex justify-center gap-4">
-      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
-      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
-      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    <div class="chat-list">
+      <div class="chat-item" onclick="openChat('Ana García', true)">
+        <img src="img/ana-garcia.jpg" alt="Ana García">
+        <div class="chat-info">
+          <div class="name">Ana García</div>
+          <div class="preview">¡Hola! ¿Cómo vas con la práctica?</div>
+        </div>
+        <div class="status online" title="En línea"></div>
+      </div>
+      <div class="chat-item" onclick="openChat('Carlos Ruiz', false)">
+        <img src="img/carlos-ruiz.jpg" alt="Carlos Ruiz">
+        <div class="chat-info">
+          <div class="name">Carlos Ruiz</div>
+          <div class="preview">¿Viste la última entrevista?</div>
+        </div>
+        <div class="status offline" title="Desconectado"></div>
+      </div>
+      <div class="chat-item" onclick="openChat('María López', true)">
+        <img src="img/userprofile.png" alt="María López">
+        <div class="chat-info">
+          <div class="name">María López</div>
+          <div class="preview">¡Excelente práctica!</div>
+        </div>
+        <div class="status online" title="En línea"></div>
+      </div>
     </div>
-    <!-- Copyright -->
-    <p class="text-sm text-[#3fc0a4] mt-4">2025 Formigo</p>
-  </footer>
+  </div>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-window-header">
+      <span id="chatWindowTitle">Nombre del contacto</span>
+      <div class="actions">
+        <i class="fas fa-minus" onclick="minimizeChat()" style="cursor: pointer;"></i>
+        <i class="fas fa-times" onclick="closeChatWindow()" style="cursor: pointer;"></i>
+      </div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <!-- Los mensajes se agregarán dinámicamente -->
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Escribe un mensaje..." id="messageInput">
+      <button onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de solicitud aceptada -->
+  <div class="modal" id="friendRequestModal">
+    <div class="modal-content">
+      <img src="img/mochi-success.png" alt="Mochi celebrando">
+      <h3 class="text-xl font-bold mb-2">¡Nueva amistad!</h3>
+      <p class="text-gray-600">Has aceptado la solicitud de amistad.</p>
+      <p class="text-gray-600">¡Ahora pueden chatear y compartir experiencias!</p>
+      <button onclick="document.getElementById('friendRequestModal').style.display = 'none'" 
+              class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-full hover:bg-teal-600">
+        ¡Entendido!
+      </button>
+    </div>
+  </div>
+
   <script>
     function cerrarSesion(e) {
       e.preventDefault();
@@ -288,6 +803,152 @@
     menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     notificationButton.addEventListener('click', () => notificationMenu.classList.toggle('hidden'));
     profileButton.addEventListener('click', () => profileMenu.classList.toggle('hidden'));
+
+    // Funcionalidad del chat
+    const chatButton = document.getElementById('chatButton');
+    const chatList = document.getElementById('chatList');
+    const chatWindow = document.getElementById('chatWindow');
+
+    function toggleChat(type = 'list') {
+      if (type === 'list') {
+        chatList.classList.toggle('hidden');
+        chatWindow.classList.add('hidden');
+      } else {
+        chatWindow.classList.toggle('hidden');
+        chatList.classList.add('hidden');
+      }
+    }
+
+    function minimizeChat() {
+      chatWindow.classList.add('hidden');
+      chatList.classList.add('hidden');
+    }
+
+    chatButton.addEventListener('click', () => toggleChat());
+
+    // Abrir chat individual al hacer clic en un contacto
+    document.querySelectorAll('.chat-contact').forEach(contact => {
+      contact.addEventListener('click', () => {
+        toggleChat('window');
+      });
+    });
+
+    // Modal de solicitud de amistad
+    function showFriendRequestModal() {
+      document.getElementById('friendRequestModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Evento para los botones de aceptar solicitud
+    document.querySelectorAll('.accept-friend-request').forEach(button => {
+      button.addEventListener('click', () => {
+        showFriendRequestModal();
+      });
+    });
+
+    // Variables para el chat
+    let activeChats = []; // Array para mantener el orden de los chats
+    const CHAT_WIDTH = 320; // Ancho de la ventana de chat
+    const CHAT_SPACING = 10; // Espacio entre ventanas
+    const BASE_RIGHT = 100; // Distancia base desde la derecha (junto a la burbuja)
+
+    // Función para mostrar/ocultar la lista de chats
+    function toggleChat() {
+      const chatContainer = document.getElementById('chatContainer');
+      const currentDisplay = chatContainer.style.display;
+      chatContainer.style.display = currentDisplay === 'none' ? 'block' : 'none';
+    }
+
+    function openChat(contactName, isOnline) {
+      // Ocultar la lista de chats
+      document.getElementById('chatContainer').style.display = 'none';
+
+      const chatId = `chat-${contactName.toLowerCase().replace(/\s+/g, '-')}`;
+      
+      // Verificar si el chat ya existe
+      const existingChat = document.getElementById(chatId);
+      if (existingChat) {
+        existingChat.style.display = 'flex';
+        return;
+      }
+
+      // Crear nueva ventana de chat
+      const chatWindow = document.createElement('div');
+      chatWindow.id = chatId;
+      chatWindow.className = 'chat-window';
+      chatWindow.style.zIndex = 1000 + activeChats.length;
+      chatWindow.innerHTML = `
+        <div class="chat-window-header">
+          <div class="flex items-center gap-2">
+            <img src="${contactName === 'Ana García' ? 'img/ana-garcia.jpg' : 'img/userprofile.png'}" 
+                 class="w-8 h-8 rounded-full">
+            <div>
+              <span>${contactName}</span>
+              <span class="w-2 h-2 rounded-full ${isOnline ? 'bg-green-400' : 'bg-gray-400'} inline-block ml-2"></span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-times" onclick="closeChat('${chatId}')" title="Cerrar"></i>
+          </div>
+        </div>
+        <div class="chat-messages" id="messages-${chatId}">
+          <div class="flex items-center justify-center h-full text-gray-500">
+            <p>Inicio de la conversación con ${contactName}</p>
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" 
+                 placeholder="Escribe un mensaje..." 
+                 id="input-${chatId}"
+                 onkeypress="if(event.key === 'Enter') sendMessage('${chatId}')"
+                 class="flex-1 px-4 py-2 rounded-full focus:outline-none focus:border-[#49e9c9] border">
+          <button onclick="sendMessage('${chatId}')" 
+                  class="text-white bg-[#49e9c9] rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#3fc0a4]">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      `;
+
+      document.body.appendChild(chatWindow);
+      activeChats.push(chatId);
+      
+      // Posicionar la ventana
+      repositionChats();
+      
+      // Mostrar la ventana
+      chatWindow.style.display = 'flex';
+    }
+
+    function closeChat(chatId) {
+      const chat = document.getElementById(chatId);
+      if (chat) {
+        chat.remove();
+        activeChats = activeChats.filter(id => id !== chatId);
+        repositionChats();
+      }
+    }
+
+    function repositionChats() {
+      activeChats.forEach((chatId, index) => {
+        const chat = document.getElementById(chatId);
+        if (chat) {
+          chat.style.right = `${BASE_RIGHT + (CHAT_WIDTH + CHAT_SPACING) * index}px`;
+        }
+      });
+    }
+
+    // Cerrar la lista de chats al hacer clic fuera
+    document.addEventListener('click', function(e) {
+      const chatContainer = document.getElementById('chatContainer');
+      const chatButton = document.querySelector('.chat-floating-button');
+      
+      if (!chatContainer.contains(e.target) && !chatButton.contains(e.target)) {
+        chatContainer.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
