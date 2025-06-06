@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suscripción|Formigo</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+    }
+
+    .boton {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .boton:hover {
+      background-color: #3fc0a4;
+    }
+
+    .boton-secundario {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .boton-secundario:hover {
+      background-color: #cfdad6;
+    }
+
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    #notificationMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000;
+      margin-top: 0;
+    }
+
+    #profileMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000;
+      margin-top: 0;
+    }
+
+    .boton-premium {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .boton-premium:hover {
+      background-color: #3fc0a4;
+    }
+
+    /* Estilos específicos de suscripcion.html */
+    .suscripcion-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+
+    .suscripcion-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .suscripcion-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .suscripcion-card h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #0e1b18;
+        margin-bottom: 1rem;
+    }
+
+    .suscripcion-card p {
+        color: #4f9688;
+        line-height: 1.6;
+    }
+
+    .suscripcion-card ul {
+        margin: 1rem 0;
+    }
+
+    .suscripcion-card ul li {
+        margin-bottom: 0.75rem;
+        color: #4f9688;
+    }
+
+    @media (max-width: 768px) {
+        .suscripcion-container {
+            grid-template-columns: 1fr;
+        }
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="index-login.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+  
+
+<!-- Menú desplegable para dispositivos móviles con perfil -->
+<div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+  <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+  <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+  <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+    <span>Notificaciones</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+    </svg>
+  </a>
+  <!-- Botón Premium -->
+  <a href="suscripcion.html" class="boton-premium">Premium</a>
+
+  <hr class="my-2 w-full border-[#e8f3f0]" />
+  <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->  <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+  <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+  <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+</div>
+
+
+
+  <!-- Contenido principal -->
+  <main class="container mx-auto px-4 md:px-10 max-w-5xl mt-10">
+    <h2 class="text-3xl font-bold text-center mb-4">Planes Mensuales que se adaptan a ti</h2>
+    <p class="text-center text-gray-600 mb-12">Elige el plan mensual perfecto para tu preparación profesional</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <!-- Plan Gratuito -->
+      <div class="feature-card text-center">
+        <h3 class="text-2xl font-bold mb-4">Plan Básico</h3>
+        <p class="text-xl mb-4">Comienza tu viaje de preparación profesional con nuestras funciones esenciales:</p>
+        <p class="text-4xl text-gray-500 mb-6">$0<span class="text-base font-normal">/mes</span></p>
+        <ul class="text-left space-y-4 mb-4">
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Simulaciones ilimitadas</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Feedback limitado</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Consejos generales</li>
+          <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-400 mr-2"></i>Sin análisis avanzado</li>
+          <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-400 mr-2"></i>Sin recursos premium</li>
+        </ul>
+        <a href="registro.html" class="boton-secundario inline-flex items-center justify-center w-full">
+          <i class="fas fa-play mr-2"></i>
+          Comenzar Gratis
+        </a>
+      </div>
+
+      <!-- Plan Premium -->
+      <div class="feature-card text-center transform scale-105 border-2 border-[#49e9c9] relative">
+        <div class="bg-[#49e9c9] text-white px-4 py-1 rounded-full inline-block mb-2">Más Popular</div>
+        <div class="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm inline-block mb-4">¡1er mes por solo $4.99!</div>
+        <h3 class="text-2xl font-bold mb-4">Plan Premium</h3>
+        <p class="text-xl mb-4">Desbloquea todo el contenido exclusivo para maximizar tu aprendizaje:</p>
+        <div class="flex flex-col items-center gap-1 mb-6">
+          <p class="text-4xl font-bold">$7.99<span class="text-base font-normal">/mes</span></p>
+          <p class="text-sm text-[#49e9c9] font-semibold">después del primer mes</p>
+        </div>
+        <ul class="text-left space-y-4 mb-8">
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Plan Básico</li>
+          <div class="flex justify-center my-4">
+            <div class="text-[#49e9c9] text-4xl">
+              <i class="fas fa-plus"></i>
+            </div>
+          </div>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso ilimitado a simulaciones personalizadas mediante ChatBot.</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Feedback personalizado</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Reporte de análisis detallados</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso a una comunidad exclusiva para networking y colaboración</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Análisis comparativo con otros usuarios para evaluar tu progreso</li>
+        </ul>
+        <a href="registro.html" class="boton inline-flex items-center justify-center w-full">
+          <i class="fas fa-crown mr-2"></i>
+          Suscribir
+        </a>
+      </div>
+
+      <!-- Plan Universidad -->
+      <div class="feature-card text-center">
+        <h3 class="text-2xl font-bold mb-4">Plan Universidad</h3>
+        <p class="text-xl mb-4">Diseñado para instituciones educativas que buscan potenciar la preparación de sus estudiantes</p>
+        
+        <!-- Planes Universitarios -->
+        <div class="space-y-4 mb-6">
+          <div class="p-3 rounded-lg bg-[#f8fbfb] border border-[#e2e8f0]">
+            <h4 class="font-bold text-lg">Plan Inicial</h4>
+            <p class="text-2xl font-bold text-[#49e9c9]">$149<span class="text-base font-normal text-gray-600">/mes</span></p>
+            <p class="text-sm text-gray-600">Hasta 100 estudiantes</p>
+            <p class="text-sm font-semibold text-[#49e9c9]">$1.49 por estudiante</p>
+          </div>
+          
+          <div class="p-3 rounded-lg bg-[#49e9c9] bg-opacity-10 border-2 border-[#49e9c9]">
+            <h4 class="font-bold text-lg">Plan Pro</h4>
+            <p class="text-2xl font-bold text-[#49e9c9]">$299<span class="text-base font-normal text-gray-600">/mes</span></p>
+            <p class="text-sm text-gray-600">Hasta 300 estudiantes</p>
+            <p class="text-sm font-semibold text-[#49e9c9]">$0.99 por estudiante</p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[#f8fbfb] border border-[#e2e8f0]">
+            <h4 class="font-bold text-lg">Plan Enterprise</h4>
+            <p class="text-2xl font-bold text-[#49e9c9]">$499<span class="text-base font-normal text-gray-600">/mes</span></p>
+            <p class="text-sm text-gray-600">Hasta 1000 estudiantes</p>
+            <p class="text-sm font-semibold text-[#49e9c9]">$0.49 por estudiante</p>
+          </div>
+        </div>
+
+        <p class="text-sm text-[#49e9c9] font-semibold mb-6 bg-[#49e9c9] bg-opacity-10 py-2 px-4 rounded-full inline-block">
+          ¡20% de descuento en pago anual!
+        </p>
+
+        <div class="border-t border-b border-[#e2e8f0] py-4 mb-6">
+          <p class="text-sm text-gray-600">Planes personalizados disponibles para más de 1000 estudiantes</p>
+        </div>
+
+        <!-- Características comunes -->
+        <h4 class="font-bold text-lg mb-4">Todos los planes incluyen:</h4>
+        <ul class="text-left space-y-4 mb-8">
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso Premium para estudiantes mediante códigos de invitación</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Panel de control para profesores con métricas de progreso</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Gestión de aulas virtuales por curso</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Informes detallados y análisis grupal</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Integración LMS (Moodle, Canvas)</li>
+          <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Soporte prioritario y capacitación para staff</li>
+        </ul>
+        <a href="registro.html" class="boton inline-flex items-center justify-center w-full">
+          <i class="fas fa-building-columns mr-2"></i>
+          Solicitar
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <!-- Íconos de redes sociales -->
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <!-- Enlaces del footer -->
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+
+    <section id="progress-page" class="hidden">
+      <button onclick="volverMenu()" class="boton-secundario">Volver al Menú</button>
+      <div class="flex gap-4 mt-4">
+        <div class="w-1/4 bg-[#49e9c9] p-4 rounded-lg text-white">
+          <h3 class="text-lg font-bold mb-4">Progreso por Nivel</h3>
+          <ul>
+            <li class="mb-2"><button class="w-full text-left">Básico</button></li>
+            <li class="mb-2"><button class="w-full text-left">Intermedio</button></li>
+            <li><button class="w-full text-left">Avanzado</button></li>
+          </ul>
+        </div>
+        <div class="w-3/4 bg-white p-4 rounded-lg">
+          <h3 class="text-lg font-bold mb-4">Básico</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="border p-2 rounded text-center">Conociéndote Mejor</div>
+            <div class="border p-2 rounded text-center">Preferencias de comunicación</div>
+            <div class="border p-2 rounded text-center">Gestión de Situaciones Desafiantes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Copyright -->
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+  
+  
+  
+  <!-- Scripts para el menú desplegable en dispositivos móviles y el perfil -->
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    // Toggle para el menú de navegación en móvil
+    menuButton.addEventListener('click', function () {
+      mobileMenu.classList.toggle('hidden');
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('slide-down');
+      } else {
+        mobileMenu.classList.remove('slide-down');
+      }
+    });
+
+    // Toggle para el menú de perfil en escritorio
+    profileButton.addEventListener('click', function (e) {
+      e.stopPropagation();
+      profileMenu.classList.toggle('hidden');
+      profileMenu.classList.add('slide-down');
+    });
+
+    // Cerrar el menú de perfil al hacer clic fuera
+    window.addEventListener('click', function (e) {
+      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+        // Mostrar/ocultar menú de notificaciones
+        notificationButton.addEventListener('click', function (e) {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar el menú de notificaciones si se hace clic fuera
+        window.addEventListener('click', function (e) {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+        
+        function mostrarProgreso() {
+          // Ocultar todas las secciones dentro del main
+          document.querySelectorAll('main > section').forEach(section => {
+            section.classList.add('hidden');
+          });
+        
+          // Mostrar la sección de progreso
+          const progressPage = document.getElementById('progress-page');
+          if (progressPage) {
+            progressPage.classList.remove('hidden');
+            progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave
+          } else {
+            console.error("No se encontró la sección de progreso.");
+          }
+        }
+        
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+
+// Función para obtener parámetros de la URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+// Mostrar la sección correspondiente según el parámetro de la URL
+document.addEventListener("DOMContentLoaded", () => {
+  const section = getQueryParam("section");
+  if (section === "progress") {
+    // Oculta otras secciones
+    document.querySelectorAll('main > section').forEach((section) => {
+      section.classList.add('hidden');
+    });
+
+    // Muestra la sección de progreso
+    const progressPage = document.getElementById('progress-page');
+    if (progressPage) {
+      progressPage.classList.remove('hidden');
+      progressPage.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+    function cerrarSesion(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('temporaryUserData');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+
+</html>

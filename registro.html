@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro - Formigo</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+    }
+    .boton {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .boton:hover {
+      background-color: #3fc0a4;
+    }
+
+    .boton-secundario {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .boton-secundario:hover {
+      background-color: #cfdad6;
+    }
+
+    .registro-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .registro-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .input-field {
+      border: 2px solid #e8f3f0;
+      border-radius: 10px;
+      padding: 0.75rem;
+      width: 100%;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #49e9c9;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+  <!-- Header -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="login.html" class="text-base font-medium">Iniciar Sesión</a>
+      <a href="registro.html" class="boton flex items-center justify-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </div>
+
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="md:hidden hidden bg-white p-4 border-b border-[#e8f3f0]">
+    <nav class="flex flex-col space-y-4">
+      <a href="login.html" class="text-base font-medium text-center">Iniciar Sesión</a>
+      <a href="registro.html" class="boton w-full text-center justify-center inline-flex items-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex items-center justify-center py-16 px-4">
+    <div class="registro-card w-full max-w-md p-8">
+      <div class="text-center mb-8">
+        <img src="img/LOGO-MOCHI.png" alt="Mochi Mascota" class="w-20 h-20 mx-auto mb-4">
+        <h1 class="text-2xl font-bold mb-2">¡Crea tu cuenta!</h1>
+        <p class="text-gray-600">Únete a nuestra comunidad de aprendizaje</p>
+      </div>      <form id="registroForm" class="space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required
+              class="input-field"
+              placeholder="Tu nombre">
+          </div>
+          <div>
+            <label for="apellido" class="block text-sm font-medium text-gray-700 mb-2">Apellido</label>
+            <input type="text" id="apellido" name="apellido" required
+              class="input-field"
+              placeholder="Tu apellido">
+          </div>
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Correo electrónico</label>
+          <input type="email" id="email" name="email" required
+            class="input-field"
+            placeholder="nombre@ejemplo.com">
+        </div>        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+          <div class="relative">
+            <input type="password" id="password" name="password" required
+              class="input-field pr-10"
+              placeholder="••••••••"
+              onkeyup="checkPasswordStrength(this.value)">
+            <button type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700" onclick="togglePasswordVisibility('password')">
+              <i id="password-icon" class="fas fa-eye"></i>
+            </button>
+          </div>
+          <!-- Barra de fortaleza de contraseña -->
+          <div class="mt-2">
+            <div class="h-2 w-full bg-gray-200 rounded-full">
+              <div id="password-strength-bar" class="h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="password-strength-text" class="mt-1 text-sm"></p>
+          </div>
+        </div>
+
+        <div>
+          <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-2">Confirmar contraseña</label>
+          <div class="relative">
+            <input type="password" id="confirm-password" name="confirm-password" required
+              class="input-field pr-10"
+              placeholder="••••••••">
+            <button type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700" onclick="togglePasswordVisibility('confirm-password')">
+              <i id="confirm-password-icon" class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal de éxito (oculto por defecto) -->
+        <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+          <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="text-center">
+              <i class="fas fa-check-circle text-[#49e9c9] text-5xl mb-4"></i>
+              <h3 class="text-xl font-bold mb-2">¡Registro Exitoso!</h3>
+              <p class="text-gray-600 mb-6">Tu cuenta ha sido creada correctamente.</p>
+              <p class="text-sm text-gray-500 mb-4">Redirigiendo al inicio de sesión...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <input type="checkbox" id="terms" name="terms" required
+            class="h-4 w-4 mt-1 text-[#49e9c9] border-gray-300 rounded focus:ring-[#49e9c9]">
+          <label for="terms" class="ml-2 block text-sm text-gray-700">
+            Acepto los <a href="#" class="text-[#49e9c9] hover:underline">Términos y Condiciones</a> y la
+            <a href="#" class="text-[#49e9c9] hover:underline">Política de Privacidad</a>
+          </label>
+        </div>
+
+        <button type="submit" class="boton w-full justify-center">
+          <i class="fas fa-user-plus mr-2"></i>
+          Crear cuenta
+        </button>
+
+        <!-- Mensaje de éxito oculto -->
+        <div id="mensajeExito" class="hidden bg-green-100 text-green-700 p-4 rounded-lg text-center">
+          ¡Registro exitoso! Redirigiendo al inicio de sesión...
+        </div>
+
+        <div class="text-center mt-6">
+          <p class="text-sm text-gray-600">
+            ¿Ya tienes una cuenta?
+            <a href="login.html" class="text-[#49e9c9] hover:underline font-medium">
+              Inicia sesión aquí
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+
+  <script>
+    // Script para el menú móvil
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Función para mostrar/ocultar contraseña
+    function togglePasswordVisibility(fieldId) {
+      const input = document.getElementById(fieldId);
+      const icon = document.getElementById(fieldId + '-icon');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }    // Función para verificar la fortaleza de la contraseña
+    function checkPasswordStrength(password) {
+      const strengthBar = document.getElementById('password-strength-bar');
+      const strengthText = document.getElementById('password-strength-text');
+      
+      // Criterios de fortaleza
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      const isLongEnough = password.length >= 8;
+
+      // Calcular puntuación
+      let strength = 0;
+      if (hasLowerCase) strength += 20;
+      if (hasUpperCase) strength += 20;
+      if (hasNumber) strength += 20;
+      if (hasSpecialChar) strength += 20;
+      if (isLongEnough) strength += 20;
+
+      // Actualizar barra y texto
+      strengthBar.style.width = strength + '%';
+      
+      if (strength <= 20) {
+        strengthBar.style.backgroundColor = '#ff4444';
+        strengthText.textContent = 'Muy débil';
+        strengthText.className = 'mt-1 text-sm text-red-500';
+      } else if (strength <= 40) {
+        strengthBar.style.backgroundColor = '#ffbb33';
+        strengthText.textContent = 'Débil';
+        strengthText.className = 'mt-1 text-sm text-yellow-500';
+      } else if (strength <= 60) {
+        strengthBar.style.backgroundColor = '#ffeb3b';
+        strengthText.textContent = 'Regular';
+        strengthText.className = 'mt-1 text-sm text-yellow-600';
+      } else if (strength <= 80) {
+        strengthBar.style.backgroundColor = '#00C851';
+        strengthText.textContent = 'Fuerte';
+        strengthText.className = 'mt-1 text-sm text-green-600';
+      } else {
+        strengthBar.style.backgroundColor = '#007E33';
+        strengthText.textContent = 'Muy fuerte';
+        strengthText.className = 'mt-1 text-sm text-green-700';
+      }
+    }
+
+    // Script para el manejo del registro
+    document.getElementById('registroForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Obtener los valores del formulario
+      const userData = {
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      };
+
+      // Validar que las contraseñas coincidan
+      const confirmPassword = document.getElementById('confirm-password').value;
+      if (userData.password !== confirmPassword) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
+
+      // Guardar en localStorage
+      localStorage.setItem('temporaryUserData', JSON.stringify(userData));
+
+      // Mostrar modal de éxito
+      const successModal = document.getElementById('successModal');
+      successModal.classList.remove('hidden');
+
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

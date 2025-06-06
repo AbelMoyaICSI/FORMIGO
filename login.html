@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo - Iniciar Sesión</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+    }
+    .boton {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .boton:hover {
+      background-color: #3fc0a4;
+    }
+
+    .boton-secundario {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .boton-secundario:hover {
+      background-color: #cfdad6;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      transition: border-color 0.3s;
+      margin-bottom: 1rem;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #49e9c9;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+  <!-- Header heredado -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <a href="index.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+    <div class="hidden md:flex items-center gap-6">      
+      <a href="login.html" class="text-base font-medium">Iniciar Sesión</a>
+      <a href="registro.html" class="boton flex items-center justify-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </div>
+
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="md:hidden hidden bg-white p-4 border-b border-[#e8f3f0]">
+    <nav class="flex flex-col space-y-4">
+      <a href="login.html" class="text-base font-medium text-center">Iniciar Sesión</a>
+      <a href="registro.html" class="boton w-full text-center justify-center inline-flex items-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </nav>
+  </div>
+
+  <!-- Contenido principal -->
+  <main class="flex-grow flex items-center justify-center py-16 px-4">
+    <div class="login-card">
+      <div class="text-center mb-8">
+        <img src="img/LOGO-MOCHI.png" alt="Mochi Mascota" class="w-20 h-20 mx-auto mb-4">
+        <h1 class="text-2xl font-bold mb-2">¡Bienvenido de nuevo!</h1>
+        <p class="text-gray-600">Inicia sesión para continuar tu preparación</p>
+      </div>      <form id="loginForm" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+          <input type="email" id="email" class="input-field" placeholder="tu@email.com" required>
+        </div>        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <div class="relative">
+            <input type="password" id="password" class="input-field pr-10" placeholder="••••••••" required>
+            <button type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700" onclick="togglePasswordVisibility('password')">
+              <i id="password-icon" class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input type="checkbox" id="remember" class="h-4 w-4 text-[#49e9c9]">
+            <label for="remember" class="ml-2 text-sm text-gray-600">Recordarme</label>
+          </div>
+          <a href="#" class="text-sm text-[#49e9c9] hover:underline">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="boton w-full justify-center mt-6">
+          Iniciar Sesión
+        </button>
+
+        <!-- Mensaje de error oculto -->
+        <div id="mensajeError" class="hidden bg-red-100 text-red-700 p-4 rounded-lg text-center">
+          Correo electrónico o contraseña incorrectos
+        </div>
+
+        <p class="text-center text-sm text-gray-600 mt-4">
+          ¿No tienes una cuenta?
+          <a href="registro.html" class="text-[#49e9c9] hover:underline">Regístrate aquí</a>
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer heredado -->
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+
+  <script>
+    // Función para mostrar/ocultar contraseña
+    function togglePasswordVisibility(fieldId) {
+      const input = document.getElementById(fieldId);
+      const icon = document.getElementById(fieldId + '-icon');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    // Script para el menú móvil
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Script para el manejo del login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Obtener los valores del formulario
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Obtener datos del usuario almacenados
+      const storedUserData = localStorage.getItem('temporaryUserData');
+      
+      if (storedUserData) {
+        const userData = JSON.parse(storedUserData);
+
+        // Verificar credenciales
+        if (email === userData.email && password === userData.password) {
+          // Guardar estado de sesión
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('currentUser', JSON.stringify({
+            nombre: userData.nombre,
+            apellido: userData.apellido,
+            email: userData.email
+          }));
+
+          // Redirigir a la página principal con sesión iniciada
+          window.location.href = 'index-login.html';
+        } else {
+          // Mostrar mensaje de error
+          const mensajeError = document.getElementById('mensajeError');
+          mensajeError.classList.remove('hidden');
+          setTimeout(() => {
+            mensajeError.classList.add('hidden');
+          }, 3000);
+        }
+      } else {
+        // Mostrar mensaje de error
+        const mensajeError = document.getElementById('mensajeError');
+        mensajeError.textContent = 'Usuario no registrado';
+        mensajeError.classList.remove('hidden');
+        setTimeout(() => {
+          mensajeError.classList.add('hidden');
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

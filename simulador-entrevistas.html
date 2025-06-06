@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo|Simulador de Entrevistas</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/styles-simulator.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+    /* Estilos específicos del simulador */
+    .simulador-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+
+    .simulador-pantalla {
+      display: flex;
+      background-color: #ffffff;
+      width: 60%;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .media-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .media-button {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-button:hover {
+      background-color: #cfdad6;
+      transform: scale(1.1);
+    }
+
+    .media-button.active {
+      background-color: #49e9c9;
+      color: #ffffff;
+    }
+
+    .permission-prompt {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .permission-prompt.show {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Estilos para la navegación y menús desplegables */
+    .hidden {
+      display: none;
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Menús desplegables */
+    #notificationMenu,
+    #profileMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000;
+      margin-top: 0;
+      background-color: white;
+      border: 1px solid #e8f3f0;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Ajustes del header para móvil */
+    @media (max-width: 768px) {
+      #mobileMenu {
+        width: 100%;
+        background-color: white;
+        z-index: 50;
+      }
+
+      #mobileMenu a {
+        width: 100%;
+        text-align: center;
+      }
+
+      #mobileMenu .boton-premium {
+        margin: 0.5rem auto;
+        width: fit-content;
+      }
+    }
+
+    /* Estilos para el menú móvil */
+    #mobileMenu {
+      border-top: 1px solid #e8f3f0;
+    }
+
+    #mobileMenu a {
+      transition: background-color 0.3s;
+    }
+
+    #mobileMenu a:hover {
+      background-color: #f8fbfb;
+    }
+
+    #mobileMenu hr {
+      margin: 0.5rem 0;
+      border-color: #e8f3f0;
+    }    /* Estilos del globo de diálogo */
+    .globo-dialogo {
+      width: calc(100% - 2rem);
+      margin: 0 1rem;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      word-wrap: break-word;
+    }
+
+    @media (min-width: 768px) {
+      .globo-dialogo {
+        width: auto;
+      }
+    }    /* Animación suave para el globo */    .globo-dialogo {
+      opacity: 0;
+      transform-origin: bottom center;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .globo-dialogo.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .globo-dialogo:not(.show) {
+      transform: translateY(10px) scale(0.95);
+    }
+
+    /* Triángulo del globo */
+    .globo-dialogo .relative {
+      padding-bottom: 8px;
+    }
+
+    .globo-dialogo::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #49e9c9;
+    }
+
+    /* Ajuste del triángulo en móvil */
+    @media (max-width: 767px) {
+      .globo-dialogo::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #49e9c9;
+      }
+    }
+
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+  
+
+  <!-- Menú desplegable para dispositivos móviles con perfil -->
+  <div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+    <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+    <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+    <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+      <span>Notificaciones</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+      </svg>
+    </a>
+    <!-- Botón Premium -->
+    <a href="suscripcion.html" class="boton-premium">Premium</a>
+
+    <hr class="my-2 w-full border-[#e8f3f0]" />
+    <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->    <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+    <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+    <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+  </div>
+
+  <!-- Contenido principal -->
+  <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+    <!-- Menú Principal -->
+    <section id="menu" class="container mx-auto px-4 py-8">
+      <h1 class="text-2xl font-bold text-center mb-6">¡Bienvenido al Simulador de Entrevistas!</h1>
+      <p class="text-center text-[#4f9688] mb-6">Revisa tu progreso y elige dónde continuar:</p>
+
+      <!-- Espacio para la imagen del avatar -->
+      <div class="flex justify-center mb-6">
+        <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mascota del Simulador" class="w-48 h-auto">
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+        <!-- Tarjeta de "Comenzar Simulador" -->
+        <div class="borde-suave text-center" onclick="startSimulator(1, 'basic')">
+          <h2 class="card-title text-lg font-bold">Comenzar Simulador</h2>
+          <p class="text-[#4f9688] mt-2">Empieza a responder las preguntas.</p>
+          <!-- Ícono temático debajo -->
+          <div class="flex justify-center mt-4">
+            <i class="fas fa-play-circle text-[#49e9c9] text-4xl"></i>
+          </div>
+        </div>
+
+        <!-- Tarjeta de "Ver Progreso" -->
+        <div id="progress-card" class="borde-suave text-center" onclick="showProgressPage()">
+          <h2 class="card-title text-lg font-bold">Ver Progreso</h2>
+          <p class="text-[#4f9688] mt-2">Revisa tus respuestas anteriores.</p>
+          <div class="flex justify-center mt-4">
+            <i class="fas fa-check-circle text-[#49e9c9] text-4xl"></i>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contenedor del Simulador -->
+    <section id="simulator" class="hidden">
+      <!-- Aquí se generarán dinámicamente las preguntas y opciones -->
+    </section>      <!-- Página de Progreso -->
+    <section id="progress-page" class="hidden">
+      <div class="w-full flex justify-start px-4 mb-6">
+        <button class="boton-secundario volver-menu" onclick="window.location.href='simulador-entrevistas.html';" style="margin-top: 1em;">Volver al Menú</button>
+      </div>
+
+      <div class="flex flex-col md:flex-row">
+        <!-- Índice o navegación -->
+        <aside class="w-full md:w-1/4 p-4 bg-[#49e9c9] rounded-lg shadow-md">
+          <h2 class="text-xl font-bold mb-4">Progreso por Nivel</h2>
+          <ul class="space-y-2">
+            <li>
+              <button onclick="showLevels('basic')" class="w-full text-left text-[#0e1b18] font-medium py-2 px-4 bg-[#e8f3f0] rounded-lg hover:bg-[#cfdad6]">
+                Básico
+              </button>
+            </li>
+            <li>
+              <button onclick="showLevels('intermediate')" class="w-full text-left text-[#0e1b18] font-medium py-2 px-4 bg-[#e8f3f0] rounded-lg hover:bg-[#cfdad6]">
+                Intermedio
+              </button>
+            </li>
+            <li>
+              <button onclick="showLevels('advanced')" class="w-full text-left text-[#0e1b18] font-medium py-2 px-4 bg-[#e8f3f0] rounded-lg hover:bg-[#cfdad6]">
+                Avanzado
+              </button>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Sección de niveles -->
+        <section class="w-full md:w-3/4 p-4">
+          <h1 id="level-category" class="text-2xl font-bold mb-6">Básico</h1>
+          <div id="levels-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Niveles generados dinámicamente -->
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de Finalización -->
+  <div id="completionModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg p-6 shadow-lg max-w-md w-full text-center relative">
+      <!-- Botón de cerrar -->
+      <button onclick="closeCompletionModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+      </button>
+      <!-- Título del modal -->
+      <h2 class="text-2xl font-bold text-[#0e1b18] mb-4">¡Felicidades!</h2>
+      <!-- Avatar debajo del título -->
+      <div class="flex justify-center mb-4">
+        <img src="img/AVATAR-POSISION4-MOCHI.png" alt="Mochi Avatar" class="w-24 h-auto">
+      </div>
+      <!-- Mensaje del modal -->
+      <p class="text-[#4f9688] mb-6">¡Has completado el nivel! Sigue avanzando para prepararte aún mejor.</p>
+      <!-- Botón de continuar -->
+      <button onclick="goToProgressPage()" class="boton">Aceptar</button>
+    </div>
+  </div>
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <!-- Íconos de redes sociales -->
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <!-- Enlaces del footer -->
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <!-- Copyright -->
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+
+  <!-- Scripts -->
+    <script>
+      // Clase para procesar lenguaje natural
+      class NaturalLanguageProcessor {
+        constructor() {
+          this.topics = {
+            'experience': ['experiencia', 'trabajo', 'proyecto', 'logro'],
+            'skills': ['habilidad', 'competencia', 'capacidad', 'fortaleza'],
+            'education': ['educación', 'estudio', 'título', 'carrera'],
+            'personality': ['personalidad', 'actitud', 'valor', 'cualidad'],
+            'teamwork': ['equipo', 'colaboración', 'grupo', 'compañeros'],
+            'leadership': ['liderazgo', 'dirección', 'gestión', 'supervisión'],
+            'problem_solving': ['problema', 'solución', 'desafío', 'reto'],
+            'communication': ['comunicación', 'expresión', 'presentación', 'explicación']
+          };
+          
+          this.sentimentKeywords = {
+            positive: ['éxito', 'logro', 'mejora', 'eficiente', 'positivo', 'excelente'],
+            negative: ['problema', 'dificultad', 'fracaso', 'error', 'negativo'],
+            neutral: ['entonces', 'después', 'durante', 'mientras']
+          };
+        }
+
+        analyzeResponse(text) {
+          const lowerText = text.toLowerCase();
+          return {
+            topics: this.detectTopics(lowerText),
+            sentiment: this.analyzeSentiment(lowerText),
+            complexity: this.analyzeComplexity(text),
+            specificity: this.detectSpecificity(lowerText),
+            structure: this.analyzeStructure(text)
+          };
+        }
+
+        detectTopics(text) {
+          const detectedTopics = [];
+          for (const [topic, keywords] of Object.entries(this.topics)) {
+            if (keywords.some(keyword => text.includes(keyword))) {
+              detectedTopics.push(topic);
+            }
+          }
+          return detectedTopics;
+        }
+
+        analyzeSentiment(text) {
+          let score = 0;
+          const words = text.split(/\s+/);
+          
+          words.forEach(word => {
+            if (this.sentimentKeywords.positive.some(kw => word.includes(kw))) score += 1;
+            if (this.sentimentKeywords.negative.some(kw => word.includes(kw))) score -= 1;
+          });
+
+          return score > 0 ? 'positive' : score < 0 ? 'negative' : 'neutral';
+        }
+
+        analyzeComplexity(text) {
+          const sentences = text.split(/[.!?]+/).filter(Boolean);
+          const avgWordsPerSentence = sentences.reduce((acc, sent) => 
+            acc + sent.split(/\s+/).length, 0) / sentences.length;
+
+          return {
+            sentenceCount: sentences.length,
+            avgWordsPerSentence: Math.round(avgWordsPerSentence),
+            isBalanced: avgWordsPerSentence >= 10 && avgWordsPerSentence <= 20
+          };
+        }
+
+        detectSpecificity(text) {
+          const specificityMarkers = ['específicamente', 'por ejemplo', 'en particular', 'concretamente', 'exactamente', '%', 'número', 'cantidad'];
+          return specificityMarkers.some(marker => text.includes(marker));
+        }
+
+        analyzeStructure(text) {
+          const starElements = {
+            situation: ['situación', 'contexto', 'cuando', 'durante'],
+            task: ['tarea', 'objetivo', 'meta', 'necesitaba'],
+            action: ['realicé', 'implementé', 'desarrollé', 'hice'],
+            result: ['resultado', 'logré', 'conseguí', 'mejoró']
+          };
+
+          const structureAnalysis = {};
+          for (const [element, keywords] of Object.entries(starElements)) {
+            structureAnalysis[element] = keywords.some(kw => text.toLowerCase().includes(kw));
+          }
+
+          return {
+            followsSTAR: Object.values(structureAnalysis).filter(Boolean).length >= 3,
+            elements: structureAnalysis
+          };
+        }
+      }
+
+      // Clase mejorada del simulador
+      class SimuladorIA {
+        constructor() {
+          this.nlp = new NaturalLanguageProcessor();
+          this.conversationState = {
+            currentTopic: null,
+            followUpQuestions: [],
+            userBackground: {},
+            pendingFeedback: []
+          };
+        }
+
+        processResponse(response) {
+          const analysis = this.nlp.analyzeResponse(response);
+          const feedback = this.generateFeedback(analysis);
+          return {
+            feedback,
+            followUp: this.generateFollowUpQuestion(analysis)
+          };
+        }
+
+        generateFeedback(analysis) {
+          let feedback = {
+            message: '',
+            type: 'constructive',
+            suggestions: []
+          };
+
+          if (analysis.structure.followsSTAR && analysis.specificity) {
+            feedback.type = 'positive';
+            feedback.message = "¡Excelente respuesta! Has estructurado muy bien tu explicación y usado ejemplos específicos.";
+          } else if (analysis.topics.length > 0 && analysis.sentiment === 'positive') {
+            feedback.type = 'constructive';
+            feedback.message = "Buena respuesta. Aquí hay algunas sugerencias para mejorar:";
+            if (!analysis.structure.followsSTAR) {
+              feedback.suggestions.push("Intenta seguir el método STAR: Situación, Tarea, Acción y Resultado");
+            }
+            if (!analysis.specificity) {
+              feedback.suggestions.push("Incluye datos o métricas específicas para dar más peso a tus ejemplos");
+            }
+          } else {
+            feedback.type = 'encouragement';
+            feedback.message = "Sigamos practicando. Aquí hay algunos aspectos que podemos mejorar:";
+            feedback.suggestions = [
+              "Comparte ejemplos concretos de tu experiencia",
+              "Relaciona tu respuesta con las habilidades requeridas para el puesto",
+              "Mantén un tono positivo y profesional"
+            ];
+          }
+
+          return feedback;
+        }
+
+        generateFollowUpQuestion(analysis) {
+          const followUps = {
+            experience: [
+              "¿Podrías profundizar sobre los desafíos específicos que enfrentaste en ese proyecto?",
+              "¿Cómo mediste el impacto de tus acciones en ese caso?"
+            ],
+            skills: [
+              "¿Cómo has aplicado esa habilidad en diferentes contextos?",
+              "¿Puedes dar un ejemplo de cuando esta habilidad te ayudó a superar un obstáculo?"
+            ],
+            teamwork: [
+              "¿Cómo manejas los desacuerdos en el equipo?",
+              "¿Qué estrategias usas para fomentar la colaboración?"
+            ]
+          };
+
+          if (analysis.topics[0] && followUps[analysis.topics[0]]) {
+            const questions = followUps[analysis.topics[0]];
+            return questions[Math.floor(Math.random() * questions.length)];
+          }
+          return null;
+        }
+      }
+
+      // Inicializar el simulador
+      const simuladorIA = new SimuladorIA();
+
+      const menuButton = document.getElementById('menuButton');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const profileButton = document.getElementById('profileButton');
+      const profileMenu = document.getElementById('profileMenu');
+      const completionModal = document.getElementById('completionModal');
+
+      let currentLevel = 1;
+      let currentQuestion = 1;
+      let currentCategory = 'basic';
+
+      // Variables para el control de la conversación
+      let conversationState = 0;
+      let userName = '';
+
+      const levelsData = {
+        basic: [
+          {
+            levelNumber: 1,
+            title: "Conociéndote mejor",
+            questions: [
+              {
+                questionText: '¿Cómo responderías a la pregunta: "Háblame de ti" en una entrevista?',
+                options: [
+                  "Hablar de mis logros académicos y experiencias laborales",
+                  "Describir mis hobbies y pasatiempos",
+                  "Centrarme solo en mis habilidades técnicas",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Hola, soy Mochi! Estoy aquí para ayudarte. Recuerda responder con honestidad y confianza, no te juzgaré."
+              },
+              {
+                questionText: '¿A qué área universitaria o carrera perteneces?',
+                options: [
+                  "Ingeniería",
+                  "Ciencias Sociales",
+                  "Humanidades",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Muy bien!, sigamos con la siguiente pregunta"
+              },
+              {
+                questionText: "¿Cuál es tu fortaleza más destacada?",
+                options: [
+                  "Resolución de problemas",
+                  "Trabajo en equipo",
+                  "Liderazgo",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "Oh vaya, parece que estás en ritmo. ¡Sigue así!"
+              },
+              {
+                questionText: "¿Qué opinas sobre el trabajo bajo presión?",
+                options: [
+                  "Me enfoco y soy eficiente",
+                  "Prefiero trabajar a mi ritmo",
+                  "Depende de la situación",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Esto va increíble! Estoy seguro de que destacarás."
+              },
+              {
+                questionText: "¿Qué te motiva a seguir creciendo profesionalmente?",
+                options: [
+                  "Superarme a mí mismo",
+                  "Tener estabilidad financiera",
+                  "Ayudar a otros a crecer",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Excelente! Esta es clave para conocerte mejor."
+              },
+              {
+                questionText: "¿Cómo manejas el estrés en situaciones laborales?",
+                options: [
+                  "Organizándome por prioridades",
+                  "Pidiendo ayuda a colegas",
+                  "Realizando pausas estratégicas",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Lo estás haciendo genial! Sigamos avanzando."
+              },
+              {
+                questionText: "¿Qué importancia le das al aprendizaje continuo?",
+                options: [
+                  "Es crucial para mi desarrollo profesional",
+                  "Lo hago solo cuando es necesario",
+                  "Depende del contexto laboral",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Increíble! Una pregunta más para finalizar."
+              },
+              {
+                questionText: "¿Cómo planeas aplicar lo aprendido en esta experiencia?",
+                options: [
+                  "En futuras entrevistas laborales",
+                  "Para mi desarrollo personal",
+                  "Ambas opciones",
+                  "No estoy seguro, necesitaría orientación"
+                ],
+                dialogText: "¡Estás a un paso de completar el nivel 1!"
+              },
+              {
+                questionText: "¿Cómo describirías tus habilidades de comunicación?",
+                options: [
+                  "Muy efectivas",
+                  "Moderadamente efectivas",
+                  "Necesitan mejora"
+                ],
+                dialogText: "¡Casi terminamos! Sigue así."
+              },
+              {
+                questionText: "¿Qué haces cuando surge un conflicto en un equipo?",
+                options: [
+                  "Escucho a todas las partes antes de actuar",
+                  "Trato de mediar y buscar soluciones",
+                  "Delego la solución a un líder o mediador"
+                ],
+                dialogText: "¡Excelente trabajo! Has completado el nivel 1."
+              }
+            ]
+          },
+          // Niveles 2 al 10
+          {
+            levelNumber: 2,
+            title: "Preferencias de comunicación",
+            questions: [
+              {
+                questionText: "¿Prefieres trabajar en equipo o de forma individual?",
+                options: [
+                  "En equipo",
+                  "Individual",
+                  "Depende de la situación"
+                ],
+                dialogText: "¡Excelente! Comencemos con el Nivel 2."
+              },
+              {
+                questionText: "¿Qué prefieres al comunicarte?",
+                options: [
+                  "Ser claro y directo",
+                  "Ser detallado y explicativo",
+                  "Depende de la audiencia"
+                ],
+                dialogText: "¡Sigamos con la siguiente pregunta!"
+              },
+              {
+                questionText: "¿Cómo prefieres recibir retroalimentación?",
+                options: [
+                  "De manera privada",
+                  "En grupo",
+                  "Por escrito"
+                ],
+                dialogText: "¡Vas muy bien!"
+              },
+              {
+                questionText: "¿Qué haces si sientes que no te comprenden?",
+                options: [
+                  "Reformulo mi mensaje",
+                  "Uso ejemplos o analogías",
+                  "Pido retroalimentación"
+                ],
+                dialogText: "¡Casi terminamos este nivel!"
+              },
+              {
+                questionText: "¿Prefieres comunicarte verbalmente o por escrito?",
+                options: [
+                  "Verbal",
+                  "Escrita",
+                  "Ambos"
+                ],
+                dialogText: "¡Excelente trabajo en este nivel!"
+              }
+            ]
+          },
+          {
+            levelNumber: 3,
+            title: "Gestión de Situaciones Desafiantes",
+            questions: [
+              {
+                questionText: "¿Qué haces si enfrentas un problema sin solución aparente?",
+                options: [
+                  "Busco ayuda de colegas o mentores",
+                  "Investigo posibles soluciones",
+                  "Trato de resolverlo por mi cuenta"
+                ],
+                dialogText: "¡Bienvenido al Nivel 3!"
+              },
+              {
+                questionText: "¿Qué estrategias usas para manejar el estrés?",
+                options: [
+                  "Practico técnicas de relajación",
+                  "Organizo mis prioridades",
+                  "Hablo con alguien de confianza"
+                ],
+                dialogText: "¡Sigamos avanzando!"
+              },
+              {
+                questionText: "¿Cómo reaccionas ante cambios inesperados?",
+                options: [
+                  "Me adapto rápidamente",
+                  "Me siento incómodo pero lo intento",
+                  "Tomo tiempo para procesarlo"
+                ],
+                dialogText: "¡Estás haciéndolo muy bien!"
+              },
+              {
+                questionText: "¿Qué tan importante es para ti mantener la calma bajo presión?",
+                options: [
+                  "Muy importante",
+                  "Moderadamente importante",
+                  "No es relevante"
+                ],
+                dialogText: "¡Excelente respuesta!"
+              },
+              {
+                questionText: "¿Qué haces si no puedes cumplir con una tarea?",
+                options: [
+                  "Lo comunico de inmediato",
+                  "Busco apoyo para completarla",
+                  "Me enfoco en lo que puedo hacer"
+                ],
+                dialogText: "¡Casi terminamos este nivel!"
+              },
+              {
+                questionText: "¿Cómo manejas conflictos laborales o académicos?",
+                options: [
+                  "Escucho a todas las partes antes de actuar",
+                  "Trato de mediar y buscar soluciones",
+                  "Delego la solución a un líder o mediador"
+                ],
+                dialogText: "¡Excelente trabajo en el Nivel 3!"
+              }
+            ]
+          },
+          {
+            levelNumber: 4,
+            title: "Identificando Tus Intereses",
+            questions: [
+              {
+                questionText: "¿Qué tipo de actividades disfrutas en tu tiempo libre?",
+                options: [
+                  "Creativas (arte, diseño, escritura)",
+                  "Analíticas (investigación, resolución de problemas)",
+                  "Sociales (trabajo en equipo, eventos)"
+                ],
+                dialogText: "¡Bienvenido al Nivel 4!"
+              },
+              {
+                questionText: "Si pudieras aprender algo nuevo, ¿qué elegirías?",
+                options: [
+                  "Una habilidad técnica",
+                  "Un idioma",
+                  "Una actividad artística"
+                ],
+                dialogText: "¡Muy interesante!"
+              },
+              {
+                questionText: "¿Qué áreas profesionales te interesan más?",
+                options: [
+                  "Tecnología",
+                  "Negocios",
+                  "Ciencias sociales",
+                  "Humanidades"
+                ],
+                dialogText: "¡Gran elección!"
+              },
+              {
+                questionText: "¿Qué te motiva más a seguir aprendiendo?",
+                options: [
+                  "Curiosidad personal",
+                  "Avanzar profesionalmente",
+                  "Resolver problemas complejos"
+                ],
+                dialogText: "¡Excelente trabajo en este nivel!"
+              }
+            ]
+          },
+          {
+            levelNumber: 5,
+            title: "Habilidades Generales y Adaptabilidad",
+            questions: [
+              {
+                questionText: "¿Qué haces cuando debes aprender algo completamente nuevo?",
+                options: [
+                  "Me enfoco en entender lo básico",
+                  "Practico hasta dominarlo",
+                  "Busco ayuda de alguien con experiencia"
+                ],
+                dialogText: "¡Bienvenido al Nivel 5!"
+              },
+              {
+                questionText: "¿Cómo reaccionas ante cambios en tus responsabilidades?",
+                options: [
+                  "Me adapto rápidamente",
+                  "Analizo la situación antes de actuar",
+                  "Me comunico para obtener más detalles"
+                ],
+                dialogText: "¡Sigamos adelante!"
+              },
+              {
+                questionText: "¿Cómo manejarías una situación con plazos ajustados?",
+                options: [
+                  "Organizo tareas por prioridad",
+                  "Solicito más tiempo si es necesario",
+                  "Delego responsabilidades"
+                ],
+                dialogText: "¡Buena respuesta!"
+              },
+              {
+                questionText: "¿Qué tan importante consideras la adaptabilidad en tu carrera?",
+                options: [
+                  "Fundamental para el éxito",
+                  "Importante, pero no esencial",
+                  "Poco relevante"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Qué haces para mantener la motivación en situaciones difíciles?",
+                options: [
+                  "Me recompenso por pequeños logros",
+                  "Me enfoco en mis metas a largo plazo",
+                  "Busco apoyo emocional"
+                ],
+                dialogText: "¡Has completado el Nivel 5!"
+              }
+            ]
+          },
+          {
+            levelNumber: 6,
+            title: "Descubriendo tu Identidad Profesional",
+            questions: [
+              {
+                questionText: "¿Qué consideras tu mayor fortaleza profesional?",
+                options: [
+                  "Trabajo en equipo",
+                  "Habilidad técnica",
+                  "Creatividad",
+                  "Comunicación efectiva"
+                ],
+                dialogText: "¡Bienvenido al Nivel 6!"
+              },
+              {
+                questionText: "¿Qué área profesional se alinea mejor con tu personalidad?",
+                options: [
+                  "Analítica (datos, tecnología)",
+                  "Creativa (arte, marketing, diseño)",
+                  "Social (ventas, gestión, enseñanza)",
+                  "Innovadora (investigación, desarrollo de productos)"
+                ],
+                dialogText: "¡Interesante elección!"
+              },
+              {
+                questionText: "¿Qué te motiva a seguir avanzando profesionalmente?",
+                options: [
+                  "Pasión por mi trabajo",
+                  "Reconocimiento y logros",
+                  "Estabilidad financiera",
+                  "Desafíos intelectuales"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Cómo evaluarías tu conocimiento actual en tu área de interés?",
+                options: [
+                  "Muy avanzado",
+                  "Intermedio",
+                  "Principiante"
+                ],
+                dialogText: "¡Gracias por compartir!"
+              },
+              {
+                questionText: "¿Qué importancia le das a encontrar un trabajo alineado con tus valores?",
+                options: [
+                  "Fundamental",
+                  "Importante",
+                  "No relevante"
+                ],
+                dialogText: "¡Gran respuesta!"
+              },
+              {
+                questionText: "¿Qué aspectos profesionales te generan mayor satisfacción?",
+                options: [
+                  "Crecimiento personal",
+                  "Reconocimiento de colegas",
+                  "Logro de objetivos"
+                ],
+                dialogText: "¡Has completado el Nivel 6!"
+              }
+            ]
+          },
+          {
+            levelNumber: 7,
+            title: "Explorando Tus Metas Personales",
+            questions: [
+              {
+                questionText: "¿Dónde te ves profesionalmente en cinco años?",
+                options: [
+                  "Liderando un equipo",
+                  "Trabajando como especialista en un área técnica",
+                  "Emprendiendo un proyecto propio"
+                ],
+                dialogText: "¡Bienvenido al Nivel 7!"
+              },
+              {
+                questionText: "¿Qué habilidades necesitas para alcanzar tus metas?",
+                options: [
+                  "Liderazgo",
+                  "Gestión del tiempo",
+                  "Resolución de conflictos",
+                  "Trabajo en equipo"
+                ],
+                dialogText: "¡Sigamos adelante!"
+              },
+              {
+                questionText: "¿Qué consideras un logro importante para ti?",
+                options: [
+                  "Completar un proyecto desafiante",
+                  "Obtener reconocimiento en tu área",
+                  "Alcanzar una meta personal"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Qué tan importante es para ti equilibrar tu vida personal y profesional?",
+                options: [
+                  "Muy importante",
+                  "Moderadamente importante",
+                  "Poco importante"
+                ],
+                dialogText: "¡Gracias por compartir!"
+              },
+              {
+                questionText: "¿Qué factores consideras al definir tus objetivos profesionales?",
+                options: [
+                  "Impacto social",
+                  "Desarrollo personal",
+                  "Beneficios financieros"
+                ],
+                dialogText: "¡Has completado el Nivel 7!"
+              }
+            ]
+          },
+          {
+            levelNumber: 8,
+            title: "Conexión con Tus Habilidades Interpersonales",
+            questions: [
+              {
+                questionText: "¿Cómo describirías tus habilidades de comunicación?",
+                options: [
+                  "Muy efectivas",
+                  "Moderadamente efectivas",
+                  "Necesitan mejora"
+                ],
+                dialogText: "¡Bienvenido al Nivel 8!"
+              },
+              {
+                questionText: "¿Qué haces cuando surge un conflicto en un equipo?",
+                options: [
+                  "Escucho a todas las partes antes de actuar",
+                  "Trato de mediar y buscar soluciones",
+                  "Delego la solución a un líder o mediador"
+                ],
+                dialogText: "¡Buena respuesta!"
+              },
+              {
+                questionText: "¿Qué tan cómodo te sientes al hablar en público?",
+                options: [
+                  "Muy cómodo",
+                  "Moderadamente cómodo",
+                  "Incómodo, pero lo intento"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Qué haces para fortalecer tus relaciones laborales o académicas?",
+                options: [
+                  "Organizo actividades en equipo",
+                  "Ofrezco ayuda cuando es necesario",
+                  "Mantengo una comunicación constante"
+                ],
+                dialogText: "¡Has completado el Nivel 8!"
+              }
+            ]
+          },
+          {
+            levelNumber: 9,
+            title: "Reconociendo tus Fortalezas y Debilidades",
+            questions: [
+              {
+                questionText: "¿Cuál consideras que es tu mayor fortaleza en el ámbito profesional?",
+                options: [
+                  "Liderazgo",
+                  "Resolución de problemas",
+                  "Habilidades técnicas",
+                  "Trabajo en equipo"
+                ],
+                dialogText: "¡Bienvenido al Nivel 9!"
+              },
+              {
+                questionText: "¿Cómo identificas tus áreas de mejora?",
+                options: [
+                  "Escuchando retroalimentación de otros",
+                  "Reflexionando sobre experiencias pasadas",
+                  "Consultando con mentores o expertos"
+                ],
+                dialogText: "¡Sigamos avanzando!"
+              },
+              {
+                questionText: "¿Qué haces para superar una debilidad identificada?",
+                options: [
+                  "Tomo cursos o talleres",
+                  "Practico continuamente",
+                  "Pido apoyo a colegas o amigos"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Cómo te aseguras de potenciar tus fortalezas?",
+                options: [
+                  "Busco roles o actividades que las utilicen",
+                  "Comparto mis conocimientos con otros",
+                  "Aplico lo aprendido en proyectos"
+                ],
+                dialogText: "¡Buena respuesta!"
+              },
+              {
+                questionText: "¿Qué importancia le das al aprendizaje continuo?",
+                options: [
+                  "Es crucial para mi desarrollo profesional",
+                  "Lo hago solo cuando es necesario",
+                  "Depende del contexto laboral"
+                ],
+                dialogText: "¡Casi terminamos!"
+              },
+              {
+                questionText: "¿Qué estrategias usas para superar desafíos personales?",
+                options: [
+                  "Apoyo en amigos o familia",
+                  "Reflexión personal",
+                  "Uso de herramientas profesionales"
+                ],
+                dialogText: "¡Has completado el Nivel 9!"
+              }
+            ]
+          },
+          {
+            levelNumber: 10,
+            title: "Adaptabilidad y Resiliencia en el Trabajo",
+            questions: [
+              {
+                questionText: "¿Qué haces cuando enfrentas un cambio inesperado en tus responsabilidades?",
+                options: [
+                  "Me adapto rápidamente y busco soluciones",
+                  "Pido orientación para entender mejor el cambio",
+                  "Me tomo tiempo para procesarlo"
+                ],
+                dialogText: "¡Bienvenido al Nivel 10!"
+              },
+              {
+                questionText: "¿Cómo manejas la presión cuando tienes múltiples tareas?",
+                options: [
+                  "Organizo mis prioridades",
+                  "Solicito apoyo si es necesario",
+                  "Trabajo intensamente hasta completarlas"
+                ],
+                dialogText: "¡Sigamos adelante!"
+              },
+              {
+                questionText: "¿Qué tan importante consideras la resiliencia en el trabajo?",
+                options: [
+                  "Fundamental para el éxito",
+                  "Importante, pero no esencial",
+                  "Depende del contexto"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Qué estrategias utilizas para mantener la motivación en entornos desafiantes?",
+                options: [
+                  "Establezco metas claras",
+                  "Me recompenso por los pequeños logros",
+                  "Busco inspiración en otros"
+                ],
+                dialogText: "¡Buena respuesta!"
+              },
+              {
+                questionText: "¿Cómo te recuperas después de un contratiempo profesional?",
+                options: [
+                  "Reflexiono sobre lo ocurrido y busco mejorar",
+                  "Hablo con alguien de confianza para recibir apoyo",
+                  "Me enfoco en nuevas oportunidades"
+                ],
+                dialogText: "¡Casi terminamos!"
+              },
+              {
+                questionText: "¿Cómo afrontas retos desconocidos?",
+                options: [
+                  "Investigo y me preparo",
+                  "Pido ayuda a un colega",
+                  "Uso mi experiencia previa"
+                ],
+                dialogText: "¡Excelente!"
+              },
+              {
+                questionText: "¿Qué tan importante es la adaptabilidad para tu éxito profesional?",
+                options: [
+                  "Muy importante",
+                  "Moderadamente importante",
+                  "Poco importante"
+                ],
+                dialogText: "¡Has completado el Nivel 10!"
+              }
+            ]
+          }
+        ],
+        intermediate: [
+        {
+          levelNumber: 1,
+          title: "Estrategias para Preguntas Situacionales",
+          questions: [
+            {
+              questionText: "¿Qué estrategia es más efectiva al responder una pregunta situacional?",
+              options: [
+                "Usar ejemplos genéricos para todas las preguntas.",
+                "Describir un ejemplo personal relacionado con el puesto.",
+                "Hablar solo de logros académicos.",
+                "Evitar responder si no tienes experiencia."
+              ],
+              dialogText: "¡Hola! Vamos a mejorar tus respuestas situacionales."
+            },
+            {
+              questionText: "¿Cuál de los siguientes elementos NO es relevante en una pregunta situacional?",
+              options: [
+                "Contexto de la situación.",
+                "Detalles irrelevantes.",
+                "Acciones que tomaste.",
+                "Resultados obtenidos."
+              ],
+              dialogText: "¡Muy bien! Ahora, veamos esta otra pregunta."
+            },
+            {
+              questionText: "¿Qué tan importante es incluir resultados en tu respuesta?",
+              options: [
+                "Fundamental para demostrar el impacto de tus acciones.",
+                "No es importante, lo relevante es el proceso.",
+                "Solo si el entrevistador lo solicita.",
+                "Depende del tipo de entrevista."
+              ],
+              dialogText: "¡Perfecto! Sigamos aprendiendo."
+            },
+            {
+              questionText: "¿Cómo manejarías una pregunta situacional sobre un error pasado?",
+              options: [
+                "Evitar responder para no mostrar debilidades.",
+                "Describir el error, las acciones para solucionarlo y lo aprendido.",
+                "Culpar a otros para minimizar tu responsabilidad.",
+                "Mencionar que nunca cometes errores."
+              ],
+              dialogText: "¡Muy buena reflexión! Vamos por más."
+            },
+            {
+              questionText: "¿Por qué los entrevistadores hacen preguntas situacionales?",
+              options: [
+                "Para evaluar tu creatividad.",
+                "Para entender cómo manejas situaciones en la práctica.",
+                "Para analizar tu nivel académico.",
+                "Para medir tu habilidad técnica."
+              ],
+              dialogText: "¡Increíble! Has completado este nivel."
+            }
+          ]
+        },
+        {
+          levelNumber: 2,
+          title: "Trabajo en Equipo: Respuestas Enfocadas",
+          questions: [
+            {
+              questionText: "¿Cómo deberías responder cuando te preguntan sobre tu experiencia en trabajo en equipo?",
+              options: [
+                "Hablar sobre un equipo en el que tuviste problemas.",
+                "Describir un proyecto exitoso en el que participaste.",
+                "Hablar sobre tus logros individuales.",
+                "Mencionar que prefieres trabajar solo."
+              ],
+              dialogText: "¡Hola! Analicemos tus habilidades de trabajo en equipo."
+            },
+            {
+              questionText: "¿Qué factor es clave para demostrar tus habilidades de trabajo en equipo?",
+              options: [
+                "Responsabilidad individual.",
+                "Resolución de conflictos en grupo.",
+                "Comunicación efectiva.",
+                "Todas las anteriores."
+              ],
+              dialogText: "¡Muy bien! Vamos con otra pregunta."
+            },
+            {
+              questionText: "¿Qué harías si un miembro de tu equipo no cumple con su trabajo?",
+              options: [
+                "Lo ignoro y me concentro en mi parte.",
+                "Hablaría directamente con él para resolverlo.",
+                "Informaría al líder del equipo sin discutirlo antes.",
+                "Asumiría todas sus responsabilidades."
+              ],
+              dialogText: "¡Buen razonamiento! Sigamos adelante."
+            },
+            {
+              questionText: "¿Qué es más importante en un equipo exitoso?",
+              options: [
+                "Habilidades técnicas de cada miembro.",
+                "La comunicación y el respeto mutuo.",
+                "La capacidad de competir entre sí.",
+                "El liderazgo autoritario."
+              ],
+              dialogText: "¡Excelente respuesta! Una más para finalizar."
+            },
+            {
+              questionText: "¿Cómo puedes mostrar que eres un buen jugador de equipo en una entrevista?",
+              options: [
+                "Dando ejemplos específicos de colaboración.",
+                "Mencionando que te gusta trabajar con otros.",
+                "Evitando hablar sobre conflictos pasados.",
+                "Asegurándote de que el equipo dependa de ti."
+              ],
+              dialogText: "¡Gran trabajo! Nivel completado."
+            }
+          ]
+        },
+        {
+          levelNumber: 3,
+          title: "Uso de Ejemplos en Respuestas",
+          questions: [
+            {
+              questionText: "¿Por qué es importante usar ejemplos concretos en tus respuestas?",
+              options: [
+                "Para demostrar tu experiencia práctica.",
+                "Para evitar preguntas adicionales del entrevistador.",
+                "Para impresionar al entrevistador con detalles complejos.",
+                "Para llenar el tiempo de la entrevista."
+              ],
+              dialogText: "¡Bienvenido! Aprendamos sobre el uso de ejemplos."
+            },
+            {
+              questionText: "¿Qué característica tiene un buen ejemplo en una entrevista?",
+              options: [
+                "Es breve y relevante.",
+                "Es muy detallado, aunque no esté relacionado con el puesto.",
+                "Se enfoca únicamente en los problemas enfrentados.",
+                "No incluye resultados."
+              ],
+              dialogText: "¡Gran avance! Sigamos con la próxima."
+            },
+            {
+              questionText: "¿Qué tipo de ejemplos deberías usar en una entrevista?",
+              options: [
+                "Experiencias directamente relacionadas con el puesto.",
+                "Cualquier ejemplo para demostrar que tienes habilidades.",
+                "Situaciones de tu vida personal.",
+                "Experiencias académicas únicamente."
+              ],
+              dialogText: "¡Muy bien! Un poco más."
+            },
+            {
+              questionText: "¿Cómo puedes estructurar un ejemplo para hacerlo claro y efectivo?",
+              options: [
+                "Describiendo la situación, las acciones tomadas y los resultados.",
+                "Narrando todos los detalles, incluso los menos relevantes.",
+                "Centrándote únicamente en los problemas.",
+                "Evitar mencionar resultados."
+              ],
+              dialogText: "¡Perfecto! Una más para este nivel."
+            },
+            {
+              questionText: "¿Cuándo es mejor evitar usar un ejemplo en tu respuesta?",
+              options: [
+                "Cuando no está relacionado con la pregunta.",
+                "Cuando tienes muchos detalles que compartir.",
+                "Cuando no tienes tiempo para desarrollarlo.",
+                "Nunca debes evitar ejemplos."
+              ],
+              dialogText: "¡Genial! Has completado este nivel."
+            }
+          ]
+        },
+        {
+          levelNumber: 4,
+          title: "Introducción a la Técnica STAR",
+          questions: [
+            {
+              questionText: "¿Qué significa el acrónimo STAR?",
+              options: [
+                "Situación, Tarea, Acción, Resultado.",
+                "Soluciones, Técnicas, Adaptación, Revisión.",
+                "Situación, Técnica, Adaptación, Revisión.",
+                "Soluciones, Tácticas, Acción, Resolución."
+              ],
+              dialogText: "¡Hola! Aprende cómo usar STAR en tus respuestas."
+            },
+            {
+              questionText: "¿Qué incluye la etapa de 'Situación' en STAR?",
+              options: [
+                "Describir el contexto o problema.",
+                "Plantear tus habilidades técnicas.",
+                "Explicar los resultados obtenidos.",
+                "Analizar el rol de otros."
+              ],
+              dialogText: "¡Muy bien! Sigamos con otro punto clave."
+            },
+            {
+              questionText: "¿Qué importancia tiene la etapa de 'Acción' en STAR?",
+              options: [
+                "Describir claramente lo que hiciste.",
+                "Centrarte en lo que hizo el equipo.",
+                "Evitar explicar demasiado.",
+                "Hablar solo de lo que ocurrió al final."
+              ],
+              dialogText: "¡Gran trabajo! Sigamos mejorando."
+            },
+            {
+              questionText: "¿Qué debes evitar al usar STAR?",
+              options: [
+                "Ser vago o impreciso en tus respuestas.",
+                "Hablar demasiado sobre resultados.",
+                "Mencionar experiencias positivas.",
+                "Usar ejemplos relacionados con el puesto."
+              ],
+              dialogText: "¡Muy bien! Sigamos adelante."
+            },
+            {
+              questionText: "¿Cómo finalizarías una respuesta estructurada con STAR?",
+              options: [
+                "Resumiendo los resultados y aprendizajes.",
+                "Dejando la conclusión abierta.",
+                "Cambiando el tema de la conversación.",
+                "Repitiendo lo que ya dijiste."
+              ],
+              dialogText: "¡Excelente! Nivel completado."
+            }
+          ]
+        },
+        {
+          levelNumber: 5,
+          title: "STAR: Desglosando Situación y Tarea",
+          questions: [
+            {
+              questionText: "¿Cómo deberías describir la situación en STAR?",
+              options: [
+                "Detallando información irrelevante para dar contexto.",
+                "Usando un resumen claro y enfocado en el problema principal.",
+                "Incluyendo todos los pasos del proceso.",
+                "Narrando toda la historia desde el principio."
+              ],
+              dialogText: "¡Bienvenido! Vamos a profundizar en STAR."
+            },
+            {
+              questionText: "¿Qué incluye la etapa de 'Tarea' en STAR?",
+              options: [
+                "Tu rol específico en la situación.",
+                "Los problemas que enfrentó el equipo.",
+                "Los resultados obtenidos.",
+                "El contexto general de la empresa."
+              ],
+              dialogText: "¡Muy bien! Profundicemos más."
+            },
+            {
+              questionText: "¿Qué debes hacer si no recuerdas bien los detalles de la situación?",
+              options: [
+                "Inventar información para evitar dudas.",
+                "Centrarte en los resultados generales.",
+                "Ser honesto y explicar lo relevante.",
+                "Evitar usar ese ejemplo."
+              ],
+              dialogText: "¡Perfecto! Un paso más."
+            },
+            {
+              questionText: "¿Por qué es importante la claridad en esta etapa?",
+              options: [
+                "Para que el entrevistador entienda el contexto.",
+                "Para evitar preguntas adicionales.",
+                "Para impresionar con detalles complejos.",
+                "Para simplificar la evaluación del entrevistador."
+              ],
+              dialogText: "¡Excelente razonamiento!"
+            },
+            {
+              questionText: "¿Cómo puedes asegurarte de que la situación y la tarea sean relevantes?",
+              options: [
+                "Relacionándolas directamente con el puesto.",
+                "Centrándote solo en resultados genéricos.",
+                "Evitando detalles de tu rol específico.",
+                "Usando situaciones personales no relacionadas."
+              ],
+              dialogText: "¡Gran trabajo! Has completado este nivel."
+            }
+          ]
+        },
+        {
+          levelNumber: 6,
+          title: "Resolviendo Conflictos Laborales Simples",
+          questions: [
+            {
+              questionText: "¿Qué harías si un compañero no cumple con su parte del trabajo?",
+              options: [
+                "Hablar directamente con el compañero para resolverlo.",
+                "Informar al jefe sin discutirlo primero con el compañero.",
+                "Ignorar el problema y concentrarte en tu trabajo.",
+                "Asumir todas las responsabilidades del compañero."
+              ],
+              dialogText: "¡Hola! Vamos a practicar cómo resolver conflictos simples en el trabajo."
+            },
+            {
+              questionText: "¿Qué es más importante al resolver conflictos laborales?",
+              options: [
+                "Identificar la causa raíz del conflicto.",
+                "Culpar al responsable para evitar problemas futuros.",
+                "Ignorar el conflicto si parece pequeño.",
+                "Resolverlo sin comprometer la productividad."
+              ],
+              dialogText: "¡Buena respuesta! Sigamos adelante."
+            },
+            {
+              questionText: "¿Cómo manejarías un conflicto con tu jefe directo?",
+              options: [
+                "Hablando de manera respetuosa y proponiendo soluciones.",
+                "Evitar hablar con el jefe para no empeorar la situación.",
+                "Culpando a otros para evitar problemas.",
+                "Renunciando inmediatamente."
+              ],
+              dialogText: "¡Muy bien! Esta pregunta es clave en entrevistas."
+            },
+            {
+              questionText: "¿Qué NO es recomendable al resolver un conflicto?",
+              options: [
+                "Escuchar todas las partes involucradas.",
+                "Atacar personalmente a los demás.",
+                "Proponer soluciones mutuamente beneficiosas.",
+                "Mantener la calma y el profesionalismo."
+              ],
+              dialogText: "¡Perfecto! Vamos a la última pregunta."
+            },
+            {
+              questionText: "¿Qué papel juega la comunicación en la resolución de conflictos?",
+              options: [
+                "Es fundamental para entender y resolver el problema.",
+                "No tiene mucha importancia.",
+                "Es útil solo si el conflicto es grande.",
+                "Debe evitarse para no complicar la situación."
+              ],
+              dialogText: "¡Genial! Has completado este nivel."
+            }
+          ]
+        },
+        {
+          levelNumber: 7,
+          title: "Habilidades Técnicas y Blandas en Respuestas",
+          questions: [
+            {
+              questionText: "¿Qué habilidades blandas son valoradas en entrevistas laborales?",
+              options: [
+                "Resolución de problemas.",
+                "Adaptabilidad.",
+                "Comunicación efectiva.",
+                "Todas las anteriores."
+              ],
+              dialogText: "¡Hola! Vamos a explorar tus habilidades técnicas y blandas."
+            },
+            {
+              questionText: "¿Qué es más importante al hablar de habilidades técnicas?",
+              options: [
+                "Enfocarte en habilidades relacionadas con el puesto.",
+                "Hablar de todas tus habilidades técnicas.",
+                "Mencionar habilidades técnicas que no tienes.",
+                "Evitar mencionar habilidades técnicas."
+              ],
+              dialogText: "¡Muy bien! Sigamos adelante."
+            },
+            {
+              questionText: "¿Cómo puedes demostrar adaptabilidad en una entrevista?",
+              options: [
+                "Contando experiencias donde aprendiste algo nuevo rápidamente.",
+                "Mencionando que no te gustan los cambios.",
+                "Diciendo que siempre prefieres la estabilidad.",
+                "Evitando hablar de situaciones de cambio."
+              ],
+              dialogText: "¡Gran razonamiento! Continuemos."
+            },
+            {
+              questionText: "¿Cómo destacar habilidades blandas en una entrevista?",
+              options: [
+                "Proporcionando ejemplos claros y específicos.",
+                "Usando frases generales como 'soy buen líder'.",
+                "Evitando dar detalles sobre tus habilidades blandas.",
+                "Solo mencionando tus habilidades técnicas."
+              ],
+              dialogText: "¡Perfecto! Vamos con la última pregunta."
+            },
+            {
+              questionText: "¿Qué diferencia a una habilidad blanda de una técnica?",
+              options: [
+                "Las habilidades blandas son interpersonales, mientras que las técnicas son específicas del trabajo.",
+                "Las habilidades técnicas no son importantes en entrevistas.",
+                "Las habilidades blandas siempre son más relevantes.",
+                "No hay diferencia."
+              ],
+              dialogText: "¡Excelente! Nivel completado."
+            }
+          ]
+        },
+        {
+          levelNumber: 8,
+          title: "Ajustes de Respuesta según Contexto",
+          questions: [
+            {
+              questionText: "¿Qué deberías considerar al ajustar tus respuestas?",
+              options: [
+                "Las necesidades del puesto.",
+                "Los valores de la empresa.",
+                "El tipo de entrevistador (técnico o de recursos humanos).",
+                "Todas las anteriores."
+              ],
+              dialogText: "¡Hola! Vamos a practicar cómo ajustar tus respuestas según el contexto."
+            },
+            {
+              questionText: "¿Cómo ajustarías tu respuesta para un puesto técnico?",
+              options: [
+                "Usando ejemplos relacionados con habilidades técnicas.",
+                "Enfocándote en habilidades blandas solamente.",
+                "Evitando mencionar habilidades técnicas.",
+                "Dando ejemplos personales no relacionados."
+              ],
+              dialogText: "¡Gran avance! Sigamos con más preguntas."
+            },
+            {
+              questionText: "¿Qué debes evitar al ajustar tus respuestas?",
+              options: [
+                "Adaptarte demasiado y sonar poco auténtico.",
+                "Relacionar tus respuestas con el puesto.",
+                "Hablar sobre tus logros relevantes.",
+                "Usar ejemplos personales adecuados."
+              ],
+              dialogText: "¡Buena respuesta! Continuemos."
+            },
+            {
+              questionText: "¿Cómo responderías si el entrevistador pide ejemplos específicos?",
+              options: [
+                "Usando experiencias previas relacionadas con el puesto.",
+                "Evitando responder para no comprometerte.",
+                "Usando ejemplos genéricos y poco claros.",
+                "Preguntando si puedes evitar la pregunta."
+              ],
+              dialogText: "¡Perfecto! Vamos por la última."
+            },
+            {
+              questionText: "¿Qué importancia tiene el contexto en tus respuestas?",
+              options: [
+                "Es crucial para que el entrevistador vea tu compatibilidad.",
+                "Es irrelevante en la mayoría de las entrevistas.",
+                "Solo importa en puestos de liderazgo.",
+                "Depende del entrevistador."
+              ],
+              dialogText: "¡Excelente! Has completado este nivel."
+            }
+          ]
+        },
+        {
+          levelNumber: 9,
+          title: "Preguntas Hipotéticas y su Manejo",
+          questions: [
+            {
+              questionText: "¿Qué es una pregunta hipotética en una entrevista?",
+              options: [
+                "Una pregunta basada en una situación ficticia.",
+                "Una pregunta sobre tu experiencia pasada.",
+                "Una pregunta sobre tus habilidades técnicas.",
+                "Una pregunta relacionada con tus logros académicos."
+              ],
+              dialogText: "¡Hola! Vamos a manejar preguntas hipotéticas."
+            },
+            {
+              questionText: "¿Cómo responderías a: '¿Qué harías si tienes un desacuerdo con tu jefe?'?",
+              options: [
+                "Intentaría comprender su punto de vista y buscaría un acuerdo.",
+                "Aceptaría su decisión sin discutir.",
+                "Evitaría la pregunta.",
+                "Culparía a alguien más para evitar el conflicto."
+              ],
+              dialogText: "¡Buena respuesta! Vamos con otra."
+            },
+            {
+              questionText: "¿Qué objetivo tienen las preguntas hipotéticas?",
+              options: [
+                "Evaluar tu capacidad para tomar decisiones en situaciones desconocidas.",
+                "Medir tus conocimientos técnicos.",
+                "Analizar tu experiencia pasada únicamente.",
+                "Determinar si estás calificado para el puesto."
+              ],
+              dialogText: "¡Muy bien! Continuemos."
+            },
+            {
+              questionText: "¿Qué harías si no sabes cómo responder una pregunta hipotética?",
+              options: [
+                "Admitirlo y pensar en voz alta posibles soluciones.",
+                "Evitar responder para no equivocarte.",
+                "Cambiar el tema de conversación.",
+                "Inventar una respuesta sin fundamento."
+              ],
+              dialogText: "¡Perfecto! Una más."
+            },
+            {
+              questionText: "¿Qué aspecto es más importante al responder preguntas hipotéticas?",
+              options: [
+                "Mostrar cómo razonas y solucionas problemas.",
+                "Dar respuestas definitivas y absolutas.",
+                "Evitar hablar de tus limitaciones.",
+                "Impresionar al entrevistador con términos técnicos."
+              ],
+              dialogText: "¡Excelente! Nivel completado."
+            }
+          ]
+        },
+        {
+          levelNumber: 10,
+          title: "Preparación para Preguntas de Panel",
+          questions: [
+            {
+              questionText: "¿Cómo manejar una entrevista con un panel de entrevistadores?",
+              options: [
+                "Mantener contacto visual con todos.",
+                "Hablar únicamente con el entrevistador principal.",
+                "Ignorar preguntas difíciles.",
+                "Evitar mencionar ejemplos personales."
+              ],
+              dialogText: "¡Hola! Prepárate para preguntas en panel."
+            },
+            {
+              questionText: "¿Qué harías si dos entrevistadores tienen opiniones opuestas?",
+              options: [
+                "Intentar mediar y dar una respuesta que equilibre ambos puntos de vista.",
+                "Elegir un lado y enfocarte en eso.",
+                "Ignorar la pregunta.",
+                "Preguntar quién tiene más autoridad."
+              ],
+              dialogText: "¡Buena respuesta! Continuemos."
+            },
+            {
+              questionText: "¿Qué es clave al responder preguntas en una entrevista de panel?",
+              options: [
+                "Mostrar confianza y mantener el profesionalismo.",
+                "Evitar responder si la pregunta no es clara.",
+                "Responder rápido sin reflexionar.",
+                "Hablar solo con el entrevistador técnico."
+              ],
+              dialogText: "¡Excelente! Sigamos con más preguntas."
+            },
+            {
+              questionText: "¿Cómo puedes prepararte para una entrevista de panel?",
+              options: [
+                "Investigando sobre los miembros del panel.",
+                "Estudiando preguntas comunes para entrevistas de grupo.",
+                "Practicando respuestas claras y concisas.",
+                "Todas las anteriores."
+              ],
+              dialogText: "¡Muy bien! Una última pregunta."
+            },
+            {
+              questionText: "¿Qué actitud debes tener en una entrevista de panel?",
+              options: [
+                "Ser respetuoso y profesional con todos.",
+                "Enfocarte solo en la persona que parece más importante.",
+                "Ignorar preguntas incómodas.",
+                "Evitar hablar demasiado para no destacar."
+              ],
+              dialogText: "¡Perfecto! Has completado este nivel."
+            }
+          ]
+        },
+        
+
+          // Otros niveles intermedios del 3 al 10
+          {
+            levelNumber: 11,
+            title: "Fluidez en Respuestas Orales",
+            questions: [
+              {
+                questionText: "Cuéntame sobre una experiencia en la que tuviste que liderar un equipo.",
+                options: [],
+                dialogText: "¡Bienvenido al Nivel 11! Ahora practicaremos respuestas orales."
+              },
+              {
+                questionText: "Describe una situación donde superaste un desafío significativo.",
+                options: [],
+                dialogText: "¡Sigamos practicando tus habilidades de comunicación oral!"
+              },
+              // Más preguntas del nivel 11 intermedio
+            ]
+          },
+
+          {
+            levelNumber: 12,
+            title: "Feedback Básico sobre Tono y Ritmo",
+            questions: [
+              {
+                questionText: "Describe un momento en el que trabajaste bajo presión para cumplir un plazo ajustado.",
+                options: [],
+                dialogText: "¡Bienvenido al Nivel 12! Aquí analizaremos tu tono y ritmo al responder."
+              },
+              {
+                questionText: "¿Cómo manejarías una situación en la que tu equipo no está de acuerdo contigo?",
+                options: [],
+                dialogText: "Recuerda mantener un tono calmado y profesional en tu respuesta."
+              },
+              {
+                questionText: "¿Qué harías si un cliente insatisfecho te confronta directamente?",
+                options: [],
+                dialogText: "¡Buen trabajo! Vamos a practicar mantener un ritmo uniforme en tus respuestas."
+              }
+            ]
+          },
+          {
+            levelNumber: 13,
+            title: "Simulación Inicial with STT",
+            questions: [
+              {
+                questionText: "Cuéntame cómo organizarías un proyecto desde cero en un plazo de una semana.",
+                options: [],
+                dialogText: "¡Nivel 13 desbloqueado! Simulemos un escenario de entrevista."
+              },
+              {
+                questionText: "Describe cómo manejaste una situación difícil con un compañero de trabajo.",
+                options: [],
+                dialogText: "¡Genial! Piensa en una respuesta detallada pero breve."
+              },
+              {
+                questionText: "¿Cómo priorizarías tus tareas si tienes múltiples entregas el mismo día?",
+                options: [],
+                dialogText: "¡Muy bien! Sigamos con un escenario práctico."
+              }
+            ]
+          },
+          {
+            levelNumber: 14,
+            title: "Uso de STAR en Respuestas Orales",
+            questions: [
+              {
+                questionText: "Describe un proyecto exitoso que hayas liderado utilizando la técnica STAR.",
+                options: [],
+                dialogText: "¡Nivel 14! Vamos a integrar STAR en tus respuestas orales."
+              },
+              {
+                questionText: "Cuéntame sobre un desafío que enfrentaste y cómo lo resolviste aplicando STAR.",
+                options: [],
+                dialogText: "¡Muy bien! Recuerda estructurar tus respuestas: Situación, Tarea, Acción, Resultado."
+              },
+              {
+                questionText: "¿Cómo aplicaste tus habilidades técnicas para resolver un problema crítico?",
+                options: [],
+                dialogText: "¡Excelente! Enfócate en los detalles relevantes de tu respuesta."
+              }
+            ]
+          },
+          {
+            levelNumber: 15,
+            title: "Retroalimentación en Preguntas Técnicas",
+            questions: [
+              {
+                questionText: "Explícame cómo resolverías un problema técnico complejo en tu área de especialización.",
+                options: [],
+                dialogText: "¡Nivel 15 desbloqueado! Practiquemos cómo responder preguntas técnicas con claridad."
+              },
+              {
+                questionText: "Describe un caso en el que utilizaste tus habilidades técnicas para superar un obstáculo.",
+                options: [],
+                dialogText: "¡Gran trabajo! Sigamos afinando tus respuestas técnicas."
+              },
+              {
+                questionText: "¿Cómo explicarías un concepto técnico complicado a alguien sin experiencia en el tema?",
+                options: [],
+                dialogText: "¡Bien hecho! Recuerda adaptar tu lenguaje según la audiencia."
+              }
+            ]
+          },
+          {
+            levelNumber: 16,
+            title: "Lenguaje Corporal y Voz en Entrevistas",
+            questions: [
+              {
+                questionText: "Imagina que te piden explicar tu mayor logro profesional. ¿Cómo lo harías?",
+                options: [],
+                dialogText: "¡Nivel 16! Aquí combinaremos respuestas orales con observación de lenguaje corporal."
+              },
+              {
+                questionText: "Cuéntame sobre una ocasión en la que tomaste una decisión difícil.",
+                options: [],
+                dialogText: "¡Genial! Mantén una postura confiada mientras practicas."
+              },
+              {
+                questionText: "Describe cómo manejarías un desacuerdo con un cliente o jefe directo.",
+                options: [],
+                dialogText: "¡Muy bien! Ahora trabajemos en modular tu voz para mayor impacto."
+              }
+            ]
+          },
+          {
+            levelNumber: 17,
+            title: "Escenarios Simples con STT",
+            questions: [
+              {
+                questionText: "Describe cómo motivarías a un equipo desmotivado para alcanzar un objetivo.",
+                options: [],
+                dialogText: "¡Bienvenido al Nivel 17! Simulemos escenarios básicos usando STT."
+              },
+              {
+                questionText: "¿Qué harías si un proyecto crítico está retrasado por culpa de un proveedor?",
+                options: [],
+                dialogText: "¡Excelente! Practiquemos mantener calma y claridad en tu respuesta."
+              },
+              {
+                questionText: "Cuéntame sobre un momento en el que implementaste una mejora significativa en tu trabajo.",
+                options: [],
+                dialogText: "¡Increíble! Sigamos con escenarios prácticos."
+              }
+            ]
+          }
+          
+
+        ],
+        advanced: [
+          {
+            levelNumber: 1,
+            title: "Preparación Completa para Simulaciones Avanzadas",
+            questions: [
+              {
+                questionText: "¿Cómo describirías tus logros profesionales más destacados?",
+                options: [
+                  "Mencionando logros específicos con métricas.",
+                  "Describiendo tareas generales sin detalles.",
+                  "Enumerando todos los proyectos en los que he participado."
+                ],
+                dialogText: "¡Bienvenido al Nivel Avanzado! Vamos a practicar la presentación de logros."
+              },
+              {
+                questionText: "¿Cómo manejarías una pregunta técnica que desconoces?",
+                options: [
+                  "Admitiendo desconocimiento y explicando cómo lo investigaría.",
+                  "Intentando adivinar una respuesta.",
+                  "Evitando responder."
+                ],
+                dialogText: "¡Increíble trabajo! Sigamos practicando con preguntas técnicas."
+              }
+              // Más preguntas de nivel avanzado
+            ]
+          },
+          // Otros niveles avanzados
+        ]
+      };
+      
+      // Este objeto incluye preguntas, opciones y texto de diálogo para cada modalidad y nivel.
+      
+
+      function startSimulator(level = 1, category = 'basic') {
+        currentLevel = level;
+        currentCategory = category;
+        currentQuestion = 1;
+
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('progress-page').classList.add('hidden');
+        document.getElementById('simulator').classList.remove('hidden');
+
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        const simulator = document.getElementById('simulator');        
+        simulator.innerHTML = `
+            <!-- Instrucciones del simulador -->
+            <div class="text-center my-8 p-6 bg-white rounded-lg shadow-md border border-[#e8f3f0]">
+              <h2 class="text-2xl font-bold mb-4 text-[#0e1b18]">¡Prepárate para brillar! 🌟</h2>
+              <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-4">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-microphone text-[#49e9c9] text-xl"></i>
+                  <p>Practica tus respuestas</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-video text-[#49e9c9] text-xl"></i>
+                  <p>Mejora tu lenguaje corporal</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-star text-[#49e9c9] text-4xl"></i>
+                  <p>Recibe feedback instantáneo</p>
+                </div>
+              </div>
+              <p class="text-[#4f9688]">Mochi te ayudará a prepararte para tu próxima entrevista de trabajo</p>
+            </div>
+
+            <section class="simulador-container relative w-full flex flex-col justify-center items-center md:items-stretch mt-24">
+              <div class="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 my-8">
+                <!-- Contenedor principal del simulador -->
+                <div class="flex flex-col md:flex-row gap-6">
+                  <!-- Lado izquierdo: Avatar y cámara -->
+                  <div class="w-full md:w-1/2 flex flex-col items-center">                    <!-- Globo de diálogo sobre el contenedor del avatar -->
+                    <div class="w-full flex flex-col items-center mb-8">
+                      <div class="globo-dialogo mb-4 p-4 bg-[#49e9c9] rounded-lg shadow-md max-w-[300px] md:max-w-[340px]">
+                        <div class="relative">
+                          <!-- Contenido del globo -->
+                          <p class="text-[#0e1b18] text-sm md:text-base" id="avatar-dialog">¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas.</p>
+                          
+                          <!-- Triángulo del globo -->
+                          <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                            <div class="w-4 h-4 bg-[#49e9c9] transform rotate-45"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Avatar container -->
+                      <div class="relative flex justify-center">                        <!-- GIF de espera -->
+                        <img src="animations/mochi-reading-original.gif" alt="Mochi Avatar Idle" id="avatar-idle" class="w-48 h-48 object-contain relative z-10">
+                        
+                        <!-- Video de animación hablando -->
+                        <video id="avatar-video" class="w-48 h-48 object-contain hidden mix-blend-multiply" style="background: transparent;" muted loop>
+                          <source src="animations/mochi-speaking-original.mp4" type="video/mp4">
+                        </video>
+                      </div>
+                    </div>
+                    
+                    <!-- Video container -->
+                    <div class="w-full aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4">
+                      <video id="userVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+                    </div>
+                    
+                    <!-- Controles de cámara y micrófono -->
+                    <div class="flex gap-4 justify-center w-full">
+                      <button id="toggleCamera" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                        <i class="fas fa-video text-[#0e1b18]"></i>
+                      </button>
+                      <button id="toggleMic" class="p-3 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                        <i class="fas fa-microphone text-[#0e1b18]"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Lado derecho: Chat y controles -->
+                  <div class="w-full md:w-1/2">
+                    <!-- Área de chat -->
+                    <div id="chat-container" class="bg-[#f8fbfb] rounded-lg p-4 h-96 overflow-y-auto mb-4">
+                      <!-- Los mensajes se agregarán dinámicamente aquí -->
+                    </div>                    <!-- Controles de entrada -->
+                    <div class="flex items-center gap-4">
+                      <!-- Contenedor del botón de micrófono y texto de estado -->
+                      <div class="flex flex-col items-center">
+                        <!-- Botón de micrófono principal -->
+                        <button id="mainMicButton" class="mic-button p-4 rounded-full bg-[#e8f3f0] hover:bg-[#cfdad6] transition-colors">
+                          <i class="fas fa-microphone text-[#0e1b18] text-xl"></i>
+                        </button>
+                        <!-- Texto de estado (inicialmente oculto) -->
+                        <div id="recording-status" class="hidden text-sm text-[#ff4d4d] mt-2">Escuchando...</div>
+                      </div>
+
+                      <!-- Campo de texto -->
+                      <input type="text" id="userInput" 
+                            class="flex-grow p-3 rounded-lg border border-[#e8f3f0] focus:outline-none focus:ring-2 focus:ring-[#49e9c9]" 
+                            placeholder="Escribe tu respuesta aquí...">
+                      
+                      <!-- Botón de enviar -->
+                      <button id="sendButton" class="p-4 rounded-lg bg-[#49e9c9] hover:bg-[#3fc0a4] transition-colors">
+                        <i class="fas fa-paper-plane text-[#0e1b18]"></i>
+                      </button>
+                    </div>
+                  </div>                </div>
+          <!-- Controles inferiores -->
+                <div class="mt-6 flex justify-between items-center">
+                  <button class="boton-secundario volver-menu" onclick="window.location.href='simulador-entrevistas.html';">Volver al Menú</button>
+                  <p class="text-sm text-[#4f9688]">
+                    <i class="fas fa-info-circle"></i>
+                    Habla naturalmente o escribe tu respuesta
+                  </p>
+                </div>
+            </div>
+          </section>
+        `;
+
+        // Inicializar la funcionalidad de video y audio
+        initializeMediaDevices();
+        initializeAvatarVideo();
+        
+        // Eventos para los botones
+        setupEventListeners();
+
+        // Iniciar la conversación automáticamente
+        setTimeout(() => {
+          processUserInput();
+        }, 1000);
+      }    function initializeMediaDevices() {
+        const video = document.getElementById('userVideo');
+        const toggleCamera = document.getElementById('toggleCamera');
+        const toggleMic = document.getElementById('toggleMic');
+        let videoStream = null;
+        let audioStream = null;
+
+        // Configuración inicial de botones
+        toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+        toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+
+        // Crear y mostrar el placeholder de la cámara
+        video.style.display = 'none';
+        const placeholder = document.createElement('div');
+        placeholder.className = 'camera-placeholder flex items-center justify-center bg-gray-100 w-full h-full rounded-lg';
+        placeholder.innerHTML = '<i class="fas fa-video-slash text-4xl text-gray-400"></i>';
+        video.parentElement.appendChild(placeholder);
+
+        async function setupDevices(type) {
+          try {
+            const constraints = {
+              video: type === 'video' ? true : false,
+              audio: type === 'audio' ? true : false
+            };
+
+            const newStream = await navigator.mediaDevices.getUserMedia(constraints);
+            
+            if (type === 'video') {
+              if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+              }
+              videoStream = newStream;
+              video.srcObject = videoStream;
+              video.style.display = 'block';
+              placeholder.style.display = 'none';
+              toggleCamera.innerHTML = '<i class="fas fa-video"></i>';
+              toggleCamera.classList.add('active');
+            } else if (type === 'audio') {
+              if (audioStream) {
+                audioStream.getTracks().forEach(track => track.stop());
+              }
+              audioStream = newStream;
+              toggleMic.innerHTML = '<i class="fas fa-microphone"></i>';
+              toggleMic.classList.add('active');
+            }
+            
+          } catch (err) {
+            console.error('Error accessing media devices:', err);
+            if (type === 'video') {
+              toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+              toggleCamera.classList.remove('active');
+              video.style.display = 'none';
+              placeholder.style.display = 'flex';
+            } else {
+              toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+              toggleMic.classList.remove('active');
+            }
+          }
+        }      // Función para detener todos los tracks de media
+        function stopAllMediaTracks() {
+          if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+            video.srcObject = null;
+            video.style.display = 'none';
+            placeholder.style.display = 'flex';
+            toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+            toggleCamera.classList.remove('active');
+          }
+          if (audioStream) {
+            audioStream.getTracks().forEach(track => track.stop());
+            audioStream = null;
+            toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            toggleMic.classList.remove('active');
+          }
+        }
+
+        // Eventos para toggles
+        toggleCamera.addEventListener('click', () => {
+          if (toggleCamera.classList.contains('active')) {
+            if (videoStream) {
+              videoStream.getTracks().forEach(track => track.stop());
+              videoStream = null;
+            }
+            video.srcObject = null;
+            video.style.display = 'none';
+            placeholder.style.display = 'flex';
+            toggleCamera.innerHTML = '<i class="fas fa-video-slash"></i>';
+            toggleCamera.classList.remove('active');
+          } else {
+            setupDevices('video');
+          }
+        });
+
+        toggleMic.addEventListener('click', () => {
+          if (toggleMic.classList.contains('active')) {
+            if (audioStream) {
+              audioStream.getTracks().forEach(track => track.stop());
+              audioStream = null;
+            }
+            toggleMic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            toggleMic.classList.remove('active');
+          } else {
+            setupDevices('audio');
+          }
+        });
+
+        // Limpiar al cerrar o cambiar de página
+        window.addEventListener('beforeunload', stopAllMediaTracks);
+        window.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            stopAllMediaTracks();
+          }
+        });
+      }    // Función para inicializar los eventos del video del avatar
+      function initializeAvatarVideo() {
+        const avatarVideo = document.getElementById('avatar-video');
+        
+        // Cuando el video llegue al final, reiniciarlo mientras siga visible
+        avatarVideo.addEventListener('ended', () => {
+          if (!avatarVideo.classList.contains('hidden')) {
+            avatarVideo.currentTime = 0;
+            avatarVideo.play();
+          }
+        });
+
+        // Si hay un error en la reproducción, mostrar la imagen estática
+        avatarVideo.addEventListener('error', () => {
+          avatarVideo.classList.add('hidden');
+          document.getElementById('avatar-image').classList.remove('hidden');
+        });
+      }      function setupEventListeners() {
+        const mainMicButton = document.getElementById('mainMicButton');
+        const sendButton = document.getElementById('sendButton');
+        const userInput = document.getElementById('userInput');
+        const chatContainer = document.getElementById('chat-container');
+        const volverMenuBtns = document.querySelectorAll('.volver-menu');        // Evento para todos los botones de "Volver al Menú"
+        volverMenuBtns.forEach(btn => {
+          if (!btn.hasAttribute('onclick')) { // Solo si no tiene ya un onclick definido
+            btn.addEventListener('click', () => {
+              stopAllMediaTracks(); // Asegurarnos de detener todos los streams
+              window.location.href = 'index.html';
+            });
+          }
+        });
+
+        // Evento para el botón de micrófono principal
+        let isRecording = false;
+        mainMicButton.addEventListener('click', () => {
+          isRecording = !isRecording;          if (isRecording) {
+            mainMicButton.classList.add('recording');
+            mainMicButton.style.backgroundColor = '#ff4d4d';
+            // Mostrar el texto "Escuchando..."
+            document.getElementById('recording-status').classList.remove('hidden');
+            // Simular grabación después de 2 segundos
+            setTimeout(() => {
+              mainMicButton.click(); // Detener la grabación automáticamente
+            }, 2000);
+          } else {
+            mainMicButton.classList.remove('recording');            mainMicButton.style.backgroundColor = '#e8f3f0';
+            // Ocultar el texto "Escuchando..."
+            document.getElementById('recording-status').classList.add('hidden');
+            playConfirmSound(); // Reproducir sonido al terminar la grabación
+            // Procesar la respuesta
+            addMessageToChat('usuario', '¡Gracias por tu respuesta! Estoy procesando...');
+            setTimeout(() => {
+              processUserInput();
+            }, 1000);
+          }
+        });
+
+        // Evento para el botón de enviar
+        sendButton.addEventListener('click', () => {
+          const message = userInput.value.trim();
+          if (message) {
+            addMessageToChat('usuario', message);
+            userInput.value = '';
+            setTimeout(() => {
+              processUserInput();
+            }, 1000);
+          }
+        });
+
+        // Evento para la tecla Enter
+        userInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            sendButton.click();
+          }
+        });
+      }      function addMessageToChat(sender, message) {
+        const chatContainer = document.getElementById('chat-container');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `p-3 rounded-lg mb-2 ${
+          sender === 'usuario' 
+            ? 'bg-[#49e9c9] ml-auto' 
+            : 'bg-[#e8f3f0]'
+        }`;
+        messageDiv.style.maxWidth = '80%';
+        chatContainer.appendChild(messageDiv);
+        
+        if (sender === 'avatar') {
+          const avatarIdle = document.getElementById('avatar-idle');
+          const avatarVideo = document.getElementById('avatar-video');
+          const dialogBubble = document.querySelector('.globo-dialogo');
+          
+          // Ocultar el globo inicialmente
+          dialogBubble.style.opacity = '0';
+          
+          // Actualizar el texto del diálogo
+          document.getElementById('avatar-dialog').textContent = message;
+          
+          // Transición suave al video de hablar
+          avatarIdle.classList.add('avatar-hidden');
+          setTimeout(() => {
+            avatarIdle.classList.add('hidden');
+            avatarVideo.classList.remove('hidden');
+            avatarVideo.currentTime = 0;
+            avatarVideo.play();
+            
+            // Mostrar el globo con una animación suave cuando empiece a hablar
+            dialogBubble.style.transition = 'opacity 0.3s ease-in-out';
+            dialogBubble.style.opacity = '1';
+          }, 200);
+
+          let i = 0;
+          const speed = 15; // Velocidad más natural (15ms por carácter)
+          
+          function typeWriter() {
+            if (i < message.length) {
+              messageDiv.textContent += message.charAt(i);
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+              i++;
+              setTimeout(typeWriter, speed);
+            } else {
+              // Cuando termine de escribir, ocultar el globo suavemente
+              setTimeout(() => {
+                dialogBubble.style.opacity = '0';
+              }, 500);
+            }
+          }
+          typeWriter();
+          
+          // Calcular duración basada en el mensaje (40ms por carácter)
+          const duration = Math.max(500, message.length * 40);
+          
+          // Volver al GIF de espera después de la duración calculada
+          setTimeout(() => {
+            avatarVideo.pause();
+            avatarVideo.classList.add('hidden');
+            avatarIdle.classList.remove('hidden');
+            avatarIdle.classList.remove('avatar-hidden');
+          }, duration);
+        } else {
+          messageDiv.textContent = message;
+        }
+        
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+      function processUserInput(userMessage = '') {
+        switch(conversationState) {
+          case 0:
+            // Mensaje inicial de bienvenida
+            addMessageToChat('avatar', '¡Hola! Soy Mochi, tu asistente virtual para practicar entrevistas. Me emociona conocerte y ayudarte a prepararte para tus futuras entrevistas. ¿Podrías decirme tu nombre?');
+            conversationState++;
+            break;
+          
+          case 1:
+            // Guardar el nombre del usuario y pedir presentación
+            userName = userMessage || 'amigo';
+            addMessageToChat('avatar', `¡Es un placer conocerte, ${userName}! Este es el primer nivel donde interactuaremos para conocerte mejor. ¿Podrías contarme un poco sobre ti y qué te trae por aquí?`);
+            conversationState++;
+            break;
+          
+          case 2:
+            // Respuesta a la presentación del usuario
+            addMessageToChat('avatar', 'Gracias por compartir eso conmigo. Veo que tienes motivación por mejorar tus habilidades en entrevistas. Empecemos con algunas preguntas básicas para conocer tu perfil profesional. ¿Te parece bien?');
+            conversationState++;
+            break;
+          
+          case 3:
+            // Comenzar con las preguntas del nivel 1
+            addMessageToChat('avatar', 'Perfecto. Primera pregunta: ¿Cómo te describirías profesionalmente en tres palabras?');
+            conversationState++;
+            break;
+          
+          case 4:
+            // Feedback positivo y siguiente pregunta
+            addMessageToChat('avatar', '¡Excelente elección de palabras! Me ayuda a entender mejor tu perfil. Ahora, cuéntame sobre tu experiencia o formación más relevante.');
+            conversationState++;
+            break;
+          
+          case 5:
+            // Retroalimentación constructiva
+            addMessageToChat('avatar', 'Muy interesante. Me gusta cómo estructuraste tu respuesta. Recuerda siempre dar ejemplos específicos cuando sea posible. ¿Qué objetivos profesionales te has planteado para el corto plazo?');
+            conversationState++;
+            break;
+          
+          default:
+            // Respuestas generales para mantener la conversación fluida
+            const responses = [
+              "Excelente perspectiva. Tus respuestas muestran buena preparación y claridad de pensamiento.",
+              `${userName}, me impresiona tu enfoque. ¿Podrías elaborar un poco más sobre eso?`,
+              "Muy bien estructurado. Considera también incluir ejemplos específicos de tus logros.",
+              "Interesante punto de vista. ¿Cómo llegaste a desarrollar esa perspectiva?",
+              "Tu respuesta refleja buena preparación. Sigamos practicando para mejorar aún más."
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addMessageToChat('avatar', randomResponse);
+            break;
+        }
+      }
+
+      // Función para reproducir el sonido de confirmación
+      function playConfirmSound() {
+        const audio = new Audio('sound/sound-buttom-confirm.mp3');
+        audio.play().catch(error => {
+          console.log('Error reproduciendo el sonido:', error);
+        });
+      }
+
+      // Función para detener todos los tracks de media
+      function stopAllMediaTracks() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => {
+            track.stop();
+          });
+          mediaStream = null;
+        }
+      }
+
+      // Función para mostrar el prompt de permisos
+      function showPermissionPrompt(type) {
+        const prompt = document.getElementById('permissionPrompt');
+        const text = document.getElementById('permissionText');
+        text.textContent = type === 'microphone' ? 
+          'Tu micrófono para grabar tu respuesta' : 
+          'Tu cámara para una experiencia más realista';
+        prompt.classList.add('show');
+      }
+
+      // Función para cerrar el prompt de permisos
+      function closePermissionPrompt() {
+        const prompt = document.getElementById('permissionPrompt');
+        prompt.classList.remove('show');
+        stopAllMediaTracks();
+      }
+
+      // Función para procesar la entrada de voz
+      function processVoiceInput(text) {
+        addMessageToChat('usuario', text);
+        playConfirmSound(); // Reproducir sonido inmediatamente después de procesar la voz
+        setTimeout(() => {
+          processUserInput();
+        }, 1000);
+      }
+
+      // Función para manejar el final de la grabación
+      function handleRecordingEnd() {
+        const mainMicButton = document.getElementById('mainMicButton');
+        mainMicButton.classList.remove('recording');
+        mainMicButton.style.backgroundColor = '#e8f3f0';
+        stopAllMediaTracks();
+        playConfirmSound();
+      }
+
+      // Evento para detener grabación y streams al cerrar/cambiar de página
+      window.addEventListener('beforeunload', () => {
+        stopAllMediaTracks();
+      });
+
+      window.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopAllMediaTracks();
+        }
+      });
+
+      // Funciones para el manejo de menús desplegables
+    function setupMenuHandlers() {
+      // Menú móvil
+      menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Menú de notificaciones
+      const notificationButton = document.getElementById('notificationButton');
+      const notificationMenu = document.getElementById('notificationMenu');
+      
+      if (notificationButton && notificationMenu) {
+        notificationButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+          // Ocultar otros menús
+          profileMenu.classList.add('hidden');
+          mobileMenu.classList.add('hidden');
+        });
+      }
+
+      // Menú de perfil
+      profileButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+        // Ocultar otros menús
+        notificationMenu.classList.add('hidden');
+        mobileMenu.classList.add('hidden');
+      });
+
+      // Cerrar menús al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !menuButton.contains(e.target)) {
+          mobileMenu.classList.add('hidden');
+        }
+        if (!notificationMenu.contains(e.target) && !notificationButton?.contains(e.target)) {
+          notificationMenu.classList.add('hidden');
+        }
+        if (!profileMenu.contains(e.target) && !profileButton.contains(e.target)) {
+          profileMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // Llamar a la función cuando el documento esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMenuHandlers();
+      // ...existing code...
+    });    function resetSimulator() {
+        // Detener todos los streams de media
+        if (typeof stopAllMediaTracks === 'function') {
+          stopAllMediaTracks();
+        }
+        
+        // Reiniciar variables del estado
+        currentLevel = 1;
+        currentQuestion = 1;
+        currentCategory = 'basic';
+        
+        // Limpiar el chat si existe
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+          chatContainer.innerHTML = '';
+        }        // Limpiar y reiniciar el estado del avatar
+        const avatarVideo = document.getElementById('avatar-video');
+        const avatarIdle = document.getElementById('avatar-idle');
+        if (avatarVideo) {
+          avatarVideo.pause();
+          avatarVideo.classList.add('hidden');
+        }
+        if (avatarIdle) {
+          avatarIdle.classList.remove('hidden');
+          avatarIdle.classList.remove('avatar-hidden');
+        }
+        
+        // Recargar la página actual
+        window.location.reload();
+        
+        // Reproducir sonido de confirmación
+        playConfirmSound();
+        
+        // Asegurar que el menú principal muestre correctamente las tarjetas de opciones
+        const menuContent = `
+          <h1 class="text-2xl font-bold text-center mb-6">¡Bienvenido al Simulador de Entrevistas!</h1>
+          <p class="text-center text-[#4f9688] mb-6">Revisa tu progreso y elige dónde continuar:</p>
+
+          <!-- Espacio para la imagen del avatar -->
+          <div class="flex justify-center mb-6">
+            <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mascota del Simulador" class="w-48 h-auto">
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+            <!-- Tarjeta de "Comenzar Simulador" -->
+            <div class="borde-suave text-center" onclick="startSimulator(1, 'basic')">
+              <h2 class="card-title text-lg font-bold">Comenzar Simulador</h2>
+              <p class="text-[#4f9688] mt-2">Empieza a responder las preguntas.</p>
+              <div class="flex justify-center mt-4">
+                <i class="fas fa-play-circle text-[#49e9c9] text-4xl"></i>
+              </div>
+            </div>
+
+            <!-- Tarjeta de "Ver Progreso" -->
+            <div id="progress-card" class="borde-suave text-center" onclick="showProgressPage()">
+              <h2 class="card-title text-lg font-bold">Ver Progreso</h2>
+              <p class="text-[#4f9688] mt-2">Revisa tus respuestas anteriores.</p>
+              <div class="flex justify-center mt-4">
+                <i class="fas fa-check-circle text-[#49e9c9] text-4xl"></i>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        menuSection.innerHTML = menuContent;
+      }
+
+      // Funciones para la página de progreso
+    function showProgressPage() {
+      // Ocultar el menú principal y mostrar la página de progreso
+      document.getElementById('menu').classList.add('hidden');
+      document.getElementById('simulator').classList.add('hidden');
+      document.getElementById('progress-page').classList.remove('hidden');
+      
+      // Mostrar los niveles básicos por defecto
+      showLevels('basic');
+    }
+
+    function showLevels(category) {
+      // Actualizar el título de la categoría
+      document.getElementById('level-category').textContent = 
+        category === 'basic' ? 'Básico' : 
+        category === 'intermediate' ? 'Intermedio' : 'Avanzado';
+
+      const levelsContainer = document.getElementById('levels-container');
+      levelsContainer.innerHTML = ''; // Limpiar el contenedor
+
+      // Obtener los niveles de la categoría seleccionada
+      const levels = levelsData[category];
+
+      // Crear tarjetas para cada nivel
+      levels.forEach(level => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-lg shadow-md border border-[#e8f3f0] transition-transform hover:scale-105';
+        
+        // Estado del nivel (completado o bloqueado)
+        const isCompleted = checkLevelCompletion(category, level.levelNumber);
+        const statusClass = isCompleted ? 'text-[#49e9c9]' : 'text-[#bababa]';
+        const statusIcon = isCompleted ? 'check-circle' : 'lock';
+        
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold">${level.title}</h3>
+            <i class="fas fa-${statusIcon} ${statusClass}"></i>
+          </div>
+          <p class="text-sm text-[#4f9688] mb-2">Nivel ${level.levelNumber}</p>
+          <p class="text-xs text-[#757474]">${level.questions.length} preguntas</p>
+          <button onclick="startSimulator(${level.levelNumber}, '${category}')" 
+                  class="mt-4 w-full py-2 px-4 bg-[#e8f3f0] text-[#0e1b18] rounded-lg hover:bg-[#cfdad6] transition-colors">
+            ${isCompleted ? 'Repasar' : 'Comenzar'}
+          </button>
+        `;
+        
+        levelsContainer.appendChild(card);
+      });
+    }
+
+    // Función auxiliar para simular el estado de completado de los niveles
+    function checkLevelCompletion(category, levelNumber) {
+      // Aquí podrías implementar la lógica real para verificar si un nivel está completado
+      // Por ahora, simulamos que los primeros niveles están completados
+      const progressState = {
+        basic: [1, 2, 3],
+        intermediate: [1],
+        advanced: []
+      };
+      
+      return progressState[category].includes(levelNumber);
+    }
+    </script>
+
+</body>
+</html>

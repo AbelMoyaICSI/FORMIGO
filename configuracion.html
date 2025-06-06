@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo|Configuración</title>
+  <link rel="icon" href="img/LOGO-MOCHI.ico" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* Estilos específicos de configuracion.html */
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+     
+
+    .hidden {
+        display: none;
+      }
+
+      .slide-down {
+        animation: slideDown 0.3s ease-out;
+      }
+
+
+
+    #notificationMenu {
+      position: absolute; 
+      top: 40px; 
+      right: 0;
+      z-index: 1000;
+      margin-top: 0; 
+    }
+
+    /* Menú de perfil */
+    #profileMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000; 
+      margin-top: 0; 
+    }
+
+    /* Botón Premium */
+    .boton-premium {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      height: 40px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .boton-premium:hover {
+      background-color: #3fc0a4;
+    }
+
+    /* Ajuste general del header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px; 
+    }
+
+    header .flex.items-center {
+      align-items: center;
+    }
+
+    /* Alineación uniforme del header */
+    header .gap-6 > * {
+      display: flex;
+      align-items: center; 
+    }
+
+
+
+/*  ----    */   
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Header y footer */
+      header {
+        background-color: #f8fbfb;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+      }
+
+      .header-logo img {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+
+      .header-menu a {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #0e1b18;
+        transition: color 0.3s;
+      }
+
+      .header-menu a:hover {
+        color: #49e9c9;
+      }
+
+    /* Header y Footer */
+    header {
+        background-color: #f8fbfb;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+    }
+
+    .header-logo img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .header-menu a {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #0e1b18;
+        transition: color 0.3s;
+    }
+
+    .header-menu a:hover {
+        color: #49e9c9;
+    }
+    main {
+        flex: 1; 
+        padding: 1rem;
+      }
+  
+      footer {
+        background-color: #f8fbfb;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        
+      }
+  
+      footer a {
+        color: #3fc0a4;
+        transition: color 0.3s, transform 0.3s;
+      }
+  
+      footer a:hover {
+        color: #49e9c9;
+        transform: translateY(-3px);
+      }
+
+    footer a {
+        color: #3fc0a4;
+        transition: color 0.3s, transform 0.3s;
+    }
+
+    footer a:hover {
+        color: #49e9c9;
+        transform: translateY(-3px);
+    }
+
+    /* Perfil */
+    .profile-header {
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 3px solid #49e9c9;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      margin: 2rem auto;
+      max-width: 1200px;
+      width: 100%;
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    aside {
+      background-color: #49e9c9;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 280px;
+      color: white;
+    }
+
+    aside h2 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: white;
+      text-decoration: none;
+    }
+
+    .menu-link:hover,
+    .menu-link.active {
+      background-color: #3fc0a4;
+    }
+
+    .menu-link i {
+      font-size: 1.2rem;
+    }
+
+    section {
+      flex-grow: 1;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    section h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .settings-group {
+      margin-top: 1.5rem;
+    }
+
+    .settings-item {
+      margin-bottom: 1rem;
+    }
+
+    .settings-item label {
+      display: block;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .settings-item input,
+    .settings-item select,
+    .settings-item textarea {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      aside {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+<!-- Menú desplegable para dispositivos móviles con perfil -->
+<div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+  <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+  <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+  <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+    <span>Notificaciones</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+    </svg>
+  </a>
+  <!-- Botón Premium -->
+  <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+  <hr class="my-2 w-full border-[#e8f3f0]" />
+  <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->
+  <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+  <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+  <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+</div>
+
+
+  <!-- Main Content -->
+  <main>
+    <!-- Sidebar -->
+    <aside>
+      <h2>Configuración</h2>
+      <a href="#" class="menu-link active" data-section="personalizacion">
+        <i class="fas fa-palette"></i> Personalización
+      </a>
+      <a href="#" class="menu-link" data-section="seguridad">
+        <i class="fas fa-lock"></i> Seguridad
+      </a>
+      <a href="#" class="menu-link" data-section="notificaciones">
+        <i class="fas fa-bell"></i> Notificaciones
+      </a>
+      <a href="#" class="menu-link" data-section="privacidad">
+        <i class="fas fa-user-shield"></i> Privacidad
+      </a>
+      <a href="#" class="menu-link" data-section="idioma">
+        <i class="fas fa-globe"></i> Idioma
+      </a>
+    </aside>
+
+    <!-- Configuración -->
+    <section id="personalizacion" class="section active">
+      <h2>Personalización</h2>
+      <div class="settings-group">
+        <div class="settings-item">
+          <label for="ritmo-aprendizaje">Ritmo de Aprendizaje:</label>
+          <select id="ritmo-aprendizaje">
+            <option value="normal">Normal</option>
+            <option value="intenso">Intenso</option>
+            <option value="relajado">Relajado</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <label for="preguntas-diarias">Preguntas diarias:</label>
+          <input type="number" id="preguntas-diarias" min="1" max="50" value="10" />
+        </div>
+      </div>
+    </section>
+
+    <section id="seguridad" class="section hidden">
+      <h2>Seguridad</h2>
+      <div class="settings-group">
+        <div class="settings-item">
+          <label for="cambiar-password">Cambiar contraseña:</label>
+          <input type="password" id="cambiar-password" placeholder="Nueva contraseña" />
+        </div>
+        <div class="settings-item">
+          <label for="verificar-dos-pasos">Autenticación en dos pasos:</label>
+          <select id="verificar-dos-pasos">
+            <option value="activado">Activado</option>
+            <option value="desactivado">Desactivado</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section id="notificaciones" class="section hidden">
+      <h2>Notificaciones</h2>
+      <div class="settings-group">
+        <div class="settings-item">
+          <label for="email-notificaciones">Recibir notificaciones por correo:</label>
+          <select id="email-notificaciones">
+            <option value="activado">Activado</option>
+            <option value="desactivado">Desactivado</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <label for="notificaciones-push">Notificaciones push:</label>
+          <select id="notificaciones-push">
+            <option value="activado">Activado</option>
+            <option value="desactivado">Desactivado</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacidad" class="section hidden">
+      <h2>Privacidad</h2>
+      <div class="settings-group">
+        <div class="settings-item">
+          <label for="cuenta-publica">Cuenta pública o privada:</label>
+          <select id="cuenta-publica">
+            <option value="publica">Pública</option>
+            <option value="privada">Privada</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <label for="bloquear-usuarios">Usuarios bloqueados:</label>
+          <textarea id="bloquear-usuarios" rows="4" placeholder="Añade nombres de usuarios bloqueados"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section id="idioma" class="section hidden">
+      <h2>Idioma</h2>
+      <div class="settings-group">
+        <div class="settings-item">
+          <label for="seleccion-idioma">Selecciona tu idioma:</label>
+          <select id="seleccion-idioma">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+            <option value="fr">Francés</option>
+            <option value="de">Alemán</option>
+          </select>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="#" class="text-[#3fc0a4] text-3xl"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="text-[#3fc0a4] text-3xl"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="text-[#3fc0a4] text-3xl"><i class="fab fa-linkedin"></i></a>
+      <a href="#" class="text-[#3fc0a4] text-3xl"><i class="fab fa-youtube"></i></a>
+    </div>
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+
+        const sectionId = this.dataset.section;
+        document.getElementById(sectionId).classList.remove('hidden');
+        this.classList.add('active');
+      });
+    });
+
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationMenu = document.getElementById('notificationMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    notificationButton.addEventListener('click', () => notificationMenu.classList.toggle('hidden'));
+    profileButton.addEventListener('click', () => profileMenu.classList.toggle('hidden'));
+  </script>
+</body>
+</html>

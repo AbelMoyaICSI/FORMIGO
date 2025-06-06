@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo|Logros</title>
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* Estilos específicos de logros.html */
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header y footer */
+      header {
+        background-color: #f8fbfb;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+      }
+
+      .header-logo img {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+
+      .header-menu a {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #0e1b18;
+        transition: color 0.3s;
+      }
+
+      .header-menu a:hover {
+        color: #49e9c9;
+      }
+
+      footer {
+        background-color: #f8fbfb;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+        padding: 1.5rem;
+        font-size: 0.875rem;
+      }
+
+      footer a {
+        color: #3fc0a4;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      footer a:hover {
+        color: #49e9c9;
+        transform: translateY(-3px);
+      }
+
+      /* Logros */
+      .estadistica {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .estadistica:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .circle-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(#49e9c9 calc(var(--percent) * 1%), #e2e8f0 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .circle-text {
+        position: absolute;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #49e9c9;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .trofeo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .trofeo:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .trofeo-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        #notificationMenu, #profileMenu {
+          width: 100%;
+          border-radius: 0;
+        }
+      }
+  </style>
+
+  <style>
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f8fbfb;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+      }
+  
+      main {
+        flex-grow: 1;
+        padding: 2rem 1rem;
+      }
+
+/* NUEVO  */
+
+    /* Menú de notificaciones */
+    #notificationMenu {
+      position: absolute; /* Ajusta la posición del menú */
+      top: 40px; /* Separación desde el botón */
+      right: 0;
+      z-index: 1000; /* Superposición */
+      margin-top: 0; /* Elimina el uso de margen */
+    }
+
+    /* Menú de perfil */
+    #profileMenu {
+      position: absolute; /* Ajusta la posición del menú */
+      top: 40px; /* Separación desde el botón */
+      right: 0;
+      z-index: 1000; /* Superposición */
+      margin-top: 0; /* Elimina el uso de margen */
+    }
+
+    /* Botón Premium */
+    .boton-premium {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      height: 40px; /* Asegura una altura consistente */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .boton-premium:hover {
+      background-color: #3fc0a4;
+    }
+
+    /* Ajuste general del header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px; /* Asegura que todos los elementos estén centrados */
+    }
+
+    header .flex.items-center {
+      align-items: center; /* Alinea verticalmente todos los elementos */
+    }
+
+    /* Alineación uniforme del header */
+    header .gap-6 > * {
+      display: flex;
+      align-items: center; /* Asegura alineación vertical */
+    }
+
+
+
+/*  ----    */   
+
+  
+      /* Barra circular */
+      .circle-container {
+        width: 150px;
+        height: 150px;
+      }
+  
+      .circle-bg {
+        fill: none;
+        stroke: #e2e8f0;
+        stroke-width: 3;
+      }
+  
+      .circle-progress {
+        fill: none;
+        stroke: #49e9c9;
+        stroke-width: 3;
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dasharray 1s ease-in-out;
+      }
+  
+      .circle-text {
+        font-size: 0.4em;
+        font-weight: bold;
+        fill: #49e9c9;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+  
+      .estadistica {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+  
+      .estadistica:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+  
+      @media (max-width: 768px) {
+        .circle-container {
+          width: 120px;
+          height: 120px;
+        }
+  
+        .circle-text {
+          font-size: 0.5rem !important;
+        }
+      }
+
+    .trofeo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .trofeo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .trofeo-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .circle-container {
+            width: 120px;
+            height: 120px;
+          }
+    
+          .circle-text {
+            font-size: 1.25rem;
+          }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+    
+<!-- Menú desplegable para dispositivos móviles con perfil -->
+<div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+  <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+  <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+  <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+    <span>Notificaciones</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+    </svg>
+  </a>
+  <!-- Botón Premium -->
+  <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+  <hr class="my-2 w-full border-[#e8f3f0]" />
+  <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->  <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+  <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+  <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+</div>
+
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+    <section class="text-center mb-8">
+      <h1 class="text-2xl font-bold">Tus Logros</h1>
+      <p class="text-gray-600">¡Consulta tus logros y sigue avanzando!</p>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="grid grid-cols-1 text-center md:grid-cols-3 gap-8">
+        <div class="estadistica">
+            <svg class="circle-container" viewBox="0 0 36 36">
+              <circle class="circle-bg" cx="18" cy="18" r="15.915"></circle>
+              <circle class="circle-progress" cx="18" cy="18" r="15.915" 
+                style="stroke-dasharray: 75, 100; stroke-dashoffset: 25;"></circle>
+              <text x="18" y="20" class="circle-text" alignment-baseline="middle" text-anchor="middle">75%</text>
+            </svg>
+            <p class="text-lg font-bold mt-4">Competencias Blandas</p>
+          </div>
+          <div class="estadistica">
+            <svg class="circle-container" viewBox="0 0 36 36">
+              <circle class="circle-bg" cx="18" cy="18" r="15.915"></circle>
+              <circle class="circle-progress" cx="18" cy="18" r="15.915" 
+                style="stroke-dasharray: 85, 100; stroke-dashoffset: 15;"></circle>
+              <text x="18" y="20" class="circle-text" alignment-baseline="middle" text-anchor="middle">85%</text>
+            </svg>
+            <p class="text-lg font-bold mt-4">Respuestas Efectivas</p>
+          </div>
+          <div class="estadistica">
+            <svg class="circle-container" viewBox="0 0 36 36">
+              <circle class="circle-bg" cx="18" cy="18" r="15.915"></circle>
+              <circle class="circle-progress" cx="18" cy="18" r="15.915" 
+                style="stroke-dasharray: 60, 100; stroke-dashoffset: 40;"></circle>
+              <text x="18" y="20" class="circle-text" alignment-baseline="middle" text-anchor="middle">60%</text>
+            </svg>
+            <p class="text-lg font-bold mt-4">Investigación de Empresas</p>
+          </div>
+      </section>
+
+    <!-- Trofeos -->
+    <section class="mt-10 text-center">
+      <h2 class="text-lg font-bold mb-4">Trofeos Alcanzados</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="trofeo">
+          <i class="fas fa-trophy text-[#f5ca3e] trofeo-icon"></i>
+          <p class="trofeo-text">Primera Entrevista Completada</p>
+        </div>
+        <div class="trofeo">
+          <i class="fas fa-certificate text-[#49e9c9] trofeo-icon"></i>
+          <p class="trofeo-text">50 Preguntas Respondidas</p>
+        </div>
+        <div class="trofeo">
+          <i class="fas fa-level-up-alt text-[#49e9c9] trofeo-icon"></i>
+          <p class="trofeo-text">Nivel 3 Alcanzado</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <!-- Íconos de redes sociales -->
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <!-- Enlaces del footer -->
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <!-- Copyright -->
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationMenu = document.getElementById('notificationMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    notificationButton.addEventListener('click', () => notificationMenu.classList.toggle('hidden'));
+    profileButton.addEventListener('click', () => profileMenu.classList.toggle('hidden'));
+
+    function cerrarSesion(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('temporaryUserData');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

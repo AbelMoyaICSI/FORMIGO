@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo|Mi perfil</title>
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">  <style>
+    /* Estilos específicos de mi-perfil.html */
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 3px solid #49e9c9;
+    }
+
+    .edit-button {
+        padding: 0.5rem 1.5rem;
+        background-color: #49e9c9;
+        border: none;
+        border-radius: 20px;
+        color: #0e1b18;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .edit-button:hover {
+        background-color: #3fc0a4;
+    }
+
+    .friend-list, .recent-activity {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+    }
+
+    .friend-item, .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .friend-item img, .activity-item img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .friend-actions {
+        margin-left: auto;
+    }
+
+    .add-friend {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .add-friend input {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+
+    .add-friend button {
+        padding: 0.5rem 1rem;
+        background-color: #49e9c9;
+        color: #0e1b18;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-friend button:hover {
+        background-color: #3fc0a4;
+    }
+
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .edit-button {
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto 0;
+        }
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+<!-- Menú desplegable para dispositivos móviles con perfil -->
+<div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+  <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+  <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+  <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+    <span>Notificaciones</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+    </svg>
+  </a>
+  <!-- Botón Premium -->
+  <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+  <hr class="my-2 w-full border-[#e8f3f0]" />
+  <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->  <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+  <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+  <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+</div>
+
+
+  <!-- Contenido Principal -->
+  <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+    <section class="profile-header">
+      <div class="profile-picture" style="background-image: url('img/userprofile.png');"></div>
+      <div>
+        <h1 class="text-2xl font-bold">Juan Pérez</h1>
+        <p class="text-gray-600">Estudiante de Ingeniería en Computación y Sistemas</p>
+        <p class="text-gray-600">Trujillo, Perú</p>
+      </div>
+      <button class="edit-button">Editar Perfil</button>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="friend-list">
+        <h2 class="text-xl font-bold mb-4">Amigos</h2>
+        <div class="friend-item">
+          <img src="img/userprofile.png" alt="Amigo 1">
+          <p>María López</p>
+          <div class="friend-actions">
+            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+          </div>
+        </div>
+        <div class="friend-item">
+          <img src="img/userprofile.png" alt="Amigo 2">
+          <p>Pedro Gómez</p>
+          <div class="friend-actions">
+            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+          </div>
+        </div>
+        <div class="friend-item">
+          <img src="img/userprofile.png" alt="Amigo 3">
+          <p>Lucía Fernández</p>
+          <div class="friend-actions">
+            <i class="fas fa-envelope text-[#3fc0a4] text-lg"></i>
+          </div>
+        </div>
+        <div class="add-friend">
+          <input type="text" placeholder="Nombre del amigo" />
+          <button>Agregar</button>
+        </div>
+      </div>
+      <div class="recent-activity">
+        <h2 class="text-xl font-bold mb-4">Actividad Reciente</h2>
+        <div class="activity-item">
+          <img src="img/AVATAR-POSISION3-MOCHI.png" alt="Actividad 1">
+          <p>Completaste el nivel 1 del simulador.</p>
+        </div>
+        <div class="activity-item">
+          <img src="img/AVATAR-POSISION3-MOCHI.png" alt="Actividad 2">
+          <p>Ganaste el trofeo "50 Preguntas Respondidas".</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <!-- Íconos de redes sociales -->
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <!-- Enlaces del footer -->
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <!-- Copyright -->
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+  <script>
+    function cerrarSesion(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('temporaryUserData');
+      window.location.href = 'index.html';
+    }
+
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationMenu = document.getElementById('notificationMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    notificationButton.addEventListener('click', () => notificationMenu.classList.toggle('hidden'));
+    profileButton.addEventListener('click', () => profileMenu.classList.toggle('hidden'));
+  </script>
+</body>
+</html>
+

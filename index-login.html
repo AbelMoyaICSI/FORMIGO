@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style> 
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+    }
+
+    .boton {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      margin-bottom: 2em;
+    }
+
+    .boton:hover {
+      background-color: #3fc0a4;
+    }
+
+    .boton-secundario {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .boton-secundario:hover {
+      background-color: #cfdad6;
+    }
+
+    .barra-progreso-completado {
+      background-color: #49e9c9;
+      height: 10px;
+      width: 60%;
+    }
+
+    .sutil-contorno {
+      border: 1px solid #e2e8f0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .texto-progreso {
+      flex: 1;
+    }
+
+    .imagen-espacio {
+      width: 150px;
+      height: auto;
+      margin-left: 1rem;
+    }
+    .borde-suave {
+      border: 1px solid #e2e8f0; /* Color tenue */
+      border-radius: 8px; /* Esquinas redondeadas */
+      padding: 1.5rem; /* Espaciado interno */
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); /* Sombra ligera */
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .borde-suave:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Efecto hover */
+    }
+
+/* NUEVO  */
+
+    /* Menú de notificaciones */
+    #notificationMenu {
+      position: absolute; /* Ajusta la posición del menú */
+      top: 40px; /* Separación desde el botón */
+      right: 0;
+      z-index: 1000; /* Superposición */
+      margin-top: 0; /* Elimina el uso de margen */
+    }
+
+    /* Menú de perfil */
+    #profileMenu {
+      position: absolute; /* Ajusta la posición del menú */
+      top: 40px; /* Separación desde el botón */
+      right: 0;
+      z-index: 1000; /* Superposición */
+      margin-top: 0; /* Elimina el uso de margen */
+    }
+
+    /* Botón Premium */
+    .boton-premium {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      height: 40px; /* Asegura una altura consistente */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .boton-premium:hover {
+      background-color: #3fc0a4;
+    }
+
+    /* Ajuste general del header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px; /* Asegura que todos los elementos estén centrados */
+    }
+
+    header .flex.items-center {
+      align-items: center; /* Alinea verticalmente todos los elementos */
+    }
+
+    /* Alineación uniforme del header */
+    header .gap-6 > * {
+      display: flex;
+      align-items: center; /* Asegura alineación vertical */
+    }
+
+
+
+/*  ----    */   
+
+    /* Animación de deslizamiento */
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    /* Estilo para los cards */
+    .card-container {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform: scale(1);
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+    }
+
+    .card-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-container img {
+      border-radius: 8px;
+      width: 100%;
+      height: auto;
+      display: block;
+      background-color: transparent;
+    }
+
+    .card {
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .card p {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 0.5em;
+    }
+
+    .card-container img {
+      border-radius: 12px;
+    }
+
+    .borde-suave {
+      cursor: pointer;
+    }
+
+    /* Estilos específicos para el menú de perfil en modo responsive */
+    @media (max-width: 768px) {
+      #profileMenu {
+        position: relative;
+        width: 100%;
+        top: unset;
+        right: unset;
+      }
+    }
+</style>
+
+</head>
+
+<body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <!-- Logo y Título -->
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+  
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+  
+
+  <!-- Menú desplegable para dispositivos móviles con perfil -->
+  <div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+    <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+    <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+    <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+      <span>Notificaciones</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+      </svg>
+    </a>
+    <!-- Botón Premium -->
+    <a href="suscripcion.html" class="boton-premium">Premium</a>
+
+    <hr class="my-2 w-full border-[#e8f3f0]" />
+    <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->    <a href="#" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+    <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+    <a href="#" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+  </div>
+
+
+  <!-- Contenido principal -->
+  <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl">
+
+
+    <!-- Sección de progreso -->
+    <section class="sutil-contorno my-8">
+      <div class="texto-progreso">
+        <h1 class="text-2xl font-bold">¡Buenos días, Sarah!</h1>
+        <p class="mt-2 text-base">Progreso de preparación para simulador de entrevistas:</p>
+        <div class="mt-1 bg-[#d0e6e2] rounded-full h-2">
+          <div class="barra-progreso-completado rounded-full"></div>
+        </div>
+        <p class="mt-1 text-sm text-[#4f9688]">25/40 completado</p>
+      </div>
+      <!-- Espacio reservado para imagen -->
+      <div class="imagen-espacio">
+        <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Imagen de progreso" class="rounded-lg shadow-sm" />
+      </div>
+    </section>
+
+    <!-- Simulador -->
+    <section class="text-center my-10">
+      <h2 class="text-xl font-bold">Simulador de Entrevistas</h2>
+      <p class="mt-2 text-gray-600">Práctica interactiva con preguntas y retroalimentación.</p>
+      <a href="simulador-entrevistas.html"><button class="boton mt-4">Accede al Simulador</button></a>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-lg font-bold">Tus Logros <i class="fa-solid fa-trophy" style="color: rgb(245, 202, 62);"></i></h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <!-- Logro 1 -->
+        <div class="borde-suave text-center">
+          <i class="fas fa-check-circle text-[#49e9c9] text-4xl mb-2"></i>
+          <p class="font-medium">Primera Entrevista Completada</p>
+          <p class="text-sm text-[#4f9688]">¡Buen trabajo!</p>
+        </div>
+        <!-- Logro 2 -->
+        <div class="borde-suave text-center">
+          <i class="fas fa-question-circle text-[#49e9c9] text-4xl mb-2"></i>
+          <p class="font-medium">50 Preguntas Respondidas</p>
+          <p class="text-sm text-[#4f9688]">¡Vas por buen camino!</p>
+        </div>
+        <!-- Logro 3 -->
+        <div class="borde-suave text-center">
+          <i class="fas fa-level-up-alt text-[#49e9c9] text-4xl mb-2"></i>
+          <p class="font-medium">Nivel 3 Alcanzado</p>
+          <p class="text-sm text-[#4f9688]">Sigue subiendo de nivel.</p>
+        </div>
+      </div>
+    </section>
+
+<!-- NUEVA SECCIÓN PREMIUM -->
+<section class="mt-10 text-center" style="margin-block: 8rem">
+  <h2 class="text-2xl font-bold">¡Desbloquea más oportunidades con Premium!</h2>
+  <p class="mt-4 text-base text-gray-600">Accede a contenido exclusivo, simulaciones avanzadas y herramientas personalizadas para maximizar tu preparación. ¡Suscríbete ahora y lleva tu aprendizaje al siguiente nivel!</p>
+  <a href="suscripcion.html" class="boton-premium mt-6 inline-block">Suscribirse a Premium</a>
+</section>
+
+    
+<section class="mt-10">
+  <h2 class="text-lg font-bold">Consejos rápidos de Mochi <i class="fa-solid fa-circle-info" style="color: #49e9c9;"></i></h2>
+  <ul class="mt-4 space-y-4">
+    <li class="borde-suave flex items-center gap-4">
+      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
+      <div>
+        <p class="text-sm text-[#4f9688]">"Recuerda usar un lenguaje corporal positivo para mostrar confianza en tus entrevistas."</p>
+        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=1';">Ir a "Conociéndote mejor"</button>
+      </div>
+    </li>
+    <li class="borde-suave flex items-center gap-4">
+      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
+      <div>
+        <p class="text-sm text-[#4f9688]">"Prepara tus respuestas con ejemplos específicos que demuestren tus habilidades."</p>
+        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=2';">Ir a "Preferencias de comunicación"</button>
+      </div>
+    </li>
+    <li class="borde-suave flex items-center gap-4">
+      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
+      <div>
+        <p class="text-sm text-[#4f9688]">"Investiga sobre la empresa antes de la entrevista para destacar tu interés."</p>
+        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=3';">Ir a "Habilidades Generales y Adaptabilidad"</button>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section class="mt-10 text-center">
+  <h2 class="text-lg font-bold">¡Envíanos tu Opinión!</h2>
+  <p class="mt-2 text-gray-600">Escribe tus comentarios o sugerencias, nos encantaría saber qué piensas.</p>
+  
+  <!-- Campo de entrada para comentarios -->
+  <div class="mt-6 flex flex-col items-center">
+    <textarea 
+      class="w-full max-w-lg h-32 border border-[#e2e8f0] rounded-lg p-4 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#49e9c9] hover:shadow-lg placeholder-gray-400 resize-none" 
+      placeholder="Escribe tu comentario aquí...">
+    </textarea>
+    
+    <!-- Botón de enviar -->
+    <button 
+      class="mt-4 boton">
+      Enviar
+    </button>
+  </div>
+</section>
+
+
+
+
+    
+  </main>
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <!-- Íconos de redes sociales -->
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <!-- Enlaces del footer -->
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+
+    <section id="progress-page" class="hidden">
+      <button onclick="volverMenu()" class="boton-secundario">Volver al Menú</button>
+      <div class="flex gap-4 mt-4">
+        <div class="w-1/4 bg-[#49e9c9] p-4 rounded-lg text-white">
+          <h3 class="text-lg font-bold mb-4">Progreso por Nivel</h3>
+          <ul>
+            <li class="mb-2"><button class="w-full text-left">Básico</button></li>
+            <li class="mb-2"><button class="w-full text-left">Intermedio</button></li>
+            <li><button class="w-full text-left">Avanzado</button></li>
+          </ul>
+        </div>
+        <div class="w-3/4 bg-white p-4 rounded-lg">
+          <h3 class="text-lg font-bold mb-4">Básico</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="border p-2 rounded text-center">Conociéndote Mejor</div>
+            <div class="border p-2 rounded text-center">Preferencias de comunicación</div>
+            <div class="border p-2 rounded text-center">Gestión de Situaciones Desafiantes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    
+    <!-- Copyright -->
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+  
+  
+  
+  <!-- Scripts para el menú desplegable en dispositivos móviles y el perfil -->
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    // Toggle para el menú de navegación en móvil
+    menuButton.addEventListener('click', function () {
+      mobileMenu.classList.toggle('hidden');
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('slide-down');
+      } else {
+        mobileMenu.classList.remove('slide-down');
+      }
+    });
+
+    // Toggle para el menú de perfil en escritorio
+    profileButton.addEventListener('click', function (e) {
+      e.stopPropagation();
+      profileMenu.classList.toggle('hidden');
+      profileMenu.classList.add('slide-down');
+    });
+
+    // Cerrar el menú de perfil al hacer clic fuera
+    window.addEventListener('click', function (e) {
+      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+        // Mostrar/ocultar menú de notificaciones
+        notificationButton.addEventListener('click', function (e) {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar el menú de notificaciones si se hace clic fuera
+        window.addEventListener('click', function (e) {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+        
+        function mostrarProgreso() {
+          // Ocultar todas las secciones dentro del main
+          document.querySelectorAll('main > section').forEach(section => {
+            section.classList.add('hidden');
+          });
+        
+          // Mostrar la sección de progreso
+          const progressPage = document.getElementById('progress-page');
+          if (progressPage) {
+            progressPage.classList.remove('hidden');
+            progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave
+          } else {
+            console.error("No se encontró la sección de progreso.");
+          }
+        }
+        
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+
+// Función para obtener parámetros de la URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+// Mostrar la sección correspondiente según el parámetro de la URL
+document.addEventListener("DOMContentLoaded", () => {
+  const section = getQueryParam("section");
+  if (section === "progress") {
+    // Oculta otras secciones
+    document.querySelectorAll('main > section').forEach((section) => {
+      section.classList.add('hidden');
+    });
+
+    // Muestra la sección de progreso
+    const progressPage = document.getElementById('progress-page');
+    if (progressPage) {
+      progressPage.classList.remove('hidden');
+      progressPage.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+function cerrarSesion(e) {
+      e.preventDefault();
+      // Limpiar localStorage
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('temporaryUserData');
+      // Redireccionar a la página principal
+      window.location.href = 'index.html';
+    }
+
+  </script>
+</body>
+
+</html>

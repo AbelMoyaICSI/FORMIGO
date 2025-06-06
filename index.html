@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo - Tu Camino al Éxito Profesional</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fbfb;
+    }    .boton {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .boton:hover {
+      background-color: #3fc0a4;
+    }
+
+    .boton-secundario {
+      background-color: #e8f3f0;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .boton-secundario:hover {
+      background-color: #cfdad6;
+    }
+
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #49e9c9 0%, #3fc0a4 100%);
+      padding: 6rem 0;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stats-container {
+      background-color: #e8f3f0;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .cta-section {
+      background-color: #0e1b18;
+      color: white;
+      padding: 4rem 0;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <a href="landing.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>    <div class="hidden md:flex items-center gap-6">      
+      <a href="login.html" class="text-base font-medium">Iniciar Sesión</a>
+      <a href="registro.html" class="boton flex items-center justify-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </div>
+
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>  <div id="mobileMenu" class="md:hidden hidden bg-white p-4 border-b border-[#e8f3f0]">    <nav class="flex flex-col space-y-4">
+      <a href="login.html" class="text-base font-medium text-center">Iniciar Sesión</a>
+      <a href="registro.html" class="boton w-full text-center justify-center inline-flex items-center">
+        <i class="fas fa-user-plus mr-2"></i>
+        Registrarte
+      </a>
+    </nav>
+  </div>
+
+  <main class="flex-grow">    <!-- Hero Section -->    
+    <section class="hero-section text-white text-center relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-full bg-pattern opacity-10"></div>
+      <div class="container mx-auto px-4 max-w-5xl relative z-10">
+        <img src="img/LOGO-MOCHI.png" alt="Mochi Mascota" class="w-24 h-24 mx-auto mb-8 animate-bounce">        <h1 class="text-4xl md:text-6xl font-bold mb-6">Tu compañero inteligente para entrevistas preprofesionales de trabajo</h1>
+        <p class="text-xl mb-8">Formigo es tu plataforma de preparación para entrevistas laborales, diseñada especialmente para estudiantes universitarios de últimos semestres en busca de sus prácticas preprofesionales y también para recién graduados. Con Mochi, tu asistente virtual impulsado por IA, practicarás y dominarás las entrevistas de trabajo.</p>
+        <p class="text-lg mb-8">🎯 Simulaciones personalizadas • 🤖 IA adaptativa • 🌟 Método STAR probado • 📈 Análisis detallado</p>        <div class="flex flex-col md:flex-row justify-center gap-4 items-center">
+          <a href="registro.html" class="boton flex items-center justify-center min-w-[200px]">
+            <i class="fas fa-play-circle mr-2"></i>
+            Empezar Ahora
+          </a>
+          <a href="#caracteristicas" class="boton-secundario flex items-center justify-center min-w-[200px]">
+            <i class="fas fa-info-circle mr-2"></i>
+            Conoce Más
+          </a>
+        </div>
+      </div>
+    </section><!-- Características -->    <section id="caracteristicas" class="py-16 container mx-auto px-4 max-w-5xl">
+      <h2 class="text-3xl font-bold text-center mb-4">¿Por qué elegir Formigo?</h2>
+      <p class="text-center text-gray-600 mb-12">Tu compañero ideal para dominar las entrevistas preprofesionales</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">        <div class="feature-card group">
+          <div class="relative">
+            <img src="img/Test de-personalidad-para-empleo.png" alt="Sistema de Perfilación" class="w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform">
+            <div class="absolute -top-2 -right-2 bg-[#49e9c9] text-white rounded-full px-2 py-1 text-sm">
+              IA Personalizada
+            </div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Sistema de Perfilación Inteligente</h3>
+          <p class="text-gray-600">Nuestro sistema analiza tu perfil académico y personal para crear una experiencia de preparación única.</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600">
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Análisis de fortalezas y áreas de mejora</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Adaptación según tu carrera y objetivos</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Recomendaciones personalizadas</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Seguimiento de tu evolución</li>
+          </ul>
+        </div>
+
+        <div class="feature-card group">
+          <div class="relative">
+            <img src="img/Dominando-la técnica-STAR.png" alt="Técnica STAR" class="w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform">
+            <div class="absolute -top-2 -right-2 bg-[#49e9c9] text-white rounded-full px-2 py-1 text-sm">
+              Método Probado
+            </div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Preparación Integral</h3>
+          <p class="text-gray-600">Desarrolla las habilidades clave que buscan los reclutadores con un enfoque estructurado y efectivo.</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600">
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Método STAR para respuestas impactantes</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Escenarios reales de entrevistas</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Técnicas de comunicación efectiva</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Guías específicas por sector</li>
+          </ul>
+        </div>
+
+        <div class="feature-card group">
+          <div class="relative">
+            <img src="img/Logros.png" alt="Sistema de Logros" class="w-16 h-16 mb-4 transform group-hover:scale-110 transition-transform">
+            <div class="absolute -top-2 -right-2 bg-[#49e9c9] text-white rounded-full px-2 py-1 text-sm">
+              Gamificado
+            </div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Progreso Motivador</h3>
+          <p class="text-gray-600">Supera la ansiedad y construye confianza con un sistema que hace divertido el aprendizaje.</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600">
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Sistema de niveles gamificados adaptativos</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Seguimiento detallado de mejoras</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Desafíos personalizados</li>
+            <li class="flex items-center"><i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>Reconocimientos por logros</li>
+          </ul>
+        </div>
+      </div>      <!-- Características adicionales específicas para prácticas preprofesionales -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        <div class="feature-card flex items-start bg-gradient-to-br from-[#f8fbfb] to-[#e8f3f0]">
+          <img src="img/Creador-de-CV.png" alt="Creador de CV" class="w-12 h-12 mr-4">
+          <div>
+            <h3 class="text-lg font-bold mb-2">Orientación Profesional Personalizada</h3>
+            <p class="text-gray-600 mb-4">Recibe guía específica para tu carrera y sector profesional.</p>
+            <ul class="text-sm text-gray-600">
+              <li class="flex items-center mb-2">
+                <i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>
+                Perfiles de empresas actualizados
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>
+                Consejos específicos por industria
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="feature-card flex items-start bg-gradient-to-br from-[#f8fbfb] to-[#e8f3f0]">
+          <img src="img/Talleres-de-Habilidades.png" alt="Talleres" class="w-12 h-12 mr-4">
+          <div>
+            <h3 class="text-lg font-bold mb-2">Desarrollo de Habilidades Blandas</h3>
+            <p class="text-gray-600 mb-4">Mejora tus competencias clave para el éxito profesional.</p>
+            <ul class="text-sm text-gray-600">
+              <li class="flex items-center mb-2">
+                <i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>
+                Comunicación efectiva
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-[#49e9c9] mr-2"></i>
+                Resolución de problemas en tiempo real
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      <!-- Banner informativo sobre la brecha académica-profesional -->
+      <div class="mt-12 p-6 bg-[#49e9c9] bg-opacity-10 border-2 border-[#49e9c9] rounded-lg">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <div class="md:w-2/3">
+            <h3 class="text-xl font-bold mb-4 text-[#0e1b18]">¿Sabías que?</h3>
+            <p class="mb-4 text-gray-600">La preparación para entrevistas preprofesionales requiere un enfoque personalizado. Con Formigo, analizamos tu perfil único para:</p>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-center">
+                <i class="fas fa-user-graduate text-[#49e9c9] mr-2"></i>
+                Adaptar las preguntas a tu campo de estudio
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-brain text-[#49e9c9] mr-2"></i>
+                Identificar tus fortalezas y áreas de mejora
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-chart-line text-[#49e9c9] mr-2"></i>
+                Crear un plan de preparación personalizado
+              </li>
+            </ul>
+          </div>
+          <div class="md:w-1/3 mt-6 md:mt-0 text-center">
+            <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Mochi Mascota" class="w-32 h-32 mx-auto animate-bounce">
+          </div>
+        </div>
+      </div>
+    </section><!-- Estadísticas -->
+    <section class="bg-[#f8fbfb] py-16">
+      <div class="container mx-auto px-4 max-w-5xl">
+        <h2 class="text-3xl font-bold text-center mb-4">Impacto Real</h2>
+        <p class="text-center text-gray-600 mb-12">Números que respaldan nuestro compromiso con tu éxito</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="stats-container group hover:bg-[#49e9c9] hover:text-white transition-all duration-300">
+            <i class="fas fa-users text-3xl text-[#3fc0a4] group-hover:text-white mb-4"></i>
+            <h3 class="text-4xl font-bold text-[#3fc0a4] group-hover:text-white">95%</h3>
+            <p class="text-gray-600 group-hover:text-white mt-2">de usuarios mejoran sus habilidades</p>
+          </div>
+          <div class="stats-container group hover:bg-[#49e9c9] hover:text-white transition-all duration-300">
+            <i class="fas fa-question-circle text-3xl text-[#3fc0a4] group-hover:text-white mb-4"></i>
+            <h3 class="text-4xl font-bold text-[#3fc0a4] group-hover:text-white">1000+</h3>
+            <p class="text-gray-600 group-hover:text-white mt-2">preguntas de práctica</p>
+          </div>
+          <div class="stats-container group hover:bg-[#49e9c9] hover:text-white transition-all duration-300">
+            <i class="fas fa-clock text-3xl text-[#3fc0a4] group-hover:text-white mb-4"></i>
+            <h3 class="text-4xl font-bold text-[#3fc0a4] group-hover:text-white">24/7</h3>
+            <p class="text-gray-600 group-hover:text-white mt-2">acceso ilimitado</p>
+          </div>
+          <div class="stats-container group hover:bg-[#49e9c9] hover:text-white transition-all duration-300">
+            <i class="fas fa-briefcase text-3xl text-[#3fc0a4] group-hover:text-white mb-4"></i>
+            <h3 class="text-4xl font-bold text-[#3fc0a4] group-hover:text-white">80%</h3>
+            <p class="text-gray-600 group-hover:text-white mt-2">tasa de éxito en entrevistas</p>
+          </div>
+        </div>
+      </div>
+    </section>    <!-- Precios -->    <section id="precios" class="py-16 container mx-auto px-4 max-w-5xl">      <h2 class="text-3xl font-bold text-center mb-4">Planes Mensuales que se adaptan a ti</h2>
+      <p class="text-center text-gray-600 mb-12">Elige el plan mensual perfecto para tu preparación profesional</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Plan Gratuito -->
+        <div class="feature-card text-center">          <h3 class="text-2xl font-bold mb-4">Plan Básico</h3>          <p class="text-xl mb-4">Comienza tu viaje de preparación profesional con nuestras funciones esenciales:</p>
+          <p class="text-4xl text-gray-500 mb-6">$0<span class="text-base font-normal">/mes</span></p>
+          <ul class="text-left space-y-4 mb-4">
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Simulaciones ilimitadas</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Feedback limitado</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Consejos generales</li>
+            <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-400 mr-2"></i>Sin análisis avanzado</li>            <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-400 mr-2"></i>Sin recursos premium</li>
+          </ul>          <a href="registro.html" class="boton-secundario inline-flex items-center justify-center w-full">
+            <i class="fas fa-play mr-2"></i>
+            Comenzar Gratis
+          </a>
+        </div>
+
+        <!-- Plan Premium -->
+        <div class="feature-card text-center transform scale-105 border-2 border-[#49e9c9] relative">          <div class="bg-[#49e9c9] text-white px-4 py-1 rounded-full inline-block mb-2">Más Popular</div>
+          <div class="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm inline-block mb-4">¡1er mes por solo $4.99!</div>
+          <h3 class="text-2xl font-bold mb-4">Plan Premium</h3>
+          <p class="text-xl mb-4">Desbloquea todo el contenido exclusivo para maximizar tu aprendizaje:</p>
+          <div class="flex flex-col items-center gap-1 mb-6">
+            <p class="text-4xl font-bold">$7.99<span class="text-base font-normal">/mes</span></p>
+            <p class="text-sm text-[#49e9c9] font-semibold">después del primer mes</p>
+          </div><ul class="text-left space-y-4 mb-8">
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Plan Básico</li>
+            <div class="flex justify-center my-4">
+              <div class="text-[#49e9c9] text-4xl">
+                <i class="fas fa-plus"></i>
+              </div>
+            </div>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso ilimitado a simulaciones personalizadas mediante ChatBot.</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Feedback personalizado</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Reporte de análisis detallados</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso a una comunidad exclusiva para networking y colaboración</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Análisis comparativo con otros usuarios para evaluar tu progreso</li>
+          </ul>          <a href="registro.html" class="boton inline-flex items-center justify-center w-full">
+            <i class="fas fa-crown mr-2"></i>
+            Suscribir
+          </a>
+        </div>        <!-- Plan Universidad -->
+        <div class="feature-card text-center">
+          <h3 class="text-2xl font-bold mb-4">Plan Universidad</h3>
+          <p class="text-xl mb-4">Diseñado para instituciones educativas que buscan potenciar la preparación de sus estudiantes</p>
+          
+          <!-- Planes Universitarios -->
+          <div class="space-y-4 mb-6">
+            <div class="p-3 rounded-lg bg-[#f8fbfb] border border-[#e2e8f0]">
+              <h4 class="font-bold text-lg">Plan Inicial</h4>
+              <p class="text-2xl font-bold text-[#49e9c9]">$149<span class="text-base font-normal text-gray-600">/mes</span></p>
+              <p class="text-sm text-gray-600">Hasta 100 estudiantes</p>
+              <p class="text-sm font-semibold text-[#49e9c9]">$1.49 por estudiante</p>
+            </div>
+            
+            <div class="p-3 rounded-lg bg-[#49e9c9] bg-opacity-10 border-2 border-[#49e9c9]">
+              <h4 class="font-bold text-lg">Plan Pro</h4>
+              <p class="text-2xl font-bold text-[#49e9c9]">$299<span class="text-base font-normal text-gray-600">/mes</span></p>
+              <p class="text-sm text-gray-600">Hasta 300 estudiantes</p>
+              <p class="text-sm font-semibold text-[#49e9c9]">$0.99 por estudiante</p>
+            </div>
+            
+            <div class="p-3 rounded-lg bg-[#f8fbfb] border border-[#e2e8f0]">
+              <h4 class="font-bold text-lg">Plan Enterprise</h4>
+              <p class="text-2xl font-bold text-[#49e9c9]">$499<span class="text-base font-normal text-gray-600">/mes</span></p>
+              <p class="text-sm text-gray-600">Hasta 1000 estudiantes</p>
+              <p class="text-sm font-semibold text-[#49e9c9]">$0.49 por estudiante</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-[#49e9c9] font-semibold mb-6 bg-[#49e9c9] bg-opacity-10 py-2 px-4 rounded-full inline-block">
+            ¡20% de descuento en pago anual!
+          </p>
+
+          <div class="border-t border-b border-[#e2e8f0] py-4 mb-6">
+            <p class="text-sm text-gray-600">Planes personalizados disponibles para más de 1000 estudiantes</p>
+          </div>
+
+          <!-- Características comunes -->
+          <h4 class="font-bold text-lg mb-4">Todos los planes incluyen:</h4>
+          <ul class="text-left space-y-4 mb-8">
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Acceso Premium para estudiantes mediante códigos de invitación</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Panel de control para profesores con métricas de progreso</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Gestión de aulas virtuales por curso</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Informes detallados y análisis grupal</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Integración LMS (Moodle, Canvas)</li>
+            <li class="flex items-center"><i class="fas fa-check text-[#49e9c9] mr-2"></i>Soporte prioritario y capacitación para staff</li>
+          </ul>          <a href="registro.html" class="boton inline-flex items-center justify-center w-full">
+            <i class="fas fa-building-columns mr-2"></i>
+            Solicitar
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Final -->    <section class="cta-section">
+      <div class="container mx-auto px-4 max-w-5xl text-center">
+        <h2 class="text-3xl font-bold mb-6">¿Listo para destacar en tus entrevistas?</h2>
+        <p class="text-xl mb-8">Da el primer paso hacia tu éxito profesional con Formigo</p>
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center">          <a href="registro.html" class="boton inline-flex items-center">
+            <i class="fas fa-rocket mr-2"></i>
+            Comienza Ahora
+          </a>
+          <a href="#precios" class="boton-secundario inline-flex items-center">
+            <i class="fas fa-info-circle mr-2"></i>
+            Ver Planes
+          </a>
+        </div>
+      </div>
+<<<<<<< HEAD
+    </li>
+    <li class="borde-suave flex items-center gap-4">
+      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
+      <div>
+        <p class="text-sm text-[#4f9688]">"Prepara tus respuestas con ejemplos específicos que demuestren tus habilidades."</p>
+        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=2';">Ir a "Preferencias de comunicación"</button>
+      </div>
+    </li>
+    <li class="borde-suave flex items-center gap-4">
+      <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Avatar motivacional" class="w-12 h-12">
+      <div>
+        <p class="text-sm text-[#4f9688]">"Investiga sobre la empresa antes de la entrevista para destacar tu interés."</p>
+        <button class="boton-secundario mt-2" onclick="location.href='simulador-entrevistas.html?level=3';">Ir a "Habilidades Generales y Adaptabilidad"</button>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section class="mt-10 text-center">
+  <h2 class="text-lg font-bold">¡Envíanos tu Opinión!</h2>
+  <p class="mt-2 text-gray-600">Escribe tus comentarios o sugerencias, nos encantaría saber qué piensas.</p>
+  
+  <!-- Campo de entrada para comentarios -->
+  <div class="mt-6 flex flex-col items-center">
+    <textarea 
+      id="commentInput"
+      class="w-full max-w-lg h-32 border border-[#e2e8f0] rounded-lg p-4 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#49e9c9] hover:shadow-lg placeholder-gray-400 resize-none" 
+      placeholder="Escribe tu comentario aquí...">
+    </textarea>
+    
+    <!-- Botón de enviar -->
+    <button 
+      onclick="handleFeedbackSubmit()"
+      class="mt-4 boton">
+      Enviar
+    </button>
+  </div>
+</section>
+
+<!-- Modal de confirmación de envío -->
+<div id="feedbackModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0">
+    <div class="text-center">
+      <img src="img/AVATAR-POSISION4-MOCHI.png" alt="Mochi feliz" class="w-24 h-24 mx-auto mb-4">
+      <h3 class="text-xl font-bold text-[#0e1b18] mb-2">¡Gracias por tu opinión!</h3>
+      <p class="text-[#4f9688] mb-4">Tu feedback nos ayuda a mejorar Formigo</p>
+      <button onclick="closeFeedbackModal()" class="boton-secundario">Cerrar</button>
+    </div>
+  </div>
+</div>
+    
+=======
+    </section>
+>>>>>>> 087d545 (New commit update)
+  </main>
+
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <p class="text-sm text-[#3fc0a4] mt-4">2024 Formigo</p>
+  </footer>
+
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Cerrar menú móvil al hacer clic en un enlace
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+<<<<<<< HEAD
+
+    // Cerrar el menú de perfil al hacer clic fuera
+    window.addEventListener('click', function (e) {
+      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+        // Mostrar/ocultar menú de notificaciones
+        notificationButton.addEventListener('click', function (e) {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar el menú de notificaciones si se hace clic fuera
+        window.addEventListener('click', function (e) {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+        
+        function mostrarProgreso() {
+          // Ocultar todas las secciones dentro del main
+          document.querySelectorAll('main > section').forEach(section => {
+            section.classList.add('hidden');
+          });
+        
+          // Mostrar la sección de progreso
+          const progressPage = document.getElementById('progress-page');
+          if (progressPage) {
+            progressPage.classList.remove('hidden');
+            progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave
+          } else {
+            console.error("No se encontró la sección de progreso.");
+          }
+        }
+        
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+
+// Función para obtener parámetros de la URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+// Mostrar la sección correspondiente según el parámetro de la URL
+document.addEventListener("DOMContentLoaded", () => {
+  const section = getQueryParam("section");
+  if (section === "progress") {
+    // Oculta otras secciones
+    document.querySelectorAll('main > section').forEach((section) => {
+      section.classList.add('hidden');
+    });
+
+    // Muestra la sección de progreso
+    const progressPage = document.getElementById('progress-page');
+    if (progressPage) {
+      progressPage.classList.remove('hidden');
+      progressPage.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+    // Funciones para el modal de feedback
+    function handleFeedbackSubmit() {
+      const modal = document.getElementById('feedbackModal');
+      const modalContent = modal.querySelector('.bg-white');
+      const commentInput = document.getElementById('commentInput');
+      
+      // Mostrar el modal
+      modal.classList.remove('hidden');
+      // Animar la entrada del modal
+      setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      
+      // Limpiar el textarea
+      commentInput.value = '';
+    }
+
+    function closeFeedbackModal() {
+      const modal = document.getElementById('feedbackModal');
+      const modalContent = modal.querySelector('.bg-white');
+      
+      // Animar la salida del modal
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+      
+      // Ocultar el modal después de la animación
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+=======
+>>>>>>> 087d545 (New commit update)
+  </script>
+</body>
+</html>
