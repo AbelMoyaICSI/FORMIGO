@@ -332,7 +332,23 @@
 
     <!-- Contenedor del Simulador -->
     <section id="simulator" class="hidden">
-      <!-- Aquí se generarán dinámicamente las preguntas y opciones -->
+      <!-- Indicador de nivel -->      <div class="flex items-center justify-between mb-6">
+        <div class="bg-[#49e9c9] text-white px-6 py-3 rounded-full">
+          <h2 class="text-xl font-bold">Nivel <span id="currentLevelDisplay">1</span>: Conociéndote mejor</h2>
+        </div>
+      </div>
+
+      <!-- Contenedor de preguntas -->
+      <div id="questionContainer" class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div id="questionText" class="text-xl font-medium mb-4"></div>
+        <div id="optionsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Avatar y diálogo -->
+      <div class="flex items-start gap-4 bg-[#f8fbfb] rounded-lg p-4">
+        <img src="img/AVATAR-POSISION1-MOCHI.png" alt="Mochi" class="w-16 h-16">
+        <div id="dialogText" class="flex-1 bg-white rounded-lg p-4 shadow-sm"></div>
+      </div>
     </section>      <!-- Página de Progreso -->
     <section id="progress-page" class="hidden">
       <div class="w-full flex justify-start px-4 mb-6">
@@ -374,22 +390,24 @@
   </main>
 
   <!-- Modal de Finalización -->
-  <div id="completionModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white rounded-lg p-6 shadow-lg max-w-md w-full text-center relative">
+  <div id="completionModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300">
+    <div class="bg-white rounded-lg p-6 shadow-lg max-w-md w-full text-center relative transform transition-all duration-300 scale-95 opacity-0">
       <!-- Botón de cerrar -->
-      <button onclick="closeCompletionModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      <button onclick="closeCompletionModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors">
         <i class="fas fa-times"></i>
       </button>
       <!-- Título del modal -->
       <h2 class="text-2xl font-bold text-[#0e1b18] mb-4">¡Felicidades!</h2>
-      <!-- Avatar debajo del título -->
-      <div class="flex justify-center mb-4">
+      <!-- Avatar con animación -->
+      <div class="flex justify-center mb-4 animate-bounce">
         <img src="img/AVATAR-POSISION4-MOCHI.png" alt="Mochi Avatar" class="w-24 h-auto">
       </div>
       <!-- Mensaje del modal -->
       <p class="text-[#4f9688] mb-6">¡Has completado el nivel! Sigue avanzando para prepararte aún mejor.</p>
-      <!-- Botón de continuar -->
-      <button onclick="goToProgressPage()" class="boton">Aceptar</button>
+      <!-- Botón de continuar con efecto hover -->
+      <button onclick="goToProgressPage()" class="boton transform hover:scale-105 transition-transform duration-200">
+        Aceptar
+      </button>
     </div>
   </div>
 
@@ -1939,6 +1957,7 @@
                   "Evitando responder."
                 ],
                 dialogText: "¡Increíble trabajo! Sigamos practicando con preguntas técnicas."
+             
               }
               // Más preguntas de nivel avanzado
             ]
@@ -2637,6 +2656,43 @@
       
       return progressState[category].includes(levelNumber);
     }
+
+      // Función para mostrar el modal de finalización
+      function showCompletionModal() {
+        const modal = document.getElementById('completionModal');
+        modal.classList.remove('hidden');
+        // Reproducir sonido de éxito
+        const audio = new Audio('sound/success.mp3');
+        audio.play();
+      }
+
+      // Función para cerrar el modal
+      function closeCompletionModal() {
+        const modal = document.getElementById('completionModal');
+        modal.classList.add('hidden');
+      }
+
+      // Función para ir a la página de progreso
+      function goToProgressPage() {
+        closeCompletionModal();
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('simulator').classList.add('hidden');
+        document.getElementById('progress-page').classList.remove('hidden');
+        // Mostrar niveles
+        showLevels('basic');
+      }
+
+      // Función para actualizar y mostrar el progreso después de completar un nivel
+      function updateProgress() {
+        showCompletionModal();
+        saveProgress();
+      }
+
+      // Función que maneja cuando el usuario completa un nivel
+      function handleLevelCompletion() {
+        updateProgress();
+      }
+
     </script>
 
 </body>
