@@ -344,9 +344,9 @@
 
 <!-- NUEVA SECCIÓN PREMIUM -->
 <section class="mt-10 text-center" style="margin-block: 8rem">
-  <h2 class="text-2xl font-bold">¡Desbloquea más oportunidades con Premium!</h2>
+  <h2 class="text-2xl font-bold">¡Suscríbete para desbloquear más oportunidades!</h2>
   <p class="mt-4 text-base text-gray-600">Accede a contenido exclusivo, simulaciones avanzadas y herramientas personalizadas para maximizar tu preparación. ¡Suscríbete ahora y lleva tu aprendizaje al siguiente nivel!</p>
-  <a href="suscripcion.html" class="boton-premium mt-6 inline-block">Suscribirse a Premium</a>
+  <a href="suscripcion.html" class="boton-premium mt-6 inline-block">Suscribirse</a>
 </section>
 
     
@@ -388,16 +388,29 @@
       placeholder="Escribe tu comentario aquí...">
     </textarea>
     
-    <!-- Botón de enviar -->
-    <button 
+    <!-- Botón de enviar -->    <button 
+      id="sendCommentButton"
       class="mt-4 boton">
       Enviar
     </button>
   </div>
 </section>
 
-
-
+<!-- Modal de Confirmación -->
+<div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full mx-4 transform transition-all">    <div class="text-center">
+      <i class="fas fa-check-circle text-[#49e9c9] text-4xl mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">¡Gracias por tu comentario!</h3>
+      <div class="flex justify-center mb-4">
+        <img src="img/AVATAR-POSISION2-MOCHI.png" alt="Mochi agradecido" class="w-16 h-16">
+      </div>
+      <p class="text-gray-600 mb-6">Tu opinión es muy importante para nosotros.</p>
+      <button onclick="closeModal()" class="boton">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>
 
     
   </main>
@@ -454,9 +467,32 @@
   </footer>
   
   
-  
-  <!-- Scripts para el menú desplegable en dispositivos móviles y el perfil -->
+    <!-- Scripts para el menú desplegable en dispositivos móviles y el perfil -->
   <script>
+    // Funcionalidad del Modal
+    const confirmationModal = document.getElementById('confirmationModal');
+    const commentForm = document.querySelector('textarea');
+    const sendButton = document.getElementById('sendCommentButton');
+
+    sendButton.addEventListener('click', function() {
+      if (commentForm.value.trim() !== '') {
+        confirmationModal.classList.remove('hidden');
+        // Limpiar el textarea
+        commentForm.value = '';
+      }
+    });
+
+    function closeModal() {
+      confirmationModal.classList.add('hidden');
+    }
+
+    // Cerrar modal al hacer clic fuera
+    confirmationModal.addEventListener('click', function(e) {
+      if (e.target === confirmationModal) {
+        closeModal();
+      }
+    });
+
     const menuButton = document.getElementById('menuButton');
     const mobileMenu = document.getElementById('mobileMenu');
     const profileButton = document.getElementById('profileButton');
