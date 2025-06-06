@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formigo Premium - Checkout</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" />
+  <link rel="icon" href="img/LOGO-MOCHI.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <!-- Estilos del navbar -->
+  <style>
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    #notificationMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000;
+      margin-top: 0;
+    }
+
+    #profileMenu {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      z-index: 1000;
+      margin-top: 0;
+    }
+
+    .boton-premium {
+      background-color: #49e9c9;
+      color: #0e1b18;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1rem;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .boton-premium:hover {
+      background-color: #3fc0a4;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-[#f8fbfb] text-[#0e1b18]">
+  <!-- Header heredado -->
+  <header class="flex items-center justify-between border-b border-[#e8f3f0] px-4 md:px-10 h-16">
+    <a href="index-login.html" class="flex items-center gap-4">
+      <img src="img/LOGO-MOCHI.png" alt="Formigo Logo" class="w-10 h-10" />
+      <h2 class="text-lg font-bold">Formigo</h2>
+    </a>
+    
+    <!-- Menú de navegación y botones (versión escritorio) -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Navegación -->
+      <nav class="flex items-center gap-6">
+        <a href="simulador-entrevistas.html" class="text-base font-medium">Simulador</a>
+        <a href="logros.html" class="text-base font-medium">Logros</a>
+      </nav>
+  
+      <!-- Botón Premium -->
+      <a href="suscripcion.html" class="boton-premium">Premium</a>
+  
+      <!-- Ícono de notificaciones -->
+      <div class="relative">
+        <button id="notificationButton" class="text-[#bababa] relative focus:outline-none">
+          <i class="fas fa-bell text-xl text-[#757474]"></i>
+          <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 transform translate-x-2/4 -translate-y-2/4">
+            1
+          </span>
+        </button>
+        <!-- Menú desplegable de notificaciones -->
+        <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 bg-white border border-[#e8f3f0] rounded-lg shadow-lg" style="margin-top: 12px;">
+          <div class="px-4 py-2 border-b text-sm font-medium text-[#0e1b18]">Notificaciones</div>
+          <ul class="text-sm">
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Nueva respuesta en el simulador</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">Progreso actualizado</li>
+            <li class="px-4 py-2 hover:bg-[#f8fbfb] cursor-pointer">¡Felicidades por tu logro!</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Perfil con Menú Desplegable -->
+      <div class="relative">
+        <div id="profileButton" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer" style='background-image: url("img/userprofile.png");'></div>
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-[#e8f3f0] rounded-lg shadow-lg slide-down" style="margin-top: 12px;">
+          <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+          <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+          <a href="index.html" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Botón de menú para dispositivos móviles -->
+    <div class="md:hidden">
+      <button id="menuButton" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menú desplegable para dispositivos móviles con perfil -->
+  <div id="mobileMenu" class="md:hidden hidden flex flex-col items-center p-2 border-t border-[#e8f3f0] slide-down">
+    <a href="simulador-entrevistas.html" class="py-2 text-lg font-medium">Simulador</a>
+    <a href="logros.html" class="py-2 text-lg font-medium">Logros</a>  
+    <a href="#" class="py-2 text-lg font-medium flex justify-between items-center">
+      <span>Notificaciones</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-circle-fill ml-2" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z"/>
+      </svg>
+    </a>
+    <!-- Botón Premium -->
+    <a href="suscripcion.html" class="boton-premium">Premium</a>
+    
+    <hr class="my-2 w-full border-[#e8f3f0]" />
+    <!-- Opciones del menú de perfil dentro del menú de hamburguesa en móvil -->
+    <a href="mi-perfil.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Mi perfil</a>
+    <a href="configuracion.html" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Configuración</a>
+    <a href="index.html" onclick="cerrarSesion(event)" class="block px-4 py-2 text-sm text-[#0e1b18] hover:bg-[#f8fbfb]">Cerrar sesión</a>
+  </div>
+
+  <main class="flex-grow container mx-auto px-4 md:px-10 max-w-5xl py-8">
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Resumen del Plan Premium -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-6">Plan Premium</h2>
+        <div class="space-y-4 mb-6">
+          <div class="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm inline-block mb-4">¡1er mes por solo $4.99!</div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-[#49e9c9] mt-1"></i>
+            <span>Acceso ilimitado a simulaciones personalizadas mediante ChatBot</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-[#49e9c9] mt-1"></i>
+            <span>Feedback personalizado detallado</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-[#49e9c9] mt-1"></i>
+            <span>Reporte de análisis detallados</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-[#49e9c9] mt-1"></i>
+            <span>Acceso a una comunidad exclusiva para networking y colaboración</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-[#49e9c9] mt-1"></i>
+            <span>Análisis comparativo con otros usuarios para evaluar tu progreso</span>
+          </div>
+        </div>
+        <div class="text-center p-4 bg-[#e8f3f0] rounded-lg">
+          <span class="text-3xl font-bold text-[#0e1b18]">$7.99</span>
+          <span class="text-[#4f9688]">/mes</span>
+          <p class="text-sm text-[#4f9688] mt-2">después del primer mes</p>
+        </div>
+      </div>
+
+      <!-- Formulario de Pago -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-6">Información de Pago</h2>
+        <form id="payment-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Nombre en la tarjeta</label>
+            <input type="text" class="w-full p-3 border border-[#e8f3f0] rounded-lg focus:outline-none focus:border-[#49e9c9]" placeholder="Como aparece en la tarjeta">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2">Número de tarjeta</label>
+            <div class="relative">
+              <input type="text" class="w-full p-3 border border-[#e8f3f0] rounded-lg focus:outline-none focus:border-[#49e9c9]" placeholder="1234 5678 9012 3456">
+              <div class="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-2">
+                <i class="fab fa-cc-visa text-gray-400"></i>
+                <i class="fab fa-cc-mastercard text-gray-400"></i>
+                <i class="fab fa-cc-amex text-gray-400"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Fecha de expiración</label>
+              <input type="text" class="w-full p-3 border border-[#e8f3f0] rounded-lg focus:outline-none focus:border-[#49e9c9]" placeholder="MM/AA">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">CVV</label>
+              <input type="text" class="w-full p-3 border border-[#e8f3f0] rounded-lg focus:outline-none focus:border-[#49e9c9]" placeholder="123">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2">Email</label>
+            <input type="email" class="w-full p-3 border border-[#e8f3f0] rounded-lg focus:outline-none focus:border-[#49e9c9]" placeholder="tu@email.com">
+          </div>
+
+          <button type="submit" class="w-full boton py-3 text-center">
+            Pagar y Activar Premium
+          </button>
+
+          <p class="text-sm text-center text-[#4f9688] mt-4">
+            <i class="fas fa-lock mr-2"></i>
+            Pago seguro procesado por Stripe
+          </p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer heredado -->
+  <footer class="bg-[#f8fbfb] py-6 text-center border-t border-[#e2e8f0] shadow-sm mt-10">
+    <div class="flex justify-center gap-6 mb-4">
+      <a href="https://facebook.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="text-[#3fc0a4] text-3xl transition-transform duration-300 transform hover:-translate-y-1 hover:scale-110">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+    <div class="flex justify-center gap-4">
+      <a href="#" class="text-[#3fc0a4] hover:underline">Acerca de</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Equipo</a>
+      <a href="#" class="text-[#3fc0a4] hover:underline">Centro de Ayuda</a>
+    </div>
+    <p class="text-sm text-[#3fc0a4] mt-4">2025 Formigo</p>
+  </footer>
+  <script>
+    // Validación básica del formulario
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Aquí iría la integración con Stripe u otra pasarela de pago
+      alert('¡Pago procesado! Bienvenido a Formigo Premium');
+      window.location.href = 'simulador-entrevistas.html';
+    });
+
+    // Scripts para el menú desplegable en dispositivos móviles y el perfil
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationMenu = document.getElementById('notificationMenu');
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    
+    notificationButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      notificationMenu.classList.toggle('hidden');
+    });
+    
+    profileButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      profileMenu.classList.toggle('hidden');
+      profileMenu.classList.add('slide-down');
+    });
+
+    // Cerrar menus al hacer clic fuera
+    window.addEventListener('click', function(e) {
+      if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+        notificationMenu.classList.add('hidden');
+      }
+      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+    function cerrarSesion(e) {
+      e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('temporaryUserData');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
