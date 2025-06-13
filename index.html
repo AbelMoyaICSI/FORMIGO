@@ -205,75 +205,6 @@
           </div>
         </div>
 
-        <!-- Script mejorado para el control del video -->
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('demoVideo');
-            const playPauseIcon = document.getElementById('playPauseIcon');
-            const videoStatus = document.getElementById('videoStatus');
-            const statusText = videoStatus.querySelector('span');
-            
-            // Función para actualizar la UI
-            function updateUI(isPlaying) {
-              // Actualizar ícono con transición suave
-              playPauseIcon.style.transform = 'scale(0.8)';
-              setTimeout(() => {
-                playPauseIcon.className = isPlaying ? 
-                  'fas fa-pause text-[#49e9c9] text-3xl transition-all duration-300' : 
-                  'fas fa-play text-[#49e9c9] text-3xl transition-all duration-300';
-                playPauseIcon.style.transform = 'scale(1)';
-              }, 150);
-              
-              // Actualizar texto de estado con efecto
-              statusText.style.opacity = '0';
-              setTimeout(() => {
-                statusText.textContent = isPlaying ? 'Reproduciendo' : 'Pausado';
-                statusText.style.opacity = '1';
-              }, 200);
-            }
-
-            // Asegurar reproducción inicial
-            video.play().catch(err => console.error('Error al reproducir:', err));
-            
-            // Función para alternar el video
-            window.toggleVideo = function(event) {
-              if(event) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              
-              try {
-                if (video.paused) {
-                  video.play();
-                  updateUI(true);
-                } else {
-                  video.pause();
-                  updateUI(false);
-                }
-              } catch(error) {
-                console.error('Error al controlar el video:', error);
-              }
-            };
-            
-            // Eventos del video
-            video.addEventListener('play', () => updateUI(true));
-            video.addEventListener('pause', () => updateUI(false));
-            
-            // Estado inicial
-            updateUI(!video.paused);
-            
-            // Efecto hover en el contenedor
-            const videoContainer = video.parentElement;
-            videoContainer.addEventListener('mouseenter', () => {
-              videoContainer.style.transform = 'scale(1.02)';
-            });
-            
-            videoContainer.addEventListener('mouseleave', () => {
-              videoContainer.style.transform = 'scale(1)';
-            });
-          });
-        </script>
-
         <!-- Características destacadas -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           <div class="flex items-start space-x-4">
@@ -881,209 +812,93 @@
     </div>
     <p class="text-sm text-[#3fc0a4] mt-4">2025 Formigo</p>
   </footer>
-ma , 
-   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>   <!-- Script para control de video -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<!-- Scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Control del menú móvil
+      const menuButton = document.getElementById('menuButton');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      // Control del video
       const video = document.getElementById('demoVideo');
       const playPauseIcon = document.getElementById('playPauseIcon');
-    const menuButton = document.getElementById('menuButton');
-    const mobileMenu = document.getElementById('mobileMenu');    menuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      if (!mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add('slide-down');
-      } else {
-        mobileMenu.classList.remove('slide-down');
-      }
-    });
-
-    // Cerrar menú móvil al hacer clic en un enlace
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-      });
-    });
-
-    // Cerrar el menú de perfil al hacer clic fuera
-    window.addEventListener('click', function (e) {
-      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
-        profileMenu.classList.add('hidden');
-      }
-    });
-
-        // Mostrar/ocultar menú de notificaciones
-        notificationButton.addEventListener('click', function (e) {
-          e.stopPropagation();
-          notificationMenu.classList.toggle('hidden');
-        });
+      const videoStatus = document.getElementById('videoStatus');
+      
+      if (video && playPauseIcon && videoStatus) {
+        const statusText = videoStatus.querySelector('span');
         
-        // Cerrar el menú de notificaciones si se hace clic fuera
-        window.addEventListener('click', function (e) {
-          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
-            notificationMenu.classList.add('hidden');
+        // Función para actualizar la UI
+        function updateUI(isPlaying) {
+          // Actualizar ícono con transición suave
+          playPauseIcon.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            playPauseIcon.className = isPlaying ? 
+              'fas fa-pause text-[#49e9c9] text-3xl transition-all duration-300' : 
+              'fas fa-play text-[#49e9c9] text-3xl transition-all duration-300';
+            playPauseIcon.style.transform = 'scale(1)';
+          }, 150);
+          
+          // Actualizar texto de estado con efecto
+          if (statusText) {
+            statusText.style.opacity = '0';
+            setTimeout(() => {
+              statusText.textContent = isPlaying ? 'Reproduciendo' : 'Pausado';
+              statusText.style.opacity = '1';
+            }, 200);
           }
-        });
+        }
+
+        // Asegurar reproducción inicial
+        video.play().catch(err => console.error('Error al reproducir:', err));
         
-        function mostrarProgreso() {
-          // Ocultar todas las secciones dentro del main
-          document.querySelectorAll('main > section').forEach(section => {
-            section.classList.add('hidden');
+        // Función para alternar el video
+        window.toggleVideo = function(event) {
+          if(event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          
+          try {
+            if (video.paused) {
+              video.play();
+              updateUI(true);
+            } else {
+              video.pause();
+              updateUI(false);
+            }
+          } catch(error) {
+            console.error('Error al controlar el video:', error);
+          }
+        };
+        
+        // Eventos del video
+        video.addEventListener('play', () => updateUI(true));
+        video.addEventListener('pause', () => updateUI(false));
+        
+        // Estado inicial
+        updateUI(!video.paused);
+        
+        // Efecto hover en el contenedor
+        const videoContainer = video.parentElement;
+        if (videoContainer) {
+          videoContainer.addEventListener('mouseenter', () => {
+            videoContainer.style.transform = 'scale(1.02)';
           });
-        
-          // Mostrar la sección de progreso
-          const progressPage = document.getElementById('progress-page');
-          if (progressPage) {
-            progressPage.classList.remove('hidden');
-            progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave
-          } else {
-            console.error("No se encontró la sección de progreso.");
-          }
+          
+          videoContainer.addEventListener('mouseleave', () => {
+            videoContainer.style.transform = 'scale(1)';
+          });
         }
-        
-function mostrarProgreso() {
-  // Oculta todas las secciones dentro del main
-  document.querySelectorAll('main > section').forEach((section) => {
-    section.classList.add('hidden');
-  });
-
-  // Muestra la sección de progreso
-  const progressPage = document.getElementById('progress-page');
-  if (progressPage) {
-    progressPage.classList.remove('hidden');
-    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
-  } else {
-    console.error("No se encontró la sección de progreso.");
-  }
-
-  // Cargar los niveles básicos por defecto
-  showLevels("basic");
-}
-
-// Asigna el evento al enlace "Progreso"
-document.getElementById('progress-link').addEventListener('click', (e) => {
-  e.preventDefault();
-  mostrarProgreso();
-});
-function mostrarProgreso() {
-  // Oculta todas las secciones dentro del main
-  document.querySelectorAll('main > section').forEach((section) => {
-    section.classList.add('hidden');
-  });
-
-  // Muestra la sección de progreso
-  const progressPage = document.getElementById('progress-page');
-  if (progressPage) {
-    progressPage.classList.remove('hidden');
-    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
-  } else {
-    console.error("No se encontró la sección de progreso.");
-  }
-
-  // Cargar los niveles básicos por defecto
-  showLevels("basic");
-}
-
-// Asigna el evento al enlace "Progreso"
-document.getElementById('progress-link').addEventListener('click', (e) => {
-  e.preventDefault();
-  mostrarProgreso();
-});
-
-// Función para obtener parámetros de la URL
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
-// Mostrar la sección correspondiente según el parámetro de la URL
-document.addEventListener("DOMContentLoaded", () => {
-  const section = getQueryParam("section");
-  if (section === "progress") {
-    // Oculta otras secciones
-    document.querySelectorAll('main > section').forEach((section) => {
-      section.classList.add('hidden');
+      }
     });
-
-    // Muestra la sección de progreso
-    const progressPage = document.getElementById('progress-page');
-    if (progressPage) {
-      progressPage.classList.remove('hidden');
-      progressPage.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-});
-
-    // Funciones para el modal de feedback
-    function handleFeedbackSubmit() {
-      const modal = document.getElementById('feedbackModal');
-      const modalContent = modal.querySelector('.bg-white');
-      const commentInput = document.getElementById('commentInput');
-      
-      // Mostrar el modal
-      modal.classList.remove('hidden');
-      // Animar la entrada del modal
-      setTimeout(() => {
-        modalContent.classList.remove('scale-95', 'opacity-0');
-        modalContent.classList.add('scale-100', 'opacity-100');
-      }, 10);
-      
-      // Limpiar el textarea
-      commentInput.value = '';
-    }
-
-    function closeFeedbackModal() {
-      const modal = document.getElementById('feedbackModal');
-      const modalContent = modal.querySelector('.bg-white');
-      
-      // Animar la salida del modal
-      modalContent.classList.remove('scale-100', 'opacity-100');
-      modalContent.classList.add('scale-95', 'opacity-0');
-      
-      // Ocultar el modal después de la animación
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
-    }     
-      // Asegurarnos de que el video comience reproduciéndose
-      video.play().catch(err => console.error('Error al reproducir:', err));
-      
-      // Función para alternar el video
-      window.toggleVideo = function(event) {
-        if(event) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        
-        try {
-          if (video.paused) {
-            video.play();
-            playPauseIcon.className = 'fas fa-pause text-[#49e9c9] text-3xl';
-          } else {
-            video.pause();
-            playPauseIcon.className = 'fas fa-play text-[#49e9c9] text-3xl';
-          }
-        } catch(error) {
-          console.error('Error al controlar el video:', error);
-        }
-      };
-      
-      // Eventos del video para mantener sincronizado el ícono
-      video.addEventListener('play', () => {
-        playPauseIcon.className = 'fas fa-pause text-[#49e9c9] text-3xl';
-      });
-      
-      video.addEventListener('pause', () => {
-        playPauseIcon.className = 'fas fa-play text-[#49e9c9] text-3xl';
-      });
-      
-      // Se asegura que el ícono inicial sea de pausa ya que el video está reproduciéndose
-      playPauseIcon.className = 'fas fa-pause text-[#49e9c9] text-3xl';
-    });
-
-
   </script>
-
-
-
+</body>
 </html>
