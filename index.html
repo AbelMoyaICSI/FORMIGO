@@ -159,32 +159,120 @@
         
         <!-- Contenedor del video con clip-path -->
         <div class="relative group">
-          <!-- Forma decorativa de fondo -->
-          <div class="absolute inset-0 bg-gradient-to-r from-[#49e9c9] to-[#3fc0a4] opacity-20 transform -skew-y-3"></div>
+          <!-- Forma decorativa de fondo con efecto skew -->
+          <div class="absolute inset-0 bg-gradient-to-r from-[#49e9c9] to-[#3fc0a4] opacity-20 transform -skew-y-3 transition-all duration-300 group-hover:opacity-30"></div>
           
-          <!-- Video con bordes oblicuos -->
-          <div class="relative mx-auto max-w-4xl shadow-2xl">
-            <div class="absolute inset-0 bg-gradient-to-r from-[#49e9c9]/20 to-[#3fc0a4]/20 group-hover:opacity-0 transition-opacity duration-300"></div>
+          <!-- Video con bordes oblicuos y efectos -->
+          <div class="relative mx-auto max-w-4xl shadow-2xl transform transition-all duration-300 group-hover:scale-[1.01]">
+            <!-- Overlay gradiente con efecto hover -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#49e9c9]/20 to-[#3fc0a4]/20 group-hover:opacity-0 transition-all duration-500"></div>
+            
+            <!-- Efecto de brillo en los bordes -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#49e9c9]/10 to-[#3fc0a4]/10 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                 style="clip-path: polygon(3% 0, 97% 0, 100% 5%, 100% 95%, 97% 100%, 3% 100%, 0 95%, 0 5%)">
+            </div>
+            
+            <!-- Video principal -->
             <video 
               id="demoVideo"
-              class="w-full h-auto rounded-lg transform transition-transform duration-300 group-hover:scale-[1.02]"
+              class="w-full h-auto rounded-lg transform transition-transform duration-500 group-hover:scale-[1.02] relative z-10"
               style="clip-path: polygon(3% 0, 97% 0, 100% 5%, 100% 95%, 97% 100%, 3% 100%, 0 95%, 0 5%)"
               autoplay 
               loop 
               muted 
-              playsinline>
-              <source src="videos/DEMOSTRACIÓN FORMIGO.mp4" type="video/mp4">
+              playsinline>              <source src="videos/DEMOSTRACIÓN FORMIGO.mp4" type="video/mp4">
               Tu navegador no soporta el elemento de video.
             </video>
             
-            <!-- Botón simple de play/pause -->
-            <button 
-              onclick="toggleVideo()"
-              class="absolute inset-0 m-auto w-20 h-20 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-[#49e9c9]/30 opacity-0 group-hover:opacity-100">
-              <i id="playPauseIcon" class="fas fa-pause text-[#49e9c9] text-3xl"></i>
-            </button>
+            <!-- Contenedor de controles con efectos -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <!-- Botón de play/pause con efectos mejorados -->
+              <button 
+                onclick="toggleVideo(event)"
+                class="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-[#49e9c9]/50 transform hover:rotate-3 active:scale-95 relative z-20">
+                <i id="playPauseIcon" class="fas fa-pause text-[#49e9c9] text-3xl transition-all duration-300"></i>
+              </button>
+            </div>
+            
+            <!-- Indicador de estado con efectos -->
+            <div id="videoStatus" 
+                class="absolute bottom-4 left-4 px-4 py-2 bg-white/90 rounded-lg text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm transform hover:scale-105">
+              <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 rounded-full bg-[#49e9c9] animate-pulse"></div>
+                <span class="text-gray-700">Reproduciendo</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- Script mejorado para el control del video -->
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('demoVideo');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+            const videoStatus = document.getElementById('videoStatus');
+            const statusText = videoStatus.querySelector('span');
+            
+            // Función para actualizar la UI
+            function updateUI(isPlaying) {
+              // Actualizar ícono con transición suave
+              playPauseIcon.style.transform = 'scale(0.8)';
+              setTimeout(() => {
+                playPauseIcon.className = isPlaying ? 
+                  'fas fa-pause text-[#49e9c9] text-3xl transition-all duration-300' : 
+                  'fas fa-play text-[#49e9c9] text-3xl transition-all duration-300';
+                playPauseIcon.style.transform = 'scale(1)';
+              }, 150);
+              
+              // Actualizar texto de estado con efecto
+              statusText.style.opacity = '0';
+              setTimeout(() => {
+                statusText.textContent = isPlaying ? 'Reproduciendo' : 'Pausado';
+                statusText.style.opacity = '1';
+              }, 200);
+            }
+
+            // Asegurar reproducción inicial
+            video.play().catch(err => console.error('Error al reproducir:', err));
+            
+            // Función para alternar el video
+            window.toggleVideo = function(event) {
+              if(event) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              
+              try {
+                if (video.paused) {
+                  video.play();
+                  updateUI(true);
+                } else {
+                  video.pause();
+                  updateUI(false);
+                }
+              } catch(error) {
+                console.error('Error al controlar el video:', error);
+              }
+            };
+            
+            // Eventos del video
+            video.addEventListener('play', () => updateUI(true));
+            video.addEventListener('pause', () => updateUI(false));
+            
+            // Estado inicial
+            updateUI(!video.paused);
+            
+            // Efecto hover en el contenedor
+            const videoContainer = video.parentElement;
+            videoContainer.addEventListener('mouseenter', () => {
+              videoContainer.style.transform = 'scale(1.02)';
+            });
+            
+            videoContainer.addEventListener('mouseleave', () => {
+              videoContainer.style.transform = 'scale(1)';
+            });
+          });
+        </script>
 
         <!-- Características destacadas -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
@@ -793,13 +881,170 @@
     </div>
     <p class="text-sm text-[#3fc0a4] mt-4">2025 Formigo</p>
   </footer>
-
-  <!-- Script para control de video -->
+ma , 
+   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>   <!-- Script para control de video -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const video = document.getElementById('demoVideo');
       const playPauseIcon = document.getElementById('playPauseIcon');
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');    menuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('slide-down');
+      } else {
+        mobileMenu.classList.remove('slide-down');
+      }
+    });
+
+    // Cerrar menú móvil al hacer clic en un enlace
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Cerrar el menú de perfil al hacer clic fuera
+    window.addEventListener('click', function (e) {
+      if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+        // Mostrar/ocultar menú de notificaciones
+        notificationButton.addEventListener('click', function (e) {
+          e.stopPropagation();
+          notificationMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar el menú de notificaciones si se hace clic fuera
+        window.addEventListener('click', function (e) {
+          if (!notificationButton.contains(e.target) && !notificationMenu.contains(e.target)) {
+            notificationMenu.classList.add('hidden');
+          }
+        });
+        
+        function mostrarProgreso() {
+          // Ocultar todas las secciones dentro del main
+          document.querySelectorAll('main > section').forEach(section => {
+            section.classList.add('hidden');
+          });
+        
+          // Mostrar la sección de progreso
+          const progressPage = document.getElementById('progress-page');
+          if (progressPage) {
+            progressPage.classList.remove('hidden');
+            progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave
+          } else {
+            console.error("No se encontró la sección de progreso.");
+          }
+        }
+        
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+function mostrarProgreso() {
+  // Oculta todas las secciones dentro del main
+  document.querySelectorAll('main > section').forEach((section) => {
+    section.classList.add('hidden');
+  });
+
+  // Muestra la sección de progreso
+  const progressPage = document.getElementById('progress-page');
+  if (progressPage) {
+    progressPage.classList.remove('hidden');
+    progressPage.scrollIntoView({ behavior: 'smooth' }); // Desplazamiento suave al hacer clic
+  } else {
+    console.error("No se encontró la sección de progreso.");
+  }
+
+  // Cargar los niveles básicos por defecto
+  showLevels("basic");
+}
+
+// Asigna el evento al enlace "Progreso"
+document.getElementById('progress-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  mostrarProgreso();
+});
+
+// Función para obtener parámetros de la URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+// Mostrar la sección correspondiente según el parámetro de la URL
+document.addEventListener("DOMContentLoaded", () => {
+  const section = getQueryParam("section");
+  if (section === "progress") {
+    // Oculta otras secciones
+    document.querySelectorAll('main > section').forEach((section) => {
+      section.classList.add('hidden');
+    });
+
+    // Muestra la sección de progreso
+    const progressPage = document.getElementById('progress-page');
+    if (progressPage) {
+      progressPage.classList.remove('hidden');
+      progressPage.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+    // Funciones para el modal de feedback
+    function handleFeedbackSubmit() {
+      const modal = document.getElementById('feedbackModal');
+      const modalContent = modal.querySelector('.bg-white');
+      const commentInput = document.getElementById('commentInput');
       
+      // Mostrar el modal
+      modal.classList.remove('hidden');
+      // Animar la entrada del modal
+      setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      
+      // Limpiar el textarea
+      commentInput.value = '';
+    }
+
+    function closeFeedbackModal() {
+      const modal = document.getElementById('feedbackModal');
+      const modalContent = modal.querySelector('.bg-white');
+      
+      // Animar la salida del modal
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+      
+      // Ocultar el modal después de la animación
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }     
       // Asegurarnos de que el video comience reproduciéndose
       video.play().catch(err => console.error('Error al reproducir:', err));
       
@@ -835,6 +1080,10 @@
       // Se asegura que el ícono inicial sea de pausa ya que el video está reproduciéndose
       playPauseIcon.className = 'fas fa-pause text-[#49e9c9] text-3xl';
     });
+
+
   </script>
 
-  <div id="mobileMenu"
+
+
+</html>
